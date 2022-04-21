@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.19.5",
+    "dotenv": "^16.0.0",
     "eslint-config-prettier": "^8.5.0",
     "immer": "^9.0.12",
     "react": "^17.0.2",
@@ -12,7 +15,9 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5"
   },
   "scripts": {
     "start": "react-scripts start",
