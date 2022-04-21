@@ -95,7 +95,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const userData = {
-  username: '성민',
+  username: 'sungmin',
 };
 
 function Header() {
