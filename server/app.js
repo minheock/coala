@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
 const port = 4000;
@@ -21,6 +22,8 @@ app.use(
   }),
 );
 app.use(cookieParser());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(
   morgan('      :method :url :status :res[content-length] - :response-time ms'),
