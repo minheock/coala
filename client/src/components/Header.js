@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { XLView, LView, MView } from '../config';
 
 const HeaderWrapper = styled.header`
-  width: 100%;
+  margin: auto;
   display: flex;
   justify-content: space-between;
   .left-container {
@@ -14,6 +15,23 @@ const HeaderWrapper = styled.header`
   }
   .right-container {
     margin-right: 1rem;
+  }
+
+  // 반응형
+  @media screen and (min-width: ${XLView}px) {
+    & {
+      width: 1375px;
+    }
+  }
+  @media screen and (max-width: ${LView}px) {
+    & {
+      width: 1024px;
+    }
+  }
+  @media screen and (max-width: ${MView}px) {
+    & {
+      width: 90%;
+    }
   }
 `;
 
