@@ -6,6 +6,13 @@ const {
   findPost,
 } = require('../controllers/contents');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Contents
+ *   description: User management
+ */
+
 const router = express.Router();
 
 router.get('/', allPost); // 모든컨텐츠 가져오기
