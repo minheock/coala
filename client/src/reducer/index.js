@@ -1,17 +1,10 @@
 import { combineReducers } from 'redux';
 import user from './user';
-import contents from './contents';
+import content from './content';
 
-const rootReducer = (state, action) => {
-  switch (action.type) {
-    default: {
-      const combineReducer = combineReducers({
-        user,
-        contents,
-      });
-      return combineReducer(state, action);
-    }
-  }
-};
+const rootReducer = combineReducers({
+  user,
+  content,
+});
 
 export default rootReducer;
