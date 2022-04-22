@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { CoalaGreen, CoalaGrey } from '../config';
 
 const Container = styled.div`
   position: absolute;
@@ -23,8 +24,8 @@ const Container = styled.div`
       cursor: pointer;
     }
     li:hover {
-      background-color: #dfe6e9;
-      color: #00b894;
+      background-color: ${CoalaGrey};
+      color: ${CoalaGreen};
     }
   }
 `;
