@@ -7,6 +7,7 @@ module.exports = {
     return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1d' });
   },
   sendAccessToken: (res, accessToken) => {
+    console.log(accessToken);
     res
       .cookie('jwt', accessToken, {
         // sameSite: 'none', //https 일때만 하는거
