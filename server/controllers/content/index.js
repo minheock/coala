@@ -1,23 +1,25 @@
-const { contents } = require('../../models');
+const { posts } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
-    const { user_id, content_name, content_body, category } = req.body;
+    const { userid, title, content, category, done } = req.body;
     if (
       // user_id는 필수값 없으면 400 //db에서도 null안받게
-      user_id === undefined ||
-      user_id === '' ||
-      content_name === undefined ||
-      content_name === '' ||
-      content_body === undefined ||
-      content_body === '' ||
+      userid === undefined ||
+      userid === '' ||
+      title === undefined ||
+      title === '' ||
+      content === undefined ||
+      content === '' ||
       category === undefined ||
-      category === ''
+      category === '' ||
+      done === undefined ||
+      done === ''
     ) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
-      await contents // User_id = 로그인 유저의 pk id 받음
-        .create({ user_id, content_name, content_body, category })
+      await posts // User_id = 로그인 유저의 pk id 받음
+        .create({ userid, title, content, category, done })
         .then((data) => {
           res.status(200).send({ message: 'post is saved' });
         })
@@ -33,7 +35,7 @@ module.exports = {
     // console.log(req.query);
     if (req.query.id) {
       // 파라미터가 없으면 400 있으면 200
-      await contents
+      await posts
         .destroy({
           where: { id: req.query.id },
         })
@@ -53,24 +55,26 @@ module.exports = {
   update: async (req, res) => {
     // params
     // 컨텐츠 수정
-    const { content_name, content_body, category } = req.body;
+    const { title, content, category, done } = req.body;
     if (req.query.id) {
       // 파라미터가 없으면 400 있으면 200
       if (
-        content_name === undefined ||
-        content_name === '' ||
-        content_body === undefined ||
-        content_body === '' ||
+        title === undefined ||
+        title === '' ||
+        content === undefined ||
+        content === '' ||
         category === undefined ||
-        category === ''
+        category === '' ||
+        done === undefined ||
+        done === ''
       ) {
         res.status(400).send({ message: 'Invalid request' });
       } else {
-        await contents
+        await posts
           .update(
             {
-              content_name,
-              content_body,
+              title,
+              content,
               category,
             },
             {

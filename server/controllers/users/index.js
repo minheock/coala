@@ -1,4 +1,4 @@
-const { users, contents } = require('../../models');
+const { users, posts } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -90,15 +90,15 @@ module.exports = {
     // include / 최신 작성이 위로 올라오게
     // 해당유저의 작성한 게시글 불러오기
     const verify = isAuthorized(req);
-    const { user_id } = req.body;
+    const { userid } = req.body;
     if (verify) {
-      await contents
+      await posts
         .findAll({
           order: [['id', 'desc']],
           where: {
-            user_id,
+            userid,
           },
-          attributes: ['id', 'content_name', 'content_body', 'category'],
+          attributes: ['id', 'title', 'content', 'category', 'done'],
         })
         .then((data) => {
           // console.log(data);
