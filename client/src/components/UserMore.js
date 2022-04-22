@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 180px;
   top: 55px;
   right: 13px;
+  background-color: #ffffff;
   ul {
     list-style: none;
     padding: 0px;

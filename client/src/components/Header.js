@@ -4,6 +4,7 @@ import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { XLView, LView, MView, SView } from '../config';
 import UserMore from './UserMore';
+import NavBar from './NavBar';
 
 const { Search } = Input;
 
@@ -106,36 +107,43 @@ function Header() {
     setUserInfo(userData);
   };
   return (
-    <HeaderWrapper>
-      {isUserMore ? <UserMore /> : null}
-      <div className="left-container">
-        <div className="logo">Coala</div>
-      </div>
-      <div className="right-container">
-        <Search
-          placeholder="search..."
-          onSearch={handleSearch}
-          className="search-input"
-        />
-        {userInfo ? (
-          <div className="user-container">
-            <div className="user-name">{userInfo.username}님 안녕하세요</div>
-            <Avatar
-              className="user-profile"
-              src="https://joeschmoe.io/api/v1/random"
-            />
-            <CaretDownOutlined
-              onClick={() => setIsUserMore(prev => !prev)}
-              className="user-more"
-            />
-          </div>
-        ) : (
-          <button onClick={handleLogin} type="button" className="login-button">
-            로그인
-          </button>
-        )}
-      </div>
-    </HeaderWrapper>
+    <>
+      <HeaderWrapper>
+        {isUserMore ? <UserMore /> : null}
+        <div className="left-container">
+          <div className="logo">Coala</div>
+        </div>
+        <div className="right-container">
+          <Search
+            placeholder="search..."
+            onSearch={handleSearch}
+            className="search-input"
+          />
+          {userInfo ? (
+            <div className="user-container">
+              <div className="user-name">{userInfo.username}님 안녕하세요</div>
+              <Avatar
+                className="user-profile"
+                src="https://joeschmoe.io/api/v1/random"
+              />
+              <CaretDownOutlined
+                onClick={() => setIsUserMore(prev => !prev)}
+                className="user-more"
+              />
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin}
+              type="button"
+              className="login-button"
+            >
+              로그인
+            </button>
+          )}
+        </div>
+      </HeaderWrapper>
+      <NavBar />
+    </>
   );
 }
 
