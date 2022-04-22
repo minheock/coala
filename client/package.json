@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.19.5",
+    "craco-less": "^2.0.0",
     "dotenv": "^16.0.0",
     "eslint-config-prettier": "^8.5.0",
     "immer": "^9.0.12",
@@ -35,7 +36,8 @@
       "react/react-in-jsx-scope": 0,
       "default-param-last": 0,
       "no-param-reassign": 0,
-      "no-unused-vars": 1
+      "no-unused-vars": 1,
+      "react/prop-types":0
     },
     "env": {
       "browser": true,
