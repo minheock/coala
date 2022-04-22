@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CoalaGreen, CoalaGrey } from '../config';
+import { CoalaGreen, CoalaGrey, language } from '../config';
 
 const Container = styled.div`
   position: absolute;
   -webkit-box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
   box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
-  width: 180px;
-  top: 55px;
-  right: -30px;
+  height: 460px;
+  overflow-y: scroll;
+  width: 200px;
+  top: 40px;
+  right: -70px;
   background-color: #ffffff;
   ul {
     list-style: none;
@@ -31,12 +33,12 @@ const Container = styled.div`
     }
   }
 `;
-function StackMore({ stacks }) {
+function StackMore() {
   return (
     <Container>
       <ul>
-        {stacks.map(stack => (
-          <li key={stack.name}>{stack.name}</li>
+        {language.map(stack => (
+          <li key={stack}>{stack}</li>
         ))}
       </ul>
     </Container>

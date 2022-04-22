@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { CoalaGreen, CoalaGrey } from '../config';
 
 const Container = styled.div`
@@ -9,7 +10,11 @@ const Container = styled.div`
   width: 180px;
   top: 55px;
   right: 13px;
+  z-index: 1000;
   background-color: #ffffff;
+  .link {
+    color: black;
+  }
   ul {
     list-style: none;
     padding: 0px;
@@ -35,7 +40,9 @@ function UserMore() {
   return (
     <Container>
       <ul>
-        <li>질문작성</li>
+        <Link className="link" to="/write">
+          <li>질문작성</li>
+        </Link>
         <li>마이페이지</li>
         <li>로그아웃</li>
       </ul>
