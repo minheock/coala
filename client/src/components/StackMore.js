@@ -1,31 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { CoalaGreen, CoalaGrey } from '../config';
+import { CoalaGreen, CoalaGrey, language } from '../config';
 
 const Container = styled.div`
   position: absolute;
   -webkit-box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
   box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
-  width: 180px;
-  top: 55px;
-  right: 13px;
-  z-index: 1000;
+  height: 460px;
+  overflow-y: scroll;
+  width: 200px;
+  top: 40px;
+  right: -70px;
   background-color: #ffffff;
-  .link {
-    color: black;
-  }
   ul {
     list-style: none;
     padding: 0px;
     margin: 0;
     li {
-      padding-left: 10px;
       line-height: 3rem;
       font-size: 16px;
       font-weight: 500;
       height: 48px;
       width: 100%;
+      margin: 0;
+      padding-left: 16px;
       transition: 0.3s ease-in;
       cursor: pointer;
     }
@@ -35,19 +33,16 @@ const Container = styled.div`
     }
   }
 `;
-
-function UserMore() {
+function StackMore() {
   return (
     <Container>
       <ul>
-        <Link className="link" to="/write">
-          <li>질문작성</li>
-        </Link>
-        <li>마이페이지</li>
-        <li>로그아웃</li>
+        {language.map(stack => (
+          <li key={stack}>{stack}</li>
+        ))}
       </ul>
     </Container>
   );
 }
 
-export default UserMore;
+export default StackMore;
