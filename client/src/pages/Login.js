@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const LoginWrapper = styled.div``;
-// 123
+const LoginWrapper = styled.div`
+  border: solid 1px black;
+  align-items: center;
+  height: 50vh;
+`;
+
 function Login() {
-  const [isLogin, setisLogin] = useState(false);
+  // const [isLogin, setisLogin] = useState(false);
   return (
     <LoginWrapper>
-      <div />
+      <div className="IdInput" />
     </LoginWrapper>
   );
 }

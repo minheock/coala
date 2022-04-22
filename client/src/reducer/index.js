@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './user';
-import contents from './contents';
+import contents from './content';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
