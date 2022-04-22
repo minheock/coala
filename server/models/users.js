@@ -33,3 +33,26 @@ module.exports = (sequelize, DataTypes) => {
   );
   return users;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      User:
+ *        type: object
+ *        required:
+ *          - username
+ *          - profile
+ *          - email
+ *          - password
+ *        properties:
+ *          username:
+ *            type: string
+ *          profile:
+ *            type: string
+ *          email:
+ *            type: string
+ *            format: email
+ *            description: Email for the user, needs to be unique.
+ *          password:
+ *            type: string
+ */

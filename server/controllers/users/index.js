@@ -14,7 +14,7 @@ module.exports = {
       .findOne({
         where: { email, password },
       })
-      .then(data => {
+      .then((data) => {
         if (!data) {
           // db에 정보가 없을때
           res.status(400).send({ message: '존재하지 않는 유저 입니다.' });
@@ -25,7 +25,7 @@ module.exports = {
           sendAccessToken(res, accessToken);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   },
@@ -52,7 +52,7 @@ module.exports = {
           res.status(201).send({ message: '회원가입 완료' });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(500);
       });
@@ -66,13 +66,13 @@ module.exports = {
       .destroy({
         where: { id, email },
       })
-      .then(data => {
+      .then((data) => {
         res
           .status(200)
           .clearCookie('jwt')
           .send({ message: 'delete user infomation & token' });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(500);
       });
@@ -87,7 +87,7 @@ module.exports = {
       .findOne({
         where: { email },
       })
-      .then(data => {
+      .then((data) => {
         if (data) {
           users
             .update(
@@ -99,14 +99,14 @@ module.exports = {
                 where: { email },
               },
             )
-            .then(data => {
+            .then((data) => {
               res.status(200).send({ message: 'user information changed' });
             });
         } else {
           res.status(400).send({ message: 'user ' });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(500);
       });
@@ -119,7 +119,7 @@ module.exports = {
       .findOne({
         where: { email, password },
       })
-      .then(data => {
+      .then((data) => {
         if (data) {
           users
             .update(
@@ -139,7 +139,7 @@ module.exports = {
           res.status(400).send({ message: 'wrong password' });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(500);
       });
