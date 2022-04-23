@@ -1,15 +1,11 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
-import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
-import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import { Editor } from '@toast-ui/react-editor';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
-import { CoalaGreen, language, colors } from '../config';
+import { CoalaGreen, language, colors, MView, SView } from '../config';
 
 const Container = styled.div`
   width: 95%;
@@ -79,15 +75,48 @@ const Container = styled.div`
 
 function Post() {
   const navigate = useNavigate();
+  const [tagsInfo, setTagsInfo] = useState([]);
+  const [title, setTitle] = useState('');
   const [tag, setTag] = useState(null);
+  const [innerWidth, setInnerWidth] = useState(MView);
+  const editorRef = useRef();
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('hello');
+    const contentInfo = {
+      title,
+      stack: tag.stack,
+      editorBody: editorRef.current.getInstance().getHTML(),
+    };
+    console.log(contentInfo);
   };
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  // 스택별 언어들 가져올때 무작위로 색을 가져온다 처음렌더링할때만 실행.
+  useEffect(() => {
+    setTagsInfo(
+      language.map(stack => {
+        const randomColorIdx = Math.floor(Math.random() * colors.length);
+        return { stack, color: colors[randomColorIdx] };
+      }),
+    );
+  }, []);
+
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <input className="title-input" placeholder="제목을 입력하세요" />
+        <input
+          className="title-input"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          placeholder="제목을 입력하세요"
+        />
         {tag ? (
           <Tag
             closable
@@ -101,34 +130,36 @@ function Post() {
         {tag ? null : <p className="selectStack">스택을 한개만 선택해주세요</p>}
         {tag ? null : (
           <div className="stacks">
-            {language.map(stack => {
-              const randomColorIdx = Math.floor(Math.random() * colors.length);
-              return (
-                <Tag
-                  onClick={() =>
-                    setTag({ stack, color: colors[randomColorIdx] })
-                  }
-                  className="tag"
-                  color={colors[randomColorIdx]}
-                  key={stack}
-                >
-                  {stack}
-                </Tag>
-              );
-            })}
+            {tagsInfo.map(stackInfo => (
+              <Tag
+                onClick={() =>
+                  setTag({ stack: stackInfo.stack, color: stackInfo.color })
+                }
+                className="tag"
+                color={stackInfo.color}
+                key={stackInfo.stack}
+              >
+                {stackInfo.stack}
+              </Tag>
+            ))}
           </div>
         )}
 
         <Editor
           height="100%"
-          previewStyle="vertical"
-          plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+          previewStyle={innerWidth < SView ? 'tab' : 'vertical'}
+          initialEditType="markdown"
+          ref={editorRef}
         />
         <div className="submin-container">
-          <botton onClick={() => navigate('/')} className="backhome">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="backhome"
+          >
             <LeftOutlined />
             <p>나가기</p>
-          </botton>
+          </button>
           <button className="submit-btn" type="submit">
             출간하기
           </button>
