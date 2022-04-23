@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { XLView, LView, MView, SView } from '../config';
 import UserMore from './UserMore';
 import { LOG_IN_SUCCESS } from '../reducer/user';
@@ -21,6 +22,7 @@ const HeaderWrapper = styled.header`
     .logo {
       font-size: 21px;
       font-size: 700;
+      cursor: pointer;
     }
   }
   .right-container {
@@ -100,6 +102,7 @@ function Header({ page }) {
   const [isUserMore, setIsUserMore] = useState(false);
   const { userInfo } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const navigator = useNavigate();
   const handleSearch = value => console.log(value);
   const handleLogin = () => {
     dispatch({
@@ -110,7 +113,9 @@ function Header({ page }) {
     <HeaderWrapper>
       {isUserMore ? <UserMore /> : null}
       <div className="left-container">
-        <div className="logo">Coala</div>
+        <div onClick={() => navigator('/')} className="logo">
+          Coala
+        </div>
       </div>
       <div className="right-container">
         {page === 'Home' ? (

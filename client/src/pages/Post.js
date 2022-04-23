@@ -6,6 +6,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
+import uploadFiles from '../firebase';
 
 const Container = styled.div`
   width: 95%;
@@ -79,7 +80,13 @@ function Post() {
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState(null);
   const [innerWidth, setInnerWidth] = useState(MView);
+  const [content, setContent] = useState('');
   const editorRef = useRef();
+
+  const contentHandler = () => {
+    setContent(editorRef.current?.getInstance().getMarkdown() || '');
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
     const contentInfo = {
@@ -92,6 +99,23 @@ function Post() {
   const handleResize = () => {
     setInnerWidth(window.innerWidth);
   };
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.getInstance().removeHook('addImageBlobHook');
+      editorRef.current
+        .getInstance()
+        .addHook('addImageBlobHook', (blob, callback) => {
+          console.log(blob);
+          // 이미지 파이어베이스 업로드
+          uploadFiles(blob);
+          // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
+          // ReactS3Client.uploadFile(blob, uuidv4())
+          //   .then((data) => callback(data.location, 'imageURL'))
+          //   .catch((err) => (window.location.href = '/error'));
+        });
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -147,8 +171,10 @@ function Post() {
 
         <Editor
           height="100%"
+          initialValue={content}
           previewStyle={innerWidth < SView ? 'tab' : 'vertical'}
           initialEditType="markdown"
+          onChange={contentHandler}
           ref={editorRef}
         />
         <div className="submin-container">
