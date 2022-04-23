@@ -10,6 +10,7 @@
     "craco-less": "^2.0.0",
     "dotenv": "^16.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "firebase": "^9.6.11",
     "immer": "^9.0.12",
     "prismjs": "^1.28.0",
     "react": "^17.0.2",
@@ -42,9 +43,9 @@
       "no-unused-vars": 1,
       "react/prop-types": 0,
       "import/no-extraneous-dependencies": 0,
-      "jsx-a11y/click-events-have-key-events":0,
-      "jsx-a11y/no-static-element-interactions":0
-      
+      "jsx-a11y/click-events-have-key-events": 0,
+      "jsx-a11y/no-static-element-interactions": 0,
+      "no-plusplus":0
     },
     "env": {
       "browser": true,
