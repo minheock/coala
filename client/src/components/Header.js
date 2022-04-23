@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
 import { XLView, LView, MView, SView } from '../config';
 import UserMore from './UserMore';
-import NavBar from './NavBar';
+import { LOG_IN_SUCCESS } from '../reducer/user';
 
 const { Search } = Input;
 
@@ -95,55 +96,47 @@ const HeaderWrapper = styled.header`
   }
 `;
 
-const userData = {
-  username: '성민',
-};
-
-function Header() {
-  const [userInfo, setUserInfo] = useState(null);
+function Header({ page }) {
   const [isUserMore, setIsUserMore] = useState(false);
+  const { userInfo } = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const handleSearch = value => console.log(value);
   const handleLogin = () => {
-    setUserInfo(userData);
+    dispatch({
+      type: LOG_IN_SUCCESS,
+    });
   };
   return (
-    <>
-      <HeaderWrapper>
-        {isUserMore ? <UserMore /> : null}
-        <div className="left-container">
-          <div className="logo">Coala</div>
-        </div>
-        <div className="right-container">
+    <HeaderWrapper>
+      {isUserMore ? <UserMore /> : null}
+      <div className="left-container">
+        <div className="logo">Coala</div>
+      </div>
+      <div className="right-container">
+        {page === 'Home' ? (
           <Search
             placeholder="search..."
             onSearch={handleSearch}
             className="search-input"
           />
-          {userInfo ? (
-            <div className="user-container">
-              <div className="user-name">{userInfo.username}님 안녕하세요</div>
-              <Avatar
-                className="user-profile"
-                src="https://joeschmoe.io/api/v1/random"
-              />
-              <CaretDownOutlined
-                onClick={() => setIsUserMore(prev => !prev)}
-                className="user-more"
-              />
-            </div>
-          ) : (
-            <button
-              onClick={handleLogin}
-              type="button"
-              className="login-button"
-            >
-              로그인
-            </button>
-          )}
-        </div>
-      </HeaderWrapper>
-      <NavBar />
-    </>
+        ) : null}
+
+        {userInfo ? (
+          <div className="user-container">
+            <div className="user-name">{userInfo.username}님 안녕하세요</div>
+            <Avatar className="user-profile" src={userInfo.profile} />
+            <CaretDownOutlined
+              onClick={() => setIsUserMore(prev => !prev)}
+              className="user-more"
+            />
+          </div>
+        ) : (
+          <button onClick={handleLogin} type="button" className="login-button">
+            로그인
+          </button>
+        )}
+      </div>
+    </HeaderWrapper>
   );
 }
 

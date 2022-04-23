@@ -1,11 +1,24 @@
 import produce from 'immer';
 
 const initialized = {
+  mainContents: [],
   or: false,
 };
 
+export const dummyContent = {
+  id: 1,
+  userInfo: {
+    userId: 1,
+    username: '성민',
+    profile: 'https://joeschmoe.io/api/v1/random',
+  },
+  updateAt: '2022-03-01 04:45:40',
+  title: '샘플',
+  stack: 'JavaScript',
+  editorBody: `<p><img src="https://uicdn.toast.com/toastui/img/tui-editor-bi.png" alt="image" contenteditable="false"><img class="ProseMirror-separator" alt=""><br class="ProseMirror-trailingBreak"></p><h1>Awesome Editor!</h1><p>It has been <em>released as opensource in 2018</em> and has <del>continually</del> evolved to <strong>receive 10k GitHub ⭐️ Stars</strong>.</p><h2>Create Instance</h2><p>You can create an instance with the following code and use <code data-backticks="1">getHtml()</code> and <code data-backticks="1">getMarkdown()</code> of the <a href="https://github.com/nhn/tui.editor">Editor</a>.</p><div data-language="js" class="toastui-editor-ww-code-block"><pre><code data-language="js">const editor = new Editor(options);</code></pre></div><blockquote><p>See the table below for default options</p><blockquote><p>More API information can be found in the document</p></blockquote></blockquote><table><thead><tr><th><p>name</p></th><th><p>type</p></th><th><p>description</p></th></tr></thead><tbody><tr><td><p>el</p></td><td><p><code data-backticks="1">HTMLElement</code></p></td><td><p>container element</p></td></tr></tbody></table><h2>Features</h2><ul><li><p>CommonMark + GFM Specifications</p><ul><li><p>Live Preview</p></li><li><p>Scroll Sync</p></li><li><p>Auto Indent</p></li><li><p>Syntax Highlight</p><ol><li><p>Markdown</p></li><li><p>Preview</p></li></ol></li></ul></li></ul><h2>Support Wrappers</h2><blockquote><ul><li><p>Wrappers</p><ol><li class="task-list-item checked" data-task="true" data-task-checked="true"><p>React</p></li><li class="task-list-item checked" data-task="true" data-task-checked="true"><p>Vue</p></li><li class="task-list-item" data-task="true"><p>Ember</p></li></ol></li></ul></blockquote>`,
+};
+
 export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
-export const CONTENT_LIKE_REQUES = 'CONTENT_LIKE_REQUES';
 
 const reducer = (state = initialized, action) =>
   produce(state, draft => {
