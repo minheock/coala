@@ -41,7 +41,10 @@
       "no-param-reassign": 0,
       "no-unused-vars": 1,
       "react/prop-types": 0,
-      "import/no-extraneous-dependencies": 0
+      "import/no-extraneous-dependencies": 0,
+      "jsx-a11y/click-events-have-key-events":0,
+      "jsx-a11y/no-static-element-interactions":0
+      
     },
     "env": {
       "browser": true,

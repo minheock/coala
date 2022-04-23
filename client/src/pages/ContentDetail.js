@@ -5,14 +5,15 @@ import styled from 'styled-components';
 import { Avatar } from 'antd';
 import { dummyContent } from '../reducer/content';
 import Header from '../components/Header';
-import { CoalaGreen, CoalaGrey } from '../config';
+import { CoalaGreen, CoalaGrey, SView } from '../config';
 
 const Container = styled.main`
   width: 95%;
   margin: auto;
   article {
     width: 65%;
-    h1 {
+    .content-title {
+      text-align: center;
       margin-top: 10px;
       font-size: 30px;
       font-weight: 700;
@@ -39,6 +40,13 @@ const Container = styled.main`
       margin-left: 1rem;
     }
   }
+  // 반응형
+  @media screen and (max-width: ${SView}px) {
+    article {
+      width: 90%;
+      margin: auto;
+    }
+  }
 `;
 
 function ContentDetail() {
@@ -46,7 +54,7 @@ function ContentDetail() {
     <Container>
       <Header />
       <article>
-        <h1>{dummyContent.title}</h1>
+        <h1 className="content-title">{dummyContent.title}</h1>
         <div className="user-info">
           <Avatar
             className="user-profile"
