@@ -1,7 +1,7 @@
 import { ref, uploadBytes } from '@firebase/storage';
 import { storage } from './config';
 
-const uploadFiles = async file => {
+async function uploadFiles(file) {
   try {
     if (!file) return;
     const storageRef = ref(storage, `/file/sub/sub2/${file.name}`);
@@ -17,10 +17,8 @@ const uploadFiles = async file => {
         path += ethierPath[i];
       }
     }
-
-    console.log(
-      `fullpath:https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${path}?alt=media`,
-    );
+    const fullpath = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${path}?alt=media`;
+    return fullpath;
   } catch (error) {
     console.error(error);
   }
@@ -42,6 +40,6 @@ const uploadFiles = async file => {
   //     });
   //   },
   // );
-};
+}
 
 export default uploadFiles;

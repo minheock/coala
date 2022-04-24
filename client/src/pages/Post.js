@@ -106,13 +106,9 @@ function Post() {
       editorRef.current
         .getInstance()
         .addHook('addImageBlobHook', (blob, callback) => {
-          console.log(blob);
           // 이미지 파이어베이스 업로드
-          uploadFiles(blob);
           // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
-          // ReactS3Client.uploadFile(blob, uuidv4())
-          //   .then((data) => callback(data.location, 'imageURL'))
-          //   .catch((err) => (window.location.href = '/error'));
+          uploadFiles(blob).then(imgPath => callback(imgPath, 'imageURL'));
         });
     }
   }, []);
