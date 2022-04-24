@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
+// <FontAwesomeIcon icon="fa-regular fa-square-check" />
 function AcceptTerms() {
   return (
     <AcceptDiv>
       <AcceptLogo to="/">Coala</AcceptLogo>
       <InputNameBox>
-        <InputTitle>
-          코알라 이용약관, 개인정보 수집, 위치정보, 프로모션 정보 수신에 모두
-          동의합니다
-        </InputTitle>
-        <InputName
-          type="text"
-          name="inputName"
-          placeholder="이름을 입력하세요."
-        />
+        <InputTitle>코알라 이용약관에 모두 동의합니다</InputTitle>
       </InputNameBox>
 
       <InputEmailBox>
@@ -36,7 +28,7 @@ function AcceptTerms() {
         />
       </InputPasswordBox>
       <SuccesPasswordBox>
-        <InputTitle>비밀번호 확인</InputTitle>
+        <InputTitle>위치정보 이용약관 동의</InputTitle>
         <InputPassword
           type="password"
           name="inputPassword"
@@ -44,7 +36,7 @@ function AcceptTerms() {
         />
       </SuccesPasswordBox>
       <InputPhoneNumBox>
-        <InputTitle>위치정보 이용약관 동의</InputTitle>
+        <InputTitle>프로모션 정보 수신 동의</InputTitle>
         <InputPhoneNum
           type="text"
           name="inputPhoneNum"
@@ -92,7 +84,7 @@ const InputEmailBox = styled.div`
 
 const InputTitle = styled.div`
   text-align: left;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: bold;
 `;
 
@@ -151,7 +143,9 @@ const InputPhoneNum = styled.input`
   border-width: 1px;
 `;
 
-const AcceptBtn = styled.button`
+const AcceptBtn = styled(Link)`
+  padding-top: 10px;
+  text-align: center;
   margin-top: 45px;
   border-radius: 10px;
   border: none;
@@ -162,6 +156,9 @@ const AcceptBtn = styled.button`
   background-color: #555555;
   color: white;
   cursor: pointer;
+  &:hover {
+    color: white;
+  }
 `;
 const AcceptLogo = styled(Link)`
   color: black;

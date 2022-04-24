@@ -161,7 +161,7 @@ function Login() {
     <LoginWrapper>
       <div className="login-container">
         <h1>
-          <Link className="logo" to="/signup">
+          <Link className="logo" to="/home">
             Login
           </Link>
         </h1>
@@ -211,7 +211,7 @@ function Login() {
           </LoginBtn> */}
 
           <LoginBtn type="submit">로그인</LoginBtn>
-          <Link to="/signup">
+          <Link to="/accept">
             <div className="sighup">회원가입</div>
           </Link>
         </div>
