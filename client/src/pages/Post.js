@@ -89,12 +89,14 @@ function Post() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const contentInfo = {
-      title,
-      stack: tag.stack,
-      editorBody: editorRef.current.getInstance().getHTML(),
-    };
-    console.log(contentInfo);
+    if (title && tag && editorRef.current) {
+      const contentInfo = {
+        title,
+        stack: tag.stack,
+        editorBody: editorRef.current.getInstance().getHTML(),
+      };
+      console.log(contentInfo);
+    }
   };
   const handleResize = () => {
     setInnerWidth(window.innerWidth);
@@ -115,9 +117,9 @@ function Post() {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   // 스택별 언어들 가져올때 무작위로 색을 가져온다 처음렌더링할때만 실행.
   useEffect(() => {
     setTagsInfo(
