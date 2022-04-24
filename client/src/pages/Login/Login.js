@@ -138,13 +138,12 @@ function Login() {
   //     password: '',
   //   });
   // const [isLoginPush, setLoginPush] = useState(false);
-  const [inputValue, setValue] = useState('');
-  const [inputPwValue, setPwValue] = useState('');
-  function inputhandler(e) {
-    setValue(e.target.value);
+  const [inputValue, setValue] = useState({ id: '', pw: '' });
+  function inputhandler(e, key) {
+    setValue({ ...inputValue, [key]: e.target.value });
   }
-  function Reset() {
-    setValue('');
+  function Reset(e, key) {
+    setValue({ ...inputValue, [key]: '' });
   }
 
   return (
@@ -161,20 +160,31 @@ function Login() {
               <Input
                 type="text"
                 placeholder="아이디 입력"
-                onChange={inputhandler}
-                value={inputValue}
+                onChange={e => inputhandler(e, 'id')}
+                value={inputValue.id}
               />
               <FontAwesomeIcon
                 icon={close}
-                onClick={Reset}
+                onClick={e => Reset(e, 'id')}
                 className={
-                  inputValue.length === 0 ? 'id-close hide' : 'id-close'
+                  inputValue.id.length === 0 ? 'id-close hide' : 'id-close'
                 }
               />
             </div>
             <div className="inputPasswordBox">
-              <Input type="password" placeholder="비밀번호 입력" />
-              <FontAwesomeIcon icon={close} className="pw-close " />
+              <Input
+                type="password"
+                onChange={e => inputhandler(e, 'pw')}
+                value={inputValue.pw}
+                placeholder="비밀번호 입력"
+              />
+              <FontAwesomeIcon
+                icon={close}
+                onClick={e => Reset(e, 'pw')}
+                className={
+                  inputValue.pw.length === 0 ? 'pw-close hide' : 'pw-close'
+                }
+              />
             </div>
           </div>
           {/* <LoginBtn
