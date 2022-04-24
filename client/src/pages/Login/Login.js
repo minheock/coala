@@ -74,7 +74,7 @@ const LoginWrapper = styled.div`
     display: flex;
     /* position: relative; */
     width: 11vw;
-    margin-bottom: 5em;
+    margin-bottom: 3em;
     height: 4vh;
     /* padding: 16px 18px 15px; */
     /* box-sizing: border-box; */
@@ -87,9 +87,20 @@ const LoginWrapper = styled.div`
     margin-bottom: 1em;
     height: 4vh;
   }
-  .sighup {
-    margin-top: 45px;
+  .fail-message {
+    float: left;
+    color: red;
+    height: 3vh;
     font-weight: 500;
+    margin-top: 1vh;
+    width: 72%;
+    font-size: 10.5px;
+  }
+  .sighup {
+    color: black;
+    font-size: 11px;
+    margin-top: 45px;
+    font-weight: 300;
     border: none;
     background-color: white;
     cursor: pointer;
@@ -120,7 +131,7 @@ const Input = styled.input`
   cursor: pointer;
 `;
 const LoginBtn = styled.button`
-  margin-top: 7vh;
+  margin-top: 1vh;
   border-radius: 10px;
   border: none;
   width: 6vw;
@@ -186,6 +197,10 @@ function Login() {
                 }
               />
             </div>
+            <div className="fail-message hidden">
+              아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
+              확인해주세요.
+            </div>
           </div>
           {/* <LoginBtn
           onClick={() => {
@@ -196,9 +211,9 @@ function Login() {
           </LoginBtn> */}
 
           <LoginBtn type="submit">로그인</LoginBtn>
-          {/* <Link to="/signup">
-            <div className="sighup">회원가입 하시겠습니까?</div>
-          </Link> */}
+          <Link to="/signup">
+            <div className="sighup">회원가입</div>
+          </Link>
         </div>
       </div>
     </LoginWrapper>
