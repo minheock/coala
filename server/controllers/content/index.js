@@ -2,11 +2,11 @@ const { posts } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
-    const { userid, title, content, category, done } = req.body;
+    const { userId, title, content, category, done } = req.body;
     if (
       // user_id는 필수값 없으면 400 //db에서도 null안받게
-      userid === undefined ||
-      userid === '' ||
+      userId === undefined ||
+      userId === '' ||
       title === undefined ||
       title === '' ||
       content === undefined ||
@@ -19,7 +19,7 @@ module.exports = {
       res.status(400).send({ message: 'Invalid request' });
     } else {
       await posts // User_id = 로그인 유저의 pk id 받음
-        .create({ userid, title, content, category, done })
+        .create({ userId, title, content, category, done })
         .then((data) => {
           res.status(200).send({ message: 'post is saved' });
         })

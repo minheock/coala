@@ -1,19 +1,8 @@
-import '../../App.css';
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { text } from '@fortawesome/fontawesome-svg-core';
-import { onlyNumberAndEnglish as NumEng } from '../Signup/validator';
-// import { XLView, LView, MView, SView } from '../config'
-// <FontAwesomeIcon icon="fa-solid fa-circle-xmark" />
-
-// 그림자와 음영으로 효과
-const handleSignin = async ({ email, password }) => {
-  const result = await axios.post('https://localhost:4000/users/signin');
-};
 
 const LoginWrapper = styled.div`
   align-items: center;

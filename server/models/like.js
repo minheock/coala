@@ -10,19 +10,19 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.posts, {
-        foreignKey: 'content_id',
+        foreignKey: 'postId',
         sourceKey: 'id',
       });
       this.belongsTo(models.users, {
-        foreignKey: 'user_id',
+        foreignKey: 'userId',
         sourceKey: 'id',
       });
     }
   }
   like.init(
     {
-      user_id: DataTypes.INTEGER,
-      content_id: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
+      postId: DataTypes.INTEGER,
     },
     {
       sequelize,
@@ -31,3 +31,24 @@ module.exports = (sequelize, DataTypes) => {
   );
   return like;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Content:
+ *        type: object
+ *        required:
+ *          - user_id
+ *          - content_name
+ *          - content_body
+ *          - category
+ *        properties:
+ *          user_id:
+ *            type: string
+ *          content_name:
+ *            type: string
+ *          content_body:
+ *            type: string
+ *          category:
+ *            type: string
+ */

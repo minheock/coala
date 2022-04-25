@@ -10,11 +10,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasMany(models.posts, {
-        foreignKey: 'userid',
+        foreignKey: 'userId',
         sourceKey: 'id',
       });
       this.hasMany(models.like, {
-        foreignKey: 'user_id',
+        foreignKey: 'userId',
+        sourceKey: 'id',
+      });
+      this.hasMany(models.chattings, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+      });
+      this.hasMany(models.user_chatrooms, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+      });
+      this.hasMany(models.post_comment, {
+        foreignKey: 'userId',
         sourceKey: 'id',
       });
     }
