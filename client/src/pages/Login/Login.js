@@ -203,7 +203,7 @@ function Login() {
           </LoginBtn> */}
 
           <LoginBtn type="submit">로그인</LoginBtn>
-          <Link to="/accept">
+          <Link to="/signup">
             <div className="sighup">회원가입</div>
           </Link>
         </div>
