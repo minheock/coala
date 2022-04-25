@@ -1,15 +1,9 @@
-import '../../App.css';
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { text } from '@fortawesome/fontawesome-svg-core';
-import { onlyNumberAndEnglish as NumEng } from '../Signup/validator';
-// import { XLView, LView, MView, SView } from '../config'
-// <FontAwesomeIcon icon="fa-solid fa-circle-xmark" />
 
-// 그림자와 음영으로 효과
 const LoginWrapper = styled.div`
   align-items: center;
   position: absolute;
@@ -74,7 +68,7 @@ const LoginWrapper = styled.div`
     display: flex;
     /* position: relative; */
     width: 11vw;
-    margin-bottom: 5em;
+    margin-bottom: 3em;
     height: 4vh;
     /* padding: 16px 18px 15px; */
     /* box-sizing: border-box; */
@@ -87,9 +81,20 @@ const LoginWrapper = styled.div`
     margin-bottom: 1em;
     height: 4vh;
   }
-  .sighup {
-    margin-top: 45px;
+  .fail-message {
+    float: left;
+    color: red;
+    height: 3vh;
     font-weight: 500;
+    margin-top: 1vh;
+    width: 72%;
+    font-size: 10.5px;
+  }
+  .sighup {
+    color: black;
+    font-size: 11px;
+    margin-top: 45px;
+    font-weight: 300;
     border: none;
     background-color: white;
     cursor: pointer;
@@ -120,7 +125,7 @@ const Input = styled.input`
   cursor: pointer;
 `;
 const LoginBtn = styled.button`
-  margin-top: 7vh;
+  margin-top: 1vh;
   border-radius: 10px;
   border: none;
   width: 6vw;
@@ -133,42 +138,60 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 function Login() {
-  //   const [loginInfo, setLoginInfo] = useState({
-  //     email: '',
-  //     password: '',
-  //   });
   // const [isLoginPush, setLoginPush] = useState(false);
-  const [inputValue, setValue] = useState('');
-  const [inputPwValue, setPwValue] = useState('');
-  function inputhandler(e) {
-    setValue(e.target.value);
+  const [inputValue, setValue] = useState({ email: '', password: '' });
+  function inputhandler(e, key) {
+    setValue({ ...inputValue, [key]: e.target.value });
   }
-  function Reset() {
-    setValue('');
+  function Reset(e, key) {
+    setValue({ ...inputValue, [key]: '' });
   }
 
   return (
     <LoginWrapper>
       <div className="login-container">
         <h1>
-          <Link className="logo" to="/signup">
+          <Link className="logo" to="/home">
             Login
           </Link>
         </h1>
         <div className="login-box">
           <div className="inputIdPw">
             <div className="inputIdBox">
-              <Input type="text" placeholder="아이디 입력" value={inputValue} />
+              <Input
+                type="text"
+                placeholder="아이디 입력"
+                onChange={e => inputhandler(e, 'email')}
+                value={inputValue.email}
+              />
               <FontAwesomeIcon
                 icon={close}
+                onClick={e => Reset(e, 'email')}
                 className={
-                  inputValue.length === 0 ? 'id-close hide' : 'id-close'
+                  inputValue.email.length === 0 ? 'id-close hide' : 'id-close'
                 }
               />
             </div>
             <div className="inputPasswordBox">
-              <Input type="password" placeholder="비밀번호 입력" />
-              <FontAwesomeIcon icon={close} className="pw-close " />
+              <Input
+                type="password"
+                onChange={e => inputhandler(e, 'password')}
+                value={inputValue.password}
+                placeholder="비밀번호 입력"
+              />
+              <FontAwesomeIcon
+                icon={close}
+                onClick={e => Reset(e, 'password')}
+                className={
+                  inputValue.password.length === 0
+                    ? 'pw-close hide'
+                    : 'pw-close'
+                }
+              />
+            </div>
+            <div className="fail-message hidden">
+              아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
+              확인해주세요.
             </div>
           </div>
           {/* <LoginBtn
@@ -180,9 +203,9 @@ function Login() {
           </LoginBtn> */}
 
           <LoginBtn type="submit">로그인</LoginBtn>
-          {/* <Link to="/signup">
-            <div className="sighup">회원가입 하시겠습니까?</div>
-          </Link> */}
+          <Link to="/signup">
+            <div className="sighup">회원가입</div>
+          </Link>
         </div>
       </div>
     </LoginWrapper>
