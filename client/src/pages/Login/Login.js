@@ -158,15 +158,9 @@ function Login() {
         <div className="login-box">
           <div className="inputIdPw">
             <div className="inputIdBox">
-              <Input
-                type="text"
-                placeholder="아이디 입력"
-                onChange={inputhandler}
-                value={inputValue}
-              />
+              <Input type="text" placeholder="아이디 입력" value={inputValue} />
               <FontAwesomeIcon
                 icon={close}
-                onClick={Reset}
                 className={
                   inputValue.length === 0 ? 'id-close hide' : 'id-close'
                 }
