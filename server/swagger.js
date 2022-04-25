@@ -3,15 +3,33 @@ const swaggereJsdoc = require('swagger-jsdoc');
 
 const options = {
   swaggerDefinition: {
+    openapi: '3.0.0',
     info: {
-      title: 'Test API',
+      title: 'Coala API',
       version: '1.0.0',
-      description: 'Test API with express',
+      description: 'Coala API with express',
     },
-    host: 'localhost:3300',
-    basePath: '/',
+    servers: [
+      {
+        url: 'http://localhost:4000', // 요청 URL
+      },
+    ],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'jwt',
+        },
+      },
+    },
+    security: [
+      {
+        cookieAuth: [],
+      },
+    ],
   },
-  apis: ['./routes/*.js', './swagger/*'],
+  apis: ['./routes/*.js', './models/*.js'],
 };
 
 const specs = swaggereJsdoc(options);
