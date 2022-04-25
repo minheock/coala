@@ -2,6 +2,7 @@ import '../../App.css';
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { text } from '@fortawesome/fontawesome-svg-core';
@@ -10,6 +11,10 @@ import { onlyNumberAndEnglish as NumEng } from '../Signup/validator';
 // <FontAwesomeIcon icon="fa-solid fa-circle-xmark" />
 
 // 그림자와 음영으로 효과
+const handleSignin = async ({ email, password }) => {
+  const result = await axios.post('https://localhost:4000/users/signin');
+};
+
 const LoginWrapper = styled.div`
   align-items: center;
   position: absolute;
@@ -144,12 +149,8 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 function Login() {
-  //   const [loginInfo, setLoginInfo] = useState({
-  //     email: '',
-  //     password: '',
-  //   });
   // const [isLoginPush, setLoginPush] = useState(false);
-  const [inputValue, setValue] = useState({ id: '', pw: '' });
+  const [inputValue, setValue] = useState({ email: '', password: '' });
   function inputhandler(e, key) {
     setValue({ ...inputValue, [key]: e.target.value });
   }
@@ -171,29 +172,31 @@ function Login() {
               <Input
                 type="text"
                 placeholder="아이디 입력"
-                onChange={e => inputhandler(e, 'id')}
-                value={inputValue.id}
+                onChange={e => inputhandler(e, 'email')}
+                value={inputValue.email}
               />
               <FontAwesomeIcon
                 icon={close}
-                onClick={e => Reset(e, 'id')}
+                onClick={e => Reset(e, 'email')}
                 className={
-                  inputValue.id.length === 0 ? 'id-close hide' : 'id-close'
+                  inputValue.email.length === 0 ? 'id-close hide' : 'id-close'
                 }
               />
             </div>
             <div className="inputPasswordBox">
               <Input
                 type="password"
-                onChange={e => inputhandler(e, 'pw')}
-                value={inputValue.pw}
+                onChange={e => inputhandler(e, 'password')}
+                value={inputValue.password}
                 placeholder="비밀번호 입력"
               />
               <FontAwesomeIcon
                 icon={close}
-                onClick={e => Reset(e, 'pw')}
+                onClick={e => Reset(e, 'password')}
                 className={
-                  inputValue.pw.length === 0 ? 'pw-close hide' : 'pw-close'
+                  inputValue.password.length === 0
+                    ? 'pw-close hide'
+                    : 'pw-close'
                 }
               />
             </div>
