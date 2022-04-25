@@ -2,7 +2,7 @@ const { posts } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
-    const { userId, title, content, category, done } = req.body;
+    const { userId, title, content, stack, chatroomId } = req.body;
     if (
       // user_id는 필수값 없으면 400 //db에서도 null안받게
       userId === undefined ||
@@ -11,15 +11,15 @@ module.exports = {
       title === '' ||
       content === undefined ||
       content === '' ||
-      category === undefined ||
-      category === '' ||
-      done === undefined ||
-      done === ''
+      stack === undefined ||
+      stack === '' ||
+      chatroomId === undefined ||
+      chatroomId === ''
     ) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
       await posts // User_id = 로그인 유저의 pk id 받음
-        .create({ userId, title, content, category, done })
+        .create({ userId, title, content, stack, chatroomId })
         .then((data) => {
           res.status(200).send({ message: 'post is saved' });
         })
@@ -55,7 +55,7 @@ module.exports = {
   update: async (req, res) => {
     // params
     // 컨텐츠 수정
-    const { title, content, category, done } = req.body;
+    const { title, content, stack } = req.body;
     if (req.query.id) {
       // 파라미터가 없으면 400 있으면 200
       if (
@@ -63,10 +63,8 @@ module.exports = {
         title === '' ||
         content === undefined ||
         content === '' ||
-        category === undefined ||
-        category === '' ||
-        done === undefined ||
-        done === ''
+        stack === undefined ||
+        stack === ''
       ) {
         res.status(400).send({ message: 'Invalid request' });
       } else {
@@ -75,7 +73,7 @@ module.exports = {
             {
               title,
               content,
-              category,
+              stack,
             },
             {
               where: { id: req.query.id },
