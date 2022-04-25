@@ -32,7 +32,7 @@ const Modal = styled.div`
     position: absolute;
     bottom: 0px;
     height: 4px;
-    background: #596275;
+    background: #c44569;
     animation: close-progress 3s linear;
     animation-fill-mode: forwards;
   }

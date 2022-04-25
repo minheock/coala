@@ -82,12 +82,13 @@ function Post() {
   const [tag, setTag] = useState(null);
   const [innerWidth, setInnerWidth] = useState(MView);
   const [content, setContent] = useState('');
+  const [thumbnail, setThumbnail] = useState(null);
   const editorRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const contentHandler = () => {
-    setContent(editorRef.current?.getInstance().getMarkdown() || '');
+    setContent(editorRef.current.getInstance().getMarkdown() || '');
   };
 
   const handleSubmit = e => {
@@ -97,12 +98,13 @@ function Post() {
         title,
         stack: tag.stack,
         editorBody: editorRef.current.getInstance().getHTML(),
+        thumbnail,
       };
       console.log(contentInfo);
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
-        data: '포스트작성 실패',
+        data: '모든칸을 채워주세요.',
       });
     }
   };
@@ -118,7 +120,12 @@ function Post() {
         .addHook('addImageBlobHook', (blob, callback) => {
           // 이미지 파이어베이스 업로드
           // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
-          uploadFiles(blob).then(imgPath => callback(imgPath, 'imageURL'));
+          uploadFiles(blob).then(imgPath => {
+            callback(imgPath, 'imageURL');
+            if (!thumbnail) {
+              setThumbnail(imgPath);
+            }
+          });
         });
     }
   }, []);
