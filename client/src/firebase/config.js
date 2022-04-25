@@ -8,7 +8,7 @@ const firebaseConfig = {
   authDomain: process.env.REACT_APP_FB_AUTHDOMAIM,
   projectId: process.env.REACT_APP_FB_PROJECTID,
   messagingSenderId: process.env.REACT_APP_FB_MESSAGING_SENDERID,
-  storageBucket: 'coala-f8574.appspot.com',
+  storageBucket: process.env.REACT_APP_FB_STORAGEBUCKET,
   appId: process.env.REACT_APP_FB_APPID,
 };
 const firebaseApp = initializeApp(firebaseConfig);

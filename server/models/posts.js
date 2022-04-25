@@ -28,8 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       title: DataTypes.STRING,
       content: DataTypes.STRING,
-      category: DataTypes.STRING,
-      done: DataTypes.BOOLEAN,
+      stack: DataTypes.STRING,
+      chatroomId: DataTypes.INTEGER,
+      done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
     },
     {
       sequelize,
