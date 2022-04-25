@@ -56,7 +56,7 @@ module.exports = {
       .then(([result, created]) => {
         if (!created) {
           // 겹치는 이메일이 있는경우
-          res.status(400).send('e-mail already exists');
+          res.status(400).send({ message: 'e-mail already exists' });
         } else {
           res.status(201).send({ message: '회원가입 완료' });
         }
@@ -67,7 +67,8 @@ module.exports = {
       });
   },
   signout: async (req, res) => {
-    // 회원탈퇴 토큰 검증 한 내용으로 db 유저의 아이디 칼럼 destroy
+    // 회원탈퇴
+    // 토큰 검증 한 내용으로 db 유저의 아이디 칼럼 destroy
     const verify = isAuthorized(req);
     // console.log('dd', verify);
     const { id, email } = verify;
@@ -98,7 +99,7 @@ module.exports = {
           where: {
             userId,
           },
-          attributes: ['id', 'title', 'content', 'category', 'done'],
+          attributes: ['id', 'title', 'content', 'stack', 'done'],
         })
         .then((data) => {
           // console.log(data);
@@ -144,7 +145,7 @@ module.exports = {
       });
   },
   password: async (req, res) => {
-    // 유저 비밀번호 변경 원래비번 바꿀 비번 들어옴 원래 비번이 맞으면  바꿀비번으로 바꿔줌
+    // 유저 비밀번호 변경 원래비번 바꿀 비번 들어옴 원래 비번이 맞으면 바꿀비번으로 바꿔줌
     const { email, password, newpassword } = req.body;
 
     await users

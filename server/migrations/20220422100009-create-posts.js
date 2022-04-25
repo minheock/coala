@@ -18,8 +18,11 @@ module.exports = {
       content: {
         type: Sequelize.STRING,
       },
-      category: {
+      stack: {
         type: Sequelize.STRING,
+      },
+      chatroomId: {
+        type: Sequelize.INTEGER,
       },
       done: {
         type: Sequelize.BOOLEAN,
