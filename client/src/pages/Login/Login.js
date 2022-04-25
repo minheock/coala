@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { text } from '@fortawesome/fontawesome-svg-core';
 import { onlyNumberAndEnglish as NumEng } from '../Signup/validator';
 // import { XLView, LView, MView, SView } from '../config'
 // <FontAwesomeIcon icon="fa-solid fa-circle-xmark" />
