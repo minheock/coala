@@ -6,10 +6,12 @@ import Signup from './pages/Signup/Signup';
 import Home from './pages/Home';
 import Post from './pages/Post';
 import ContentDetail from './pages/ContentDetail';
+import ErrorModal from './components/ErrorModal';
 
 function App() {
   return (
     <div className="App">
+      <ErrorModal error="포스트 작성 실패" state />
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
