@@ -90,13 +90,13 @@ module.exports = {
     // include / 최신 작성이 위로 올라오게
     // 해당유저의 작성한 게시글 불러오기
     const verify = isAuthorized(req);
-    const { userid } = req.body;
+    const { userId } = req.body;
     if (verify) {
       await posts
         .findAll({
           order: [['id', 'desc']],
           where: {
-            userid,
+            userId,
           },
           attributes: ['id', 'title', 'content', 'category', 'done'],
         })
