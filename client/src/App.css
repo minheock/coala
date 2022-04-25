@@ -1,0 +1,7 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Fira Mono', monospace;
+}
+.hide {
+  display: none;
+}
