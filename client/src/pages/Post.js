@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
+import { useDispatch } from 'react-redux';
+import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import uploadFiles from '../firebase';
 
@@ -75,13 +77,14 @@ const Container = styled.div`
 `;
 
 function Post() {
-  const navigate = useNavigate();
   const [tagsInfo, setTagsInfo] = useState([]);
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState(null);
   const [innerWidth, setInnerWidth] = useState(MView);
   const [content, setContent] = useState('');
   const editorRef = useRef();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const contentHandler = () => {
     setContent(editorRef.current?.getInstance().getMarkdown() || '');
@@ -96,6 +99,11 @@ function Post() {
         editorBody: editorRef.current.getInstance().getHTML(),
       };
       console.log(contentInfo);
+    } else {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: '포스트작성 실패',
+      });
     }
   };
   const handleResize = () => {
