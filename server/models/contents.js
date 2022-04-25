@@ -33,3 +33,24 @@ module.exports = (sequelize, DataTypes) => {
   );
   return contents;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Content:
+ *        type: object
+ *        required:
+ *          - user_id
+ *          - content_name
+ *          - content_body
+ *          - category
+ *        properties:
+ *          user_id:
+ *            type: string
+ *          content_name:
+ *            type: string
+ *          content_body:
+ *            type: string
+ *          category:
+ *            type: string
+ */
