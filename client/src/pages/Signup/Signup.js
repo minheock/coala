@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({
     userName: '',
-    profile: '',
+    profile: null,
     email: '',
     password: '',
     passwordChecked: '',
