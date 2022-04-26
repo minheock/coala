@@ -32,3 +32,22 @@ module.exports = (sequelize, DataTypes) => {
   );
   return post_comment;
 };
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Post_comment:
+ *        type: object
+ *        required:
+ *          - userId
+ *          - postId
+ *          - comment
+ *        properties:
+ *          userId:
+ *            type: integer
+ *          postId:
+ *            type: postId
+ *          comment:
+ *            type: string
+ */
