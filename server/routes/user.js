@@ -57,6 +57,8 @@ const router = express.Router();
  *                  message:
  *                    type: string
  *                    example: 존재하지 않는 유저 입니다.
+ *                headers:
+ *
  */
 router.post('/login', login); // 로그인 요청
 /**
@@ -116,9 +118,19 @@ router.post('/signup', signup); // 회원가입 요청
 /**
  * @swagger
  *  /user/signout:
- *    post:
+ *    delete:
  *      summary: 회원탈퇴
  *      tags: [User]
+ *      parameters:
+ *      - name: token
+ *        in: header
+ *        description: token
+ *        schema:
+ *          type: string
+ *        examples:
+ *          sample:
+ *            value: example
+ *            summary: A sample token
  *      responses:
  *        "200":
  *          description: 회원탈퇴 완료
@@ -163,9 +175,9 @@ router.delete('/signout', signout); // 회원탈퇴 요청
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "content_name": "js", "content_body": "hellow world", "category":"javascript" },
- *                        { "id": 2, "content_name": "js", "content_body": "hellow world", "category":"javascript" },
- *                        { "id": 1, "content_name": "js", "content_body": "hellow world", "category":"javascript" },
+ *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
+ *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
+ *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
  *                      ]
  *        "400":
  *          description: 파라미터 에러
@@ -193,6 +205,16 @@ router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨�
  *                profile:
  *                   type: string
  *                   description: ""
+ *      parameters:
+ *      - name: token
+ *        in: header
+ *        description: token
+ *        schema:
+ *          type: string
+ *        examples:
+ *          sample:
+ *            value: example
+ *            summary: A sample token
  *      responses:
  *        "200":
  *          description: 유저 정보 변경 완료
@@ -238,6 +260,16 @@ router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변�
  *                newpassword:
  *                   type: string
  *                   description: ""
+ *      parameters:
+ *      - name: token
+ *        in: header
+ *        description: token
+ *        schema:
+ *          type: string
+ *        examples:
+ *          sample:
+ *            value: example
+ *            summary: A sample token
  *      responses:
  *        "200":
  *          description: 비밀번호 변경 완료

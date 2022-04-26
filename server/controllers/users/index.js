@@ -4,7 +4,9 @@ const {
   sendAccessToken,
   isAuthorized,
 } = require('../token');
-
+// 내일 토큰검증 언제 해야하는지 확인
+// 상의 꼭!!
+// auth를 만들어서 로그인후에 클라로 한번 유저 정보를 전달해야 할것 같음
 module.exports = {
   login: async (req, res) => {
     // 로그인
