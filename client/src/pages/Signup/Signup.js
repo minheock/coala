@@ -32,21 +32,6 @@ function Signup() {
   const isValidEmail = emailVal =>
     emailVal.includes('@') && emailVal.includes('.');
 
-  // input에 value가 존재하고
-  // 다른 곳을 클릭했을때 함수가 호출됨
-  // 함수의 로직에 따라 유효성이 검증이 안되면
-  // hiden 속성이 해제되고 경고창이 뜬다.
-
-  // const handleButtomValid = () => {
-  //   if (signupInfo.email && !isValidEmail) {
-  //     setErrMessage('@ 와 .을 입력해야합니다.');
-  //   } else if (signupInfo.password && !isValidPassword) {
-  //     setErrMessage('8자리 이상 특수문자 1개가 존재해야 합니다.');
-  //   } else {
-  //     setErrMessage('비밀번호가 일치하지 않습니다.');
-  //   }
-  // };
-
   useEffect(() => {
     // handleButtomValid();
     const {

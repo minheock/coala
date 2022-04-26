@@ -1,8 +1,89 @@
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMutation } from 'react-query';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { loginAPI } from '../../api/user';
+
+function Login() {
+  const [inputValue, setValue] = useState({ email: '', password: '' });
+  const loginMutation = useMutation(loginAPI);
+  function inputhandler(e, key) {
+    setValue({ ...inputValue, [key]: e.target.value });
+  }
+  function Reset(e, key) {
+    setValue({ ...inputValue, [key]: '' });
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    loginMutation.mutate({
+      email: inputValue.email,
+      password: inputValue.password,
+    });
+  };
+  return (
+    <LoginWrapper>
+      <div className="login-container">
+        <h1>
+          <Link className="logo" to="/">
+            Login
+          </Link>
+        </h1>
+        <div className="login-box">
+          <form onSubmit={handleSubmit}>
+            <div className="inputIdPw">
+              <div className="inputIdBox">
+                <Input
+                  type="text"
+                  placeholder="아이디 입력"
+                  onChange={e => inputhandler(e, 'email')}
+                  value={inputValue.email}
+                />
+                <FontAwesomeIcon
+                  icon={close}
+                  onClick={e => Reset(e, 'email')}
+                  className={
+                    inputValue.email.length === 0 ? 'id-close hide' : 'id-close'
+                  }
+                />
+              </div>
+              <div className="inputPasswordBox">
+                <Input
+                  type="password"
+                  onChange={e => inputhandler(e, 'password')}
+                  value={inputValue.password}
+                  placeholder="비밀번호 입력"
+                />
+                <FontAwesomeIcon
+                  icon={close}
+                  onClick={e => Reset(e, 'password')}
+                  className={
+                    inputValue.password.length === 0
+                      ? 'pw-close hide'
+                      : 'pw-close'
+                  }
+                />
+              </div>
+              <div className="fail-message hidden">
+                아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
+                확인해주세요.
+              </div>
+            </div>
+            <LoginBtn type="submit">
+              {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
+            </LoginBtn>
+            <Link to="/signup">
+              <div className="sighup">회원가입</div>
+            </Link>
+          </form>
+        </div>
+      </div>
+    </LoginWrapper>
+  );
+}
 
 const LoginWrapper = styled.div`
   align-items: center;
@@ -108,7 +189,6 @@ const Input = styled.input`
   height: 4vh;
   font-size: 14px;
   font-weight: 350;
-  /* line-height: 10000px; */
   letter-spacing: -0.5px;
   border-top: none;
   border-left: none;
@@ -137,79 +217,5 @@ const LoginBtn = styled.button`
   color: white;
   cursor: pointer;
 `;
-function Login() {
-  // const [isLoginPush, setLoginPush] = useState(false);
-  const [inputValue, setValue] = useState({ email: '', password: '' });
-  function inputhandler(e, key) {
-    setValue({ ...inputValue, [key]: e.target.value });
-  }
-  function Reset(e, key) {
-    setValue({ ...inputValue, [key]: '' });
-  }
-
-  return (
-    <LoginWrapper>
-      <div className="login-container">
-        <h1>
-          <Link className="logo" to="/">
-            Login
-          </Link>
-        </h1>
-        <div className="login-box">
-          <div className="inputIdPw">
-            <div className="inputIdBox">
-              <Input
-                type="text"
-                placeholder="아이디 입력"
-                onChange={e => inputhandler(e, 'email')}
-                value={inputValue.email}
-              />
-              <FontAwesomeIcon
-                icon={close}
-                onClick={e => Reset(e, 'email')}
-                className={
-                  inputValue.email.length === 0 ? 'id-close hide' : 'id-close'
-                }
-              />
-            </div>
-            <div className="inputPasswordBox">
-              <Input
-                type="password"
-                onChange={e => inputhandler(e, 'password')}
-                value={inputValue.password}
-                placeholder="비밀번호 입력"
-              />
-              <FontAwesomeIcon
-                icon={close}
-                onClick={e => Reset(e, 'password')}
-                className={
-                  inputValue.password.length === 0
-                    ? 'pw-close hide'
-                    : 'pw-close'
-                }
-              />
-            </div>
-            <div className="fail-message hidden">
-              아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
-              확인해주세요.
-            </div>
-          </div>
-          {/* <LoginBtn
-          onClick={() => {
-            handleSignin(loginInfo);
-          }}
-          >
-          로그인
-          </LoginBtn> */}
-
-          <LoginBtn type="submit">로그인</LoginBtn>
-          <Link to="/signup">
-            <div className="sighup">회원가입</div>
-          </Link>
-        </div>
-      </div>
-    </LoginWrapper>
-  );
-}
 
 export default Login;
