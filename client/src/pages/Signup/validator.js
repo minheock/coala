@@ -9,19 +9,3 @@ export function strongPassword(str) {
     str,
   );
 }
-// const handleButtomValid = () => {
-//     if (
-//       !isValidInput ||
-//       !isValidEmail ||
-//       !isValidPassword ||
-//       !isCheckBoxClicked()
-//       ) {
-//       alert('please fill in the blanks');
-//     };
-
-// 이메일 검사: '@', '.' 이 둘다 포함될것.
-// const isValidEmail = email.includes('@') && email.includes('.');
-// 비밀번호 특수문자 검사를 위한 정규식표현.
-// const specialLetter = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
-// 특수문자 1자 이상, 전체 8자 이상일것.
-// const isValidPassword = password.length >= 8 && specialLetter >= 1;
