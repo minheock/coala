@@ -10,7 +10,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { signupAPI } from '../../api/user';
 import { strongPassword } from './validator';
-import { SET_ERROR_MESSAGE } from '../../reducer/modal';
+import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../../reducer/modal';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({
@@ -107,9 +107,19 @@ function Signup() {
     }
   };
 
-  // if (signupMutation.isLoading) {
-  //   return <h1>Loading....</h1>;
-  // }
+  useEffect(() => {
+    if (signupMutation.isSuccess) {
+      dispatch({
+        type: SET_SUCCESS_MESSAGE,
+        data: '회원가입 성공.',
+      });
+    } else if (signupMutation.isError) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: signupMutation.error.response.data.message,
+      });
+    }
+  }, [signupMutation.status]);
 
   return (
     <>
