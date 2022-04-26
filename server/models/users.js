@@ -33,10 +33,29 @@ module.exports = (sequelize, DataTypes) => {
   }
   users.init(
     {
-      username: DataTypes.STRING,
-      profile: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      profile: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      salt: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
@@ -66,5 +85,7 @@ module.exports = (sequelize, DataTypes) => {
  *            format: email
  *            description: Email for the user, needs to be unique.
  *          password:
+ *            type: string
+ *          slat:
  *            type: string
  */

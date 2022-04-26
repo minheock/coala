@@ -7,13 +7,14 @@ import Signup from './pages/Signup/Signup';
 import Home from './pages/Home';
 import Post from './pages/Post';
 import ContentDetail from './pages/ContentDetail';
-import ErrorModal from './components/ErrorModal';
+import AlertModal from './components/AlertModal';
 
 function App() {
-  const { error } = useSelector(state => state.modal);
+  const { error, success } = useSelector(state => state.modal);
   return (
     <div className="App">
-      {error ? <ErrorModal message={error} /> : null}
+      {error ? <AlertModal message={error} state="error" /> : null}
+      {success ? <AlertModal message={success} state="success" /> : null}
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

@@ -32,10 +32,9 @@ const router = express.Router();
  *              properties:
  *                email:
  *                   type: string
- *                   description: ""
+ *                   example: abcde@holy.com
  *                password:
  *                   type: string
- *                   description: ""
  *      responses:
  *        "200":
  *          description: 로그인 성공
@@ -91,7 +90,15 @@ router.post('/logout', logout); // 로그아웃 요청
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/User'
+ *              type: object
+ *              properties:
+ *                email:
+ *                   type: string
+ *                   example: abcde@holy.com
+ *                username:
+ *                   type: string
+ *                password:
+ *                   type: string
  *      responses:
  *        "201":
  *          description: 회원가입 완료
@@ -177,7 +184,7 @@ router.delete('/signout', signout); // 회원탈퇴 요청
  *                      [
  *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
  *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
  *                      ]
  *        "400":
  *          description: 파라미터 에러
