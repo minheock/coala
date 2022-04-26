@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  CheckCircleFilled,
+  LoadingOutlined,
+} from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 import { signupAPI } from '../../api/user';
+import { strongPassword } from './validator';
+import { SET_ERROR_MESSAGE } from '../../reducer/modal';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({
@@ -12,53 +19,92 @@ function Signup() {
     password: '',
     passwordChecked: '',
   });
-  const { email, password } = signupInfo;
-  const isValidEmail = email.includes('@') && email.includes('.');
-  const specialLetter = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
-  const isValidPassword = password.length >= 8 && specialLetter >= 1;
-  // input에 value가 존재하고
-  // 다른 곳을 클릭했을때 함수가 호출됨
-  // 함수의 로직에 따라 유효성이 검증이 안되면
-  // hiden 속성이 해제되고 경고창이 뜬다.
-  const [errmessage, setErrMessage] = useState('');
-  const handleButtomValid = () => {
-    if (signupInfo.email && !isValidEmail) {
-      signupInfo.email = '';
-      setErrMessage('@ 와 .을 입력해야합니다.');
-    }
-    if (signupInfo.password && !isValidPassword) {
-      signupInfo.password = '';
-      setErrMessage('8자리 이상 특수문자 1개가 존재해야 합니다.');
-    }
-    if (signupInfo.password && !isValidPassword) {
-      signupInfo.password = '';
-      setErrMessage('비밀번호가 일치하지 않습니다.');
-    }
-  };
-
   const [isAccept, setIsAccept] = useState(false);
   const [isOn, setIsOn] = useState(false);
   const signupMutation = useMutation(signupAPI);
   const [isCheck, setCheck] = useState(false);
+  const [errUserName, setErrUserName] = useState('');
+  const [errEmail, setErrEmail] = useState('');
+  const [errPassword, setErrPassword] = useState('');
+  const [errPasswordChecked, setErrPasswordChecked] = useState('');
+  const dispatch = useDispatch();
+
+  const isValidEmail = emailVal =>
+    emailVal.includes('@') && emailVal.includes('.');
+
+  // input에 value가 존재하고
+  // 다른 곳을 클릭했을때 함수가 호출됨
+  // 함수의 로직에 따라 유효성이 검증이 안되면
+  // hiden 속성이 해제되고 경고창이 뜬다.
+
+  // const handleButtomValid = () => {
+  //   if (signupInfo.email && !isValidEmail) {
+  //     setErrMessage('@ 와 .을 입력해야합니다.');
+  //   } else if (signupInfo.password && !isValidPassword) {
+  //     setErrMessage('8자리 이상 특수문자 1개가 존재해야 합니다.');
+  //   } else {
+  //     setErrMessage('비밀번호가 일치하지 않습니다.');
+  //   }
+  // };
+
+  useEffect(() => {
+    // handleButtomValid();
+    const {
+      userName,
+      email: curEmail,
+      password: curpassword,
+      passwordChecked,
+    } = signupInfo;
+
+    if (!userName) {
+      setErrUserName('이름이 비어있습니다.');
+    } else {
+      setErrUserName('');
+    }
+    if (!curEmail || !isValidEmail(curEmail)) {
+      setErrEmail('@, . 입력해주세요');
+    } else {
+      setErrEmail('');
+    }
+    if (!curpassword || !strongPassword(curpassword)) {
+      setErrPassword('비밀번호8자리이상 및 특수문자한개이상 포함해야합니다.');
+    } else {
+      setErrPassword('');
+    }
+    if (curpassword !== passwordChecked) {
+      setErrPasswordChecked('비밀번호가 일치해야 합니다.');
+    } else {
+      setErrPasswordChecked('');
+    }
+  }, [signupInfo]);
+
   const handleInputValue = (key, e) => {
-    console.log(signupInfo.email);
+    // console.log(signupInfo.email);
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
 
   const handleAccept = () => {
     setIsAccept(true);
   };
+
   function isCheckBoxClicked() {
     setCheck(!isCheck);
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-    signupMutation.mutate({
-      email: signupInfo.email,
-      username: signupInfo.userName,
-      password: signupInfo.password,
-    });
+    if (!errUserName && !errPassword && !errPasswordChecked && !errEmail) {
+      signupMutation.mutate({
+        email: signupInfo.email,
+        username: signupInfo.userName,
+        password: signupInfo.password,
+      });
+    } else {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: '모든칸을 제대로 작성해 주세요.',
+      });
+    }
   };
 
   // if (signupMutation.isLoading) {
@@ -82,9 +128,15 @@ function Signup() {
                 onChange={e => handleInputValue('userName', e)}
               />
             </div>
-            <span className="failureNameMessage hidden">
-              잘못된 이름 입니다.
-            </span>
+            {errUserName ? (
+              <span className="errmessage failureNameMessage ">
+                {errUserName}
+              </span>
+            ) : (
+              <span className="errmessage failureNameMessage hidden">
+                정답입니다.
+              </span>
+            )}
             <div className="InputBox">
               <div className="InputTitle">이메일</div>
               <input
@@ -95,7 +147,15 @@ function Signup() {
                 onChange={e => handleInputValue('email', e)}
               />
               <br />
-              <span className="failureEmailMessage hidden">{errmessage}</span>
+              {errEmail ? (
+                <span className="errmessage failureEmailMessage">
+                  {errEmail}
+                </span>
+              ) : (
+                <span className="errmessage failureEmailMessage hidden">
+                  정답
+                </span>
+              )}
             </div>
             <div className="InputBox">
               <div className="InputTitle">비밀번호</div>
@@ -104,13 +164,18 @@ function Signup() {
                 type="password"
                 name="inputPassword"
                 placeholder="비밀번호를 입력하세요."
-                onClick={handleButtomValid}
                 onChange={e => handleInputValue('password', e)}
               />
               <br />
-              <span className="failurePasswordMessage hidden">
-                {errmessage}
-              </span>
+              {errPassword ? (
+                <span className="errmessage failurePasswordMessage">
+                  {errPassword}
+                </span>
+              ) : (
+                <span className="errmessage ailurePasswordMessage hidden">
+                  정답
+                </span>
+              )}
             </div>
             <div className="InputBox">
               <div className="InputTitle">비밀번호 확인</div>
@@ -122,10 +187,18 @@ function Signup() {
                 onChange={e => handleInputValue('passwordChecked', e)}
               />
               <br />
-              <span className="failureCheckMessage hidden">{errmessage}</span>
+              {errPasswordChecked ? (
+                <span className="errmessage failureCheckMessage">
+                  {errPasswordChecked}
+                </span>
+              ) : (
+                <span className="errmessage failureCheckMessage hidden">
+                  정답
+                </span>
+              )}
             </div>
-            <button type="button" className="SignupBtn">
-              회원가입
+            <button type="submit" className="SignupBtn">
+              {signupMutation.isLoading ? <LoadingOutlined /> : '회원가입'}
             </button>
           </form>
         </SignupDiv>
@@ -229,36 +302,9 @@ const SignupDiv = styled.div`
     color: white;
     cursor: pointer;
   }
-  .InputName {
-    margin-top: 5px;
-    width: 350px;
-    height: 45px;
-    border-color: #999999;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-width: 1px;
-  }
-  .InputPassword {
-    margin-top: 5px;
-    width: 350px;
-    height: 45px;
-    border-color: #999999;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-width: 1px;
-  }
-  .InputPasswordChecked {
-    margin-top: 5px;
-    width: 350px;
-    height: 45px;
-    border-color: #999999;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-width: 1px;
-  }
+  .InputName,
+  .InputPassword,
+  .InputPasswordChecked,
   .InputEmail {
     margin-top: 5px;
     width: 350px;
@@ -269,19 +315,7 @@ const SignupDiv = styled.div`
     border-right: none;
     border-width: 1px;
   }
-  .failureNameMessage {
-    color: red;
-    font-size: 11px;
-  }
-  .failureEmailMessage {
-    color: red;
-    font-size: 11px;
-  }
-  .failurePasswordMessage {
-    color: red;
-    font-size: 11px;
-  }
-  .failureCheckMessage {
+  .errmessage {
     color: red;
     font-size: 11px;
   }
