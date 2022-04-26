@@ -91,7 +91,17 @@ router.post('/logout', logout); // 로그아웃 요청
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/User'
+ *              type: object
+ *              properties:
+ *                email:
+ *                   type: string
+ *                   description: ""
+ *                username:
+ *                   type: string
+ *                   description: ""
+ *                password:
+ *                   type: string
+ *                   description: ""
  *      responses:
  *        "201":
  *          description: 회원가입 완료
