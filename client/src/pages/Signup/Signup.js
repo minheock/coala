@@ -20,12 +20,19 @@ function Signup() {
   // 다른 곳을 클릭했을때 함수가 호출됨
   // 함수의 로직에 따라 유효성이 검증이 안되면
   // hiden 속성이 해제되고 경고창이 뜬다.
+  const [errmessage, setErrMessage] = useState('');
   const handleButtomValid = () => {
     if (signupInfo.email && !isValidEmail) {
       signupInfo.email = '';
+      setErrMessage('@ 와 .을 입력해야합니다.');
     }
     if (signupInfo.password && !isValidPassword) {
       signupInfo.password = '';
+      setErrMessage('8자리 이상 특수문자 1개가 존재해야 합니다.');
+    }
+    if (signupInfo.password && !isValidPassword) {
+      signupInfo.password = '';
+      setErrMessage('비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -34,6 +41,7 @@ function Signup() {
   const signupMutation = useMutation(signupAPI);
   const [isCheck, setCheck] = useState(false);
   const handleInputValue = (key, e) => {
+    console.log(signupInfo.email);
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
 
@@ -87,9 +95,7 @@ function Signup() {
                 onChange={e => handleInputValue('email', e)}
               />
               <br />
-              <span className="failureEmailMessage hidden">
-                @ 와 .을 입력해야합니다.{}
-              </span>
+              <span className="failureEmailMessage hidden">{errmessage}</span>
             </div>
             <div className="InputBox">
               <div className="InputTitle">비밀번호</div>
@@ -103,7 +109,7 @@ function Signup() {
               />
               <br />
               <span className="failurePasswordMessage hidden">
-                8자리 이상 특수문자 1개가 존재해야 합니다.
+                {errmessage}
               </span>
             </div>
             <div className="InputBox">
@@ -116,9 +122,7 @@ function Signup() {
                 onChange={e => handleInputValue('passwordChecked', e)}
               />
               <br />
-              <span className="failureCheckMessage hidden">
-                비밀번호가 일치하지 않습니다.
-              </span>
+              <span className="failureCheckMessage hidden">{errmessage}</span>
             </div>
             <button type="button" className="SignupBtn">
               회원가입
