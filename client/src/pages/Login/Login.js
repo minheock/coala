@@ -151,7 +151,7 @@ function Login() {
     <LoginWrapper>
       <div className="login-container">
         <h1>
-          <Link className="logo" to="/home">
+          <Link className="logo" to="/">
             Login
           </Link>
         </h1>
