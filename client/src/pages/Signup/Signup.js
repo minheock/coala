@@ -20,7 +20,12 @@ function Signup() {
   // 다른 곳을 클릭했을때 함수가 호출됨
   // 함수의 로직에 따라 유효성이 검증이 안되면
   // hiden 속성이 해제되고 경고창이 뜬다.
+  const [isAccept, setIsAccept] = useState(false);
+  const [isOn, setIsOn] = useState(false);
+  const signupMutation = useMutation(signupAPI);
+  const [isCheck, setCheck] = useState(false);
   const [errmessage, setErrMessage] = useState('');
+
   const handleButtomValid = () => {
     if (signupInfo.email && !isValidEmail) {
       signupInfo.email = '';
@@ -36,10 +41,6 @@ function Signup() {
     }
   };
 
-  const [isAccept, setIsAccept] = useState(false);
-  const [isOn, setIsOn] = useState(false);
-  const signupMutation = useMutation(signupAPI);
-  const [isCheck, setCheck] = useState(false);
   const handleInputValue = (key, e) => {
     console.log(signupInfo.email);
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
