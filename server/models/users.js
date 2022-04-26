@@ -86,4 +86,6 @@ module.exports = (sequelize, DataTypes) => {
  *            description: Email for the user, needs to be unique.
  *          password:
  *            type: string
+ *          slat:
+ *            type: string
  */
