@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { INIT_ERROR_MESSAGE } from '../reducer/modal';
+import { useNavigate } from 'react-router';
+import { INIT_MESSAGE } from '../reducer/modal';
 
 const Modal = styled.div`
   display: flex;
@@ -16,7 +17,8 @@ const Modal = styled.div`
   width: 288px;
   height: 60px;
   color: white;
-  background-color: #e15f41;
+  background-color: ${props =>
+    props.state === 'error' ? '#e15f41' : '#2ed573'};
   .error-message {
     font-size: 16px;
     padding-left: 10px;
@@ -32,7 +34,7 @@ const Modal = styled.div`
     position: absolute;
     bottom: 0px;
     height: 4px;
-    background: #c44569;
+    background: ${props => (props.state === 'error' ? '#c44569' : '#7bed9f')};
     animation: close-progress 3s linear;
     animation-fill-mode: forwards;
   }
@@ -75,27 +77,45 @@ class Timer {
   }
 }
 
-function ErrorModal({ message }) {
+function AlertModal({ message, state }) {
+  const [timeoutId, setTimeoutId] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const initError = () =>
+  const initSuccess = () => {
     dispatch({
-      type: INIT_ERROR_MESSAGE,
+      type: INIT_MESSAGE,
     });
+    clearTimeout(timeoutId);
+    navigate('/');
+  };
+  const initError = () => {
+    dispatch({
+      type: INIT_MESSAGE,
+    });
+    clearTimeout(timeoutId);
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      initError();
-    }, 3000);
+    setTimeoutId(
+      setTimeout(() => {
+        if (state === 'error') initError();
+        else initSuccess();
+      }, 3000),
+    );
   }, []);
 
   const modalRef = useRef();
 
   return (
-    <Modal ref={modalRef}>
-      <CloseOutlined onClick={initError} className="close-icon" />
+    <Modal state={state} ref={modalRef}>
+      <CloseOutlined
+        onClick={state === 'error' ? initError : initSuccess}
+        className="close-icon"
+      />
       <div className="error-message">{message}</div>
       <div className="close-progress"> </div>
     </Modal>
   );
 }
 
-export default ErrorModal;
+export default AlertModal;
