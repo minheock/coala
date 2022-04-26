@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMutation } from 'react-query';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import uploadFiles from '../firebase';
+import { postContentAPI } from '../api/content';
 
 const Container = styled.div`
   width: 95%;
@@ -86,6 +88,13 @@ function Post() {
   const editorRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.user);
+
+  const postContentMutation = useMutation(postContentAPI);
+  // 로그인 안하고 들어오면 메인페이지로 강제로 전환
+  if (!userInfo) {
+    navigate('/');
+  }
 
   const contentHandler = () => {
     setContent(editorRef.current.getInstance().getMarkdown() || '');
@@ -94,13 +103,22 @@ function Post() {
   const handleSubmit = e => {
     e.preventDefault();
     if (title && tag && editorRef.current) {
+      const des = JSON.stringify(
+        editorRef.current.getInstance().getHTML(),
+      ).replace(/<[^>]*>?/g, '');
+
+      const description = `${des.substring(1, 150)}...`;
+      console.log(description);
       const contentInfo = {
+        userId: userInfo.id,
         title,
         stack: tag.stack,
-        editorBody: editorRef.current.getInstance().getHTML(),
+        content: editorRef.current.getInstance().getHTML(),
         thumbnail,
+        description,
       };
       console.log(contentInfo);
+      // postContentMutation.mutate(contentInfo);
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
