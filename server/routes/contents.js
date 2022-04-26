@@ -7,7 +7,6 @@ const {
   findDone,
   findUndone,
 } = require('../controllers/contents');
-const { route } = require('./content');
 
 /**
  * @swagger
