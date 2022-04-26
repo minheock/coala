@@ -32,16 +32,15 @@ const router = express.Router();
  *              properties:
  *                userId:
  *                   type: integer
- *                   description: ""
  *                title:
  *                   type: string
- *                   description: ""
  *                content:
  *                   type: string
- *                   description: ""
+ *                description:
+ *                   type: string
  *                stack:
  *                   type: string
- *                   description: ""
+ *
  *      responses:
  *        "200":
  *          description: 컨텐츠 저장 완료
@@ -89,7 +88,7 @@ router.post('/', write); // 컨텐츠 작성
  *                   type: string
  *                   description: ""
  *                content:
- *                   type: string
+ *                   type: text
  *                   description: ""
  *                stack:
  *                   type: string
