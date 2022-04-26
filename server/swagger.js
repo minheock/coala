@@ -18,7 +18,7 @@ const options = {
       securitySchemes: {
         cookieAuth: {
           type: 'apiKey',
-          in: 'cookie',
+          in: 'header',
           name: 'jwt',
         },
       },

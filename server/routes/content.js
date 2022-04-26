@@ -29,16 +29,16 @@ const router = express.Router();
  *            schema:
  *              type: object
  *              properties:
- *                user_id:
+ *                userId:
+ *                   type: integer
+ *                   description: ""
+ *                title:
  *                   type: string
  *                   description: ""
- *                content_name:
+ *                content:
  *                   type: string
  *                   description: ""
- *                content_body:
- *                   type: string
- *                   description: ""
- *                category:
+ *                stack:
  *                   type: string
  *                   description: ""
  *      responses:
@@ -66,17 +66,17 @@ const router = express.Router();
 router.post('/', write); // 컨텐츠 작성
 /**
  * @swagger
- *  /content/{contentId}:
+ *  /content/{postId}:
  *    patch:
  *      summary: 컨텐츠 수정
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
  *      requestBody:
  *        required: true
  *        content:
@@ -84,13 +84,13 @@ router.post('/', write); // 컨텐츠 작성
  *            schema:
  *              type: object
  *              properties:
- *                content_name:
+ *                title:
  *                   type: string
  *                   description: ""
- *                content_body:
+ *                content:
  *                   type: string
  *                   description: ""
- *                category:
+ *                stack:
  *                   type: string
  *                   description: ""
  *      responses:
@@ -115,20 +115,20 @@ router.post('/', write); // 컨텐츠 작성
  *                    type: string
  *                    example: Invalid request
  */
-router.patch('/:contentId', update); // 작성한 컨텐츠 수정
+router.patch('/:postId', update); // 작성한 컨텐츠 수정
 /**
  * @swagger
- *  /content/{contentId}:
+ *  /content/{postId}:
  *    delete:
  *      summary: 컨텐츠 삭제
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
  *      responses:
  *        "200":
  *          description: 컨텐츠 삭제 완료
@@ -151,20 +151,20 @@ router.patch('/:contentId', update); // 작성한 컨텐츠 수정
  *                    type: string
  *                    example: Invalid request
  */
-router.delete('/:contentId', remove); // 컨텐츠 삭제
+router.delete('/:postId', remove); // 컨텐츠 삭제
 /**
  * @swagger
- *  /content/{contentId}/done:
- *    post:
+ *  /content/{postId}/done:
+ *    patch:
  *      summary: 컨텐츠 문제 해결 완료
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
  *      responses:
  *        "200":
  *          description: 컨텐츠 문제 해결 완료
@@ -187,20 +187,30 @@ router.delete('/:contentId', remove); // 컨텐츠 삭제
  *                    type: string
  *                    example: Invalid request
  */
-router.post('/:contentId/done', donePost); // 작성한 컨텐츠 문제 해결
+router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
 /**
  * @swagger
- *  /content/{contentId}/like:
+ *  /content/{postId}/like:
  *    post:
  *      summary: 컨텐츠 좋아요 요청
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                   type: integer
+ *                   description: ""
  *      responses:
  *        "200":
  *          description: 컨텐츠 좋아요 완료
@@ -223,20 +233,30 @@ router.post('/:contentId/done', donePost); // 작성한 컨텐츠 문제 해결
  *                    type: string
  *                    example: Invalid request
  */
-router.post('/:contentId/like', likePost); // 컨텐츠 좋아요 요청
+router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
 /**
  * @swagger
- *  /content/{contentId}/unlike:
+ *  /content/{postId}/unlike:
  *    post:
  *      summary: 컨텐츠 좋아요 취소
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                   type: integer
+ *                   description: ""
  *      responses:
  *        "200":
  *          description: 컨텐츠 좋아요 취소 완료
@@ -259,20 +279,20 @@ router.post('/:contentId/like', likePost); // 컨텐츠 좋아요 요청
  *                    type: string
  *                    example: Invalid request
  */
-router.post('/:contentId/unlike', unlikePost); // 컨텐츠 좋아요 취소
+router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
 /**
  * @swagger
- *  /content/{contentId}:
+ *  /content/{postId}:
  *    get:
  *      summary: 컨텐츠 디테일 정보 가져오기
  *      tags: [Content]
  *      parameters:
  *      - in: path
- *        name: contentId
+ *        name: postId
  *        required: true
  *        description: 컨텐츠 아이디
  *        schema:
- *          type: string
+ *          type: integer
  *      responses:
  *        "200":
  *          description: 요청 성공
@@ -288,9 +308,9 @@ router.post('/:contentId/unlike', unlikePost); // 컨텐츠 좋아요 취소
  *                    type: string
  *                    example:
  *                      [
- *                        { "content_name": "js", "content_body": "hellow world", "category":"javascript" },
+ *                        { "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
  *                      ]
  */
-router.get('/:contentId', post); // 컨텐츠 디테일 정보 가져오기
+router.get('/:postId', post); // 컨텐츠 디테일 정보 가져오기
 
 module.exports = router;

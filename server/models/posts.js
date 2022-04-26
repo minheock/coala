@@ -39,3 +39,31 @@ module.exports = (sequelize, DataTypes) => {
   );
   return posts;
 };
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Post:
+ *        type: object
+ *        required:
+ *          - user_id
+ *          - title
+ *          - content
+ *          - stack
+ *          - chatroomId
+ *          - done
+ *        properties:
+ *          user_id:
+ *            type: integer
+ *          title:
+ *            type: string
+ *          content:
+ *            type: string
+ *          stack:
+ *            type: string
+ *          chatroomId:
+ *            type: integer
+ *          done:
+ *            type: boolean
+ */

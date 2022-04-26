@@ -1,4 +1,4 @@
-const { posts } = require('../../models');
+const { posts, like } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
@@ -12,14 +12,14 @@ module.exports = {
       content === undefined ||
       content === '' ||
       stack === undefined ||
-      stack === '' ||
-      chatroomId === undefined ||
-      chatroomId === ''
+      stack === ''
+      // chatroomId === undefined ||
+      // chatroomId === ''
     ) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
       await posts // User_id = 로그인 유저의 pk id 받음
-        .create({ userId, title, content, stack, chatroomId })
+        .create({ userId, title, content, stack }) // chatroomId
         .then((data) => {
           res.status(200).send({ message: 'post is saved' });
         })
@@ -33,11 +33,11 @@ module.exports = {
     // params :contentId?id=1
     // 컨텐츠 삭제
     // console.log(req.query);
-    if (req.query.id) {
+    if (req.params.postId) {
       // 파라미터가 없으면 400 있으면 200
       await posts
         .destroy({
-          where: { id: req.query.id },
+          where: { id: req.params.postId },
         })
         .then((data) => {
           // 게시글을 서택해서 삭제하는거니까 없는 id를 선택하는 경우가 없을까요?
@@ -56,7 +56,7 @@ module.exports = {
     // params
     // 컨텐츠 수정
     const { title, content, stack } = req.body;
-    if (req.query.id) {
+    if (req.params.postId) {
       // 파라미터가 없으면 400 있으면 200
       if (
         title === undefined ||
@@ -76,7 +76,7 @@ module.exports = {
               stack,
             },
             {
-              where: { id: req.query.id },
+              where: { id: req.params.postId },
             },
           )
           .then((data) => {
@@ -91,14 +91,35 @@ module.exports = {
       res.status(400).send({ message: 'does not exist id' });
     }
   },
-  donePost: (req, res) => {
+  donePost: async (req, res) => {
     // 컨텐츠 문제 해결 완료
+    const { postId } = req.params;
+    if (postId) {
+      await posts.update({ done: true }, { where: { id: postId } });
+      res.status(200).send({ message: 'post done' });
+    } else {
+      res.status(400).send({ message: 'does not exist id' });
+    }
   },
-  likePost: (req, res) => {
+  likePost: async (req, res) => {
     // 컨텐츠 좋아요
+    const { postId } = req.params;
+    const { userId } = req.body;
+
+    if (!postId || !userId) {
+      await like.create({ postId: postId, userId: userId });
+      res.send();
+    }
   },
-  unlikePost: (req, res) => {
+  unlikePost: async (req, res) => {
     // 컨텐츠 좋아요 취소
+    const { postId } = req.params;
+    const { userId } = req.body;
+
+    if (!postId || !userId) {
+      await like.destroy({ where: { postId: postId, userId: userId } });
+      res.send();
+    }
   },
   post: (req, res) => {
     // 컨텐츠 작성정보 가져오기

@@ -4,7 +4,7 @@ const { sign, verify } = require('jsonwebtoken');
 
 module.exports = {
   generateAccessToken: (data) => {
-    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1d' });
+    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '20s' });
   },
   sendAccessToken: (res, accessToken) => {
     console.log(accessToken);
@@ -18,7 +18,8 @@ module.exports = {
   },
   isAuthorized: (req) => {
     const authorized = req.cookies.jwt;
-    if (!authorized) return null;
+
+    if (!authorized) return null; // 이부분 고민
     else {
       // 만약 유효하지 못한 토큰으로 요청이 들어올때 생각해봐야함
       // 일단 유효한토큰이 아닐때 verify시 오류남
