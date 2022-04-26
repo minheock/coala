@@ -4,6 +4,7 @@ const {
   sendAccessToken,
   isAuthorized,
 } = require('../token');
+const crypto = require('crypto');
 
 module.exports = {
   login: async (req, res) => {
@@ -15,7 +16,7 @@ module.exports = {
     } else {
       await users
         .findOne({
-          where: { email, password },
+          where: { email },
         })
         .then((data) => {
           if (!data) {
@@ -24,15 +25,25 @@ module.exports = {
           } else {
             // 토큰생성 및 쿠키로 전달
             // 보낼때 비번 정보 제외
-            const { id, username, profile, email } = data.dataValues;
-            const accessToken = generateAccessToken({
-              id,
-              username,
-              profile,
-              email,
-            });
-            res.status(200);
-            sendAccessToken(res, accessToken);
+            const dbPassword = data.dataValues.password;
+            const salt = data.dataValues.salt;
+            const hashPassword = crypto
+              .createHash('sha512')
+              .update(password + salt)
+              .digest('hex');
+            if (dbPassword === hashPassword) {
+              const { id, username, profile, email } = data.dataValues;
+              const accessToken = generateAccessToken({
+                id,
+                username,
+                profile,
+                email,
+              });
+              res.status(200);
+              sendAccessToken(res, accessToken);
+            } else {
+              res.status(400).send({ message: '비밀번호가 틀립니다' });
+            }
           }
         })
         .catch((err) => {
@@ -53,12 +64,19 @@ module.exports = {
     if (!username || !email || !password) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
+      console.log(password);
+      const salt = Math.round(new Date().valueOf() * Math.random()) + '';
+      const hashPassword = crypto
+        .createHash('sha512')
+        .update(password + salt)
+        .digest('hex');
       await users
         .findOrCreate({
           where: { email },
           defaults: {
             username,
-            password,
+            password: hashPassword,
+            salt: salt,
           },
         })
         .then(([result, created]) => {
