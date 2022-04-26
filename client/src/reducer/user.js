@@ -18,7 +18,10 @@ const reducer = (state = initialized, action) =>
   produce(state, draft => {
     switch (action.type) {
       case LOG_IN_SUCCESS:
-        draft.userInfo = dummyUser;
+        if (action.data.profile === null) {
+          action.data.profile = 'https://joeschmoe.io/api/v1/random';
+        }
+        draft.userInfo = action.data;
         break;
       case LOG_OUT_SUCCESS:
         draft.userInfo = null;

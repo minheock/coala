@@ -101,13 +101,10 @@ const HeaderWrapper = styled.header`
 function Header({ page }) {
   const [isUserMore, setIsUserMore] = useState(false);
   const { userInfo } = useSelector(state => state.user);
-  const dispatch = useDispatch();
   const navigator = useNavigate();
   const handleSearch = value => console.log(value);
   const handleLogin = () => {
-    dispatch({
-      type: LOG_IN_SUCCESS,
-    });
+    navigator('/login');
   };
   return (
     <HeaderWrapper>

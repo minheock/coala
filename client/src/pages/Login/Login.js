@@ -1,15 +1,19 @@
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation } from 'react-query';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 import { loginAPI } from '../../api/user';
+import { LOG_IN_SUCCESS } from '../../reducer/user';
 
 function Login() {
   const [inputValue, setValue] = useState({ email: '', password: '' });
   const loginMutation = useMutation(loginAPI);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   function inputhandler(e, key) {
     setValue({ ...inputValue, [key]: e.target.value });
   }
@@ -24,6 +28,21 @@ function Login() {
       password: inputValue.password,
     });
   };
+
+  useEffect(() => {
+    if (loginMutation.isSuccess) {
+      const userInfo = loginMutation.data.data;
+      console.log(userInfo);
+      dispatch({
+        type: LOG_IN_SUCCESS,
+        data: userInfo.data,
+      });
+      navigate('/');
+    } else if (loginMutation.isError) {
+      console.error(loginMutation.isError);
+    }
+  }, [loginMutation.status]);
+
   return (
     <LoginWrapper>
       <div className="login-container">
