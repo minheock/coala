@@ -6,7 +6,7 @@ module.exports = {
   generateAccessToken: (data) => {
     return sign(data, process.env.ACCESS_SECRET, { expiresIn: '20s' });
   },
-  sendAccessToken: (res, accessToken) => {
+  sendAccessToken: (res, accessToken, { id, username, profile, email }) => {
     console.log(accessToken);
     res
       .cookie('jwt', accessToken, {
@@ -14,7 +14,10 @@ module.exports = {
         // secure: true,
         httpOnly: true,
       })
-      .send({ message: 'token return' });
+      .send({
+        message: 'token return',
+        data: { id, username, profile, email },
+      });
   },
   isAuthorized: (req) => {
     const authorized = req.cookies.jwt;
