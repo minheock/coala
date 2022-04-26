@@ -39,8 +39,12 @@ module.exports = {
                 profile,
                 email,
               });
-              res.status(200);
-              sendAccessToken(res, accessToken);
+              sendAccessToken(res, accessToken, {
+                id,
+                username,
+                profile,
+                email,
+              });
             } else {
               res.status(400).send({ message: '비밀번호가 틀립니다' });
             }
