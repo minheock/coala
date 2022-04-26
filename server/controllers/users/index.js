@@ -64,7 +64,6 @@ module.exports = {
     if (!username || !email || !password) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
-      console.log(password);
       const salt = Math.round(new Date().valueOf() * Math.random()) + '';
       const hashPassword = crypto
         .createHash('sha512')
