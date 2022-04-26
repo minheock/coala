@@ -25,13 +25,34 @@ module.exports = (sequelize, DataTypes) => {
   }
   posts.init(
     {
-      userId: DataTypes.INTEGER,
-      title: DataTypes.STRING,
-      content: DataTypes.STRING,
-      thumbnail: DataTypes.STRING,
-      description: DataTypes.STRING,
-      stack: DataTypes.STRING,
-      chatroomId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      thumbnail: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      stack: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      chatroomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
     },
     {
@@ -61,6 +82,10 @@ module.exports = (sequelize, DataTypes) => {
  *          title:
  *            type: string
  *          content:
+ *            type: string
+ *          thumbnail:
+ *            type: string
+ *          description:
  *            type: string
  *          stack:
  *            type: string
