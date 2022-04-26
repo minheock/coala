@@ -35,20 +35,14 @@ module.exports = (sequelize, DataTypes) => {
  * @swagger
  *  components:
  *    schemas:
- *      Content:
+ *      Like:
  *        type: object
  *        required:
- *          - user_id
- *          - content_name
- *          - content_body
- *          - category
+ *          - userId
+ *          - postId
  *        properties:
- *          user_id:
- *            type: string
- *          content_name:
- *            type: string
- *          content_body:
- *            type: string
- *          category:
- *            type: string
+ *          userId:
+ *            type: integer
+ *          postId:
+ *            type: integer
  */
