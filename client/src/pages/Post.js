@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMutation } from 'react-query';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import uploadFiles from '../firebase';
+import { postContentAPI } from '../api/content';
 
 const Container = styled.div`
   width: 95%;
@@ -86,6 +88,13 @@ function Post() {
   const editorRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.user);
+
+  const postContentMutation = useMutation(postContentAPI);
+  // 로그인 안하고 들어오면 메인페이지로 강제로 전환
+  if (!userInfo) {
+    navigate('/');
+  }
 
   const contentHandler = () => {
     setContent(editorRef.current.getInstance().getMarkdown() || '');
@@ -94,13 +103,31 @@ function Post() {
   const handleSubmit = e => {
     e.preventDefault();
     if (title && tag && editorRef.current) {
+      const des = JSON.stringify(
+        editorRef.current.getInstance().getHTML(),
+      ).replace(/<[^>]*>?/g, '');
+
+      // 첫번째 이미지를 썸네일로 지정.
+      const tumb = JSON.stringify(
+        editorRef.current.getInstance().getHTML(),
+      ).split(`<img src=`);
+      if (tumb.length > 1) {
+        setThumbnail(
+          tumb[1].split(' ')[0].substring(2, tumb[1].split(' ')[0].length - 2),
+        );
+      }
+
+      const description = `${des.substring(1, 150)}...`;
       const contentInfo = {
+        userId: userInfo.id,
         title,
         stack: tag.stack,
-        editorBody: editorRef.current.getInstance().getHTML(),
+        content: editorRef.current.getInstance().getHTML(),
         thumbnail,
+        description,
       };
-      console.log(contentInfo);
+      // console.log(contentInfo);
+      postContentMutation.mutate(contentInfo);
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -122,9 +149,6 @@ function Post() {
           // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
           uploadFiles(blob).then(imgPath => {
             callback(imgPath, 'imageURL');
-            if (!thumbnail) {
-              setThumbnail(imgPath);
-            }
           });
         });
     }
