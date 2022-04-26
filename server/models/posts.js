@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       title: DataTypes.STRING,
       content: DataTypes.STRING,
+      thumbnail: DataTypes.STRING,
+      description: DataTypes.STRING,
       stack: DataTypes.STRING,
       chatroomId: DataTypes.INTEGER,
       done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
