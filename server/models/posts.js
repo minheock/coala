@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       thumbnail: {
@@ -82,7 +82,7 @@ module.exports = (sequelize, DataTypes) => {
  *          title:
  *            type: string
  *          content:
- *            type: string
+ *            type: text
  *          thumbnail:
  *            type: string
  *          description:
