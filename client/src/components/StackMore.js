@@ -12,6 +12,7 @@ const Container = styled.div`
   top: 40px;
   right: -70px;
   background-color: #ffffff;
+  z-index: 1000;
   ul {
     list-style: none;
     padding: 0px;

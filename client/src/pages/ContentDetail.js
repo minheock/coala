@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { Avatar } from 'antd';
-
+import { useQuery } from 'react-query';
+import { getContentAPI } from '../api/content';
 import Header from '../components/Header';
 import { CoalaGreen, CoalaGrey, SView } from '../config';
 
@@ -49,22 +51,51 @@ const Container = styled.main`
   }
 `;
 
-function ContentDetail({ contentInfo }) {
-  return (
-    <Container>
-      <Header />
-      <article>
-        <h1 className="content-title">{contentInfo.title}</h1>
-        <div className="user-info">
-          <Avatar className="user-profile" src={contentInfo.userInfo.profile} />
-          <span>{contentInfo.userInfo.username}</span>
-          <span className="updateAt">{contentInfo.updateAt}</span>
-        </div>
-        <div className="tag">{contentInfo.stack}</div>
-        <Viewer initialValue={contentInfo.editorBody} />
-      </article>
-    </Container>
-  );
+function ContentDetail() {
+  const { contentId } = useParams();
+  const {
+    isError,
+    isLoading,
+    data: contentDetail,
+    isSuccess,
+  } = useQuery(['content', contentId], () => getContentAPI(contentId), {
+    refetchOnWindowFocus: false,
+    retry: 0,
+  });
+  // useEffect(() => {
+  //   if (contentDetail) {
+  //     contentDetail = data.data;
+  //   }
+  // }, [isSuccess]);
+  if (isLoading) {
+    return <h1>Loading....</h1>;
+  }
+  if (isSuccess) {
+    // console.log(contentDetail.data.content);
+    return (
+      <Container>
+        <Header />
+        <article>
+          <h1 className="content-title">{contentDetail.data.title}</h1>
+          <div className="user-info">
+            <Avatar
+              className="user-profile"
+              src={
+                contentDetail.data.userInfo.profile
+                  ? contentDetail.data.userInfo.profile
+                  : 'https://joeschmoe.io/api/v1/random'
+              }
+            />
+            <span>{contentDetail.data.userInfo.username}</span>
+            <span className="updateAt">{contentDetail.data.updatedAt}</span>
+          </div>
+          <div className="tag">{contentDetail.data.stack}</div>
+          <Viewer initialValue={contentDetail.data.content} />
+        </article>
+      </Container>
+    );
+  }
+  return <h1>404</h1>;
 }
 
 export default ContentDetail;
