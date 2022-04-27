@@ -6,6 +6,7 @@ module.exports = {
       'posts',
       [
         {
+          done: 0,
           userId: 1,
           title: '삼항연산자의 다중 조건 사용할 때의 질문입니다',
           content:
@@ -20,6 +21,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 0,
           userId: 2,
           title: 'How to sequelize migrate',
           content:
@@ -34,6 +36,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 1,
           userId: 3,
           title: 'webpack live server 실행 불가능 문제',
           content:
@@ -47,6 +50,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 1,
           userId: 4,
           title: 'sprint-practice-deploy EC2, RDS 에러',
           content:
@@ -61,6 +65,7 @@ module.exports = {
         },
         {
           userId: 5,
+          done: 0,
           title: 'mysql 연결이 안됩니다',
           content:
             '<ol><li><p>현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?</p><p>Learn SQL Part3 을 진행 중입니다.</p><p>아래와 같은 오류로 인해 스프린트 진행이 안되고 있습니다.</p></li></ol><div data-language="text" class="toastui-editor-ww-code-block"><pre><code>&gt; learn-sql@1.0.0 test:part-3\n&gt; mocha __tests__/part3.test.js\n\nlearnmysql\n\n\n  part 3. 데이터베이스 연결과 스키마\n    part 3-1. connection test\n\n      &lt;YOUR DATABASE CONFIG&gt;\n  \n      host : localhost\n      user : root\n      password : 0000\n      \n      1) should be successful by initialize factoryService instance.\n      2) should be successful to query via factoryService instance.\n        cannot terminate connection of disconnected state.\n    part 3-2. schema\n      3) "before all" hook for "Q 3-1. 현재 있는 데이터베이스에 존재하는 모든 테이블 정보를 보기위한 SQL을 작성해주세요."\n        cannot terminate connection of disconnected state.\n\n  🏭factory service ends.\n\n\n  0 passing (39ms)\n  3 failing\n\n  1) part 3. 데이터베이스 연결과 스키마\n       part 3-1. connection test\n         should be successful by initialize factoryService instance.:\n     Error: the string "ER_BAD_DB_ERROR: Unknown database "learnmysql"" was thrown, throw an Error :)\n      at processTicksAndRejections (node:internal/process/task_queues:96:5)\n\n  2) part 3. 데이터베이스 연결과 스키마\n       part 3-1. connection test\n         should be successful to query via factoryService instance.:\n     Uncaught Error: Cannot enqueue Query after fatal error.\n      at Protocol._validateEnqueue (node_modules/mysql/lib/protocol/Protocol.js:212:16)\n      at Protocol._enqueue (node_modules/mysql/lib/protocol/Protocol.js:138:13)\n      at Connection.query (node_modules/mysql/lib/Connection.js:198:25)\n      at /Users/sg.yksv77/Desktop/섹션3/im-sprint-learn-sql/lib/common/mysql.js:70:23\n      at new Promise (&lt;anonymous&gt;)\n      at FactoryService.query (lib/common/mysql.js:69:12)\n      at Context.&lt;anonymous&gt; (__tests__/part3.test.js:22:50)\n      at processImmediate (node:internal/timers:466:21)\n\n  3) part 3. 데이터베이스 연결과 스키마\n       part 3-2. schema\n         "before all" hook for "Q 3-1. 현재 있는 데이터베이스에 존재하는 모든 테이블 정보를 보기위한 SQL을 작성해주세요.":\n     Error: the string "ER_BAD_DB_ERROR: Unknown database "learnmysql"" was thrown, throw an Error :)\n      at processTicksAndRejections (node:internal/process/</code></pre></div>',
@@ -73,6 +78,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 0,
           userId: 6,
           title: 'token 스프린트의 server export 부분이 궁금합니다',
           content:
@@ -87,6 +93,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 0,
           userId: 7,
           title:
             'cloudfront, elb route53 사용후에도 배포된 웹사이트 보안연결(https)안됨',
@@ -102,6 +109,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 0,
           userId: 8,
           title: 'MVC - cmarket 스프린트 controller의 index.js 질문',
           content:
@@ -115,6 +123,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          done: 0,
           userId: 9,
           title:
             'EC2 server npm start 시 listen EADDRINUSE: address already in use ::: 포트번호 에러가 납니다',
