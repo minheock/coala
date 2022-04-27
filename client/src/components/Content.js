@@ -2,12 +2,14 @@ import React from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 import styled from 'styled-components';
+import { SView, MView } from '../config';
 
 const CardContainer = styled(Card)`
   width: 270px;
   height: 350px;
   cursor: pointer;
   transition: 0.2s ease-in;
+  margin: 1rem 2rem 1rem 2rem;
   &:hover {
     transform: scale(1.03, 1.03);
   }
@@ -46,16 +48,27 @@ const CardContainer = styled(Card)`
     right: -0.5rem;
     top: 0.3rem;
   }
+  @media screen and (max-width: ${MView}px) {
+    & {
+      width: 320px;
+      height: 410px;
+    }
+  }
+  @media screen and (max-width: ${SView}px) {
+    & {
+      width: 380px;
+      height: 450px;
+    }
+  }
 `;
 
 const { Meta } = Card;
 
 function Content({ contentInfo }) {
   const { profile, username } = contentInfo.userInfo;
-  const { thumbnail, updateAt, stack, title, description, likers, solved } =
+  const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
-  const customUpdate = updateAt.split(' ')[0];
-
+  const customUpdate = updatedAt.split(' ')[0];
   return (
     <CardContainer
       cover={
@@ -79,11 +92,9 @@ function Content({ contentInfo }) {
             title={username}
             description={customUpdate}
           />
-          {solved ? (
-            <Tag className="solved-tag" color="gold">
-              solved
-            </Tag>
-          ) : null}
+          <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
+            {done ? 'solved' : 'resolving'}
+          </Tag>
           <div className="heart-icon">
             <HeartFilled /> {likers.length}
           </div>

@@ -84,7 +84,6 @@ function Post() {
   const [tag, setTag] = useState(null);
   const [innerWidth, setInnerWidth] = useState(MView);
   const [content, setContent] = useState('');
-  const [thumbnail, setThumbnail] = useState(null);
   const editorRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -100,13 +99,22 @@ function Post() {
     setContent(editorRef.current.getInstance().getMarkdown() || '');
   };
 
+  useEffect(() => {
+    if (postContentMutation.isSuccess) {
+      console.log(postContentMutation.data);
+    } else if (postContentMutation.isError) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: '포스트 작성 실패.',
+      });
+    }
+  }, [postContentMutation.status]);
   const handleSubmit = e => {
     e.preventDefault();
     if (title && tag && editorRef.current) {
       const des = JSON.stringify(
         editorRef.current.getInstance().getHTML(),
       ).replace(/<[^>]*>?/g, '');
-
       // 첫번째 이미지를 썸네일로 지정.
       let tumb = JSON.stringify(
         editorRef.current.getInstance().getHTML(),

@@ -3,7 +3,7 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
 import { Avatar } from 'antd';
-import { dummyContent } from '../reducer/content';
+
 import Header from '../components/Header';
 import { CoalaGreen, CoalaGrey, SView } from '../config';
 
@@ -49,22 +49,19 @@ const Container = styled.main`
   }
 `;
 
-function ContentDetail() {
+function ContentDetail({ contentInfo }) {
   return (
     <Container>
       <Header />
       <article>
-        <h1 className="content-title">{dummyContent.title}</h1>
+        <h1 className="content-title">{contentInfo.title}</h1>
         <div className="user-info">
-          <Avatar
-            className="user-profile"
-            src={dummyContent.userInfo.profile}
-          />
-          <span>{dummyContent.userInfo.username}</span>
-          <span className="updateAt">{dummyContent.updateAt}</span>
+          <Avatar className="user-profile" src={contentInfo.userInfo.profile} />
+          <span>{contentInfo.userInfo.username}</span>
+          <span className="updateAt">{contentInfo.updateAt}</span>
         </div>
-        <div className="tag">{dummyContent.stack}</div>
-        <Viewer initialValue={dummyContent.editorBody} />
+        <div className="tag">{contentInfo.stack}</div>
+        <Viewer initialValue={contentInfo.editorBody} />
       </article>
     </Container>
   );
