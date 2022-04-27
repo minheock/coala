@@ -1,4 +1,4 @@
-const { users, posts } = require('../../models');
+const { users, posts, like } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -123,27 +123,44 @@ module.exports = {
   post: async (req, res) => {
     // include / 최신 작성이 위로 올라오게
     // 해당유저의 작성한 게시글 불러오기
-    const verify = isAuthorized(req);
     const { userId } = req.body;
-    if (verify) {
+    if (userId) {
       await posts
         .findAll({
-          order: [['id', 'desc']],
-          where: {
-            userId,
-          },
-          attributes: ['id', 'title', 'content', 'stack', 'done'],
+          where: { userId },
+          include: [
+            {
+              model: users,
+              required: true,
+              as: 'userInfo',
+              attributes: ['id', 'username', 'profile'],
+            },
+            {
+              model: like,
+              as: 'likers',
+              attributes: ['userId'],
+            },
+          ],
+          attributes: [
+            'id',
+            'title',
+            'description',
+            'updatedAt',
+            'stack',
+            'thumbnail',
+            'done',
+          ],
+          order: [['id', 'DESC']],
         })
         .then((data) => {
-          // console.log(data);
-          res.status(200).send({ post: data });
+          res.status(200).send(data);
         })
         .catch((err) => {
           console.log(err);
           res.status(500);
         });
     } else {
-      res.status(400).send({ message: 'invalid Token' });
+      res.status(400).send({ message: 'invalid request' });
     }
   },
   userInfo: async (req, res) => {
