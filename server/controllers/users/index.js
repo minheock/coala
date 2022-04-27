@@ -21,7 +21,7 @@ module.exports = {
         .then((data) => {
           if (!data) {
             // db에 정보가 없을때
-            res.status(400).send({ message: '존재하지 않는 유저 입니다.' });
+            res.status(409).send({ message: '존재하지 않는 유저 입니다.' });
           } else {
             // 토큰생성 및 쿠키로 전달
             // 보낼때 비번 정보 제외
@@ -85,7 +85,7 @@ module.exports = {
         .then(([result, created]) => {
           if (!created) {
             // 겹치는 이메일이 있는경우
-            res.status(400).send({ message: 'e-mail already exists' });
+            res.status(409).send({ message: 'e-mail already exists' });
           } else {
             res.status(201).send({ message: '회원가입 완료' });
           }
@@ -232,4 +232,3 @@ module.exports = {
     }
   },
 };
-// {id,username, profile,email,password}

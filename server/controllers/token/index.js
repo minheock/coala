@@ -4,10 +4,9 @@ const { sign, verify } = require('jsonwebtoken');
 
 module.exports = {
   generateAccessToken: (data) => {
-    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '20s' });
+    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
   },
   sendAccessToken: (res, accessToken, { id, username, profile, email }) => {
-    console.log(accessToken);
     res
       .cookie('jwt', accessToken, {
         // sameSite: 'none', //https 일때만 하는거

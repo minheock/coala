@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
  *          userId:
  *            type: integer
  *          postId:
- *            type: postId
+ *            type: integer
  *          comment:
  *            type: string
  */

@@ -18,139 +18,9 @@ const {
 
 const router = express.Router();
 
-/**
- * @swagger
- *  /user/login:
- *    post:
- *      summary: 로그인
- *      tags: [User]
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                email:
- *                   type: string
- *                   example: abcde@holy.com
- *                password:
- *                   type: string
- *      responses:
- *        "200":
- *          description: 로그인 성공
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: token return
- *        "400":
- *          description: 로그인 실패
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: 존재하지 않는 유저 입니다.
- *                headers:
- *
- */
 router.post('/login', login); // 로그인 요청
-/**
- * @swagger
- *  /user/logout:
- *    post:
- *      summary: 로그아웃
- *      tags: [User]
- *      responses:
- *        "200":
- *          description: 로그아웃 성공
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: logout suceess
- */
 router.post('/logout', logout); // 로그아웃 요청
-/**
- * @swagger
- *  /user/signup:
- *    post:
- *      summary: 회원가입
- *      tags: [User]
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                email:
- *                   type: string
- *                   example: abcde@holy.com
- *                username:
- *                   type: string
- *                password:
- *                   type: string
- *      responses:
- *        "201":
- *          description: 회원가입 완료
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: 회원가입 완료
- *        "400":
- *          description: 회원가입 실패(이미 존재하는 이메일)
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: e-mail already exists
- */
 router.post('/signup', signup); // 회원가입 요청
-/**
- * @swagger
- *  /user/signout:
- *    delete:
- *      summary: 회원탈퇴
- *      tags: [User]
- *      parameters:
- *      - name: token
- *        in: header
- *        description: token
- *        schema:
- *          type: string
- *        examples:
- *          sample:
- *            value: example
- *            summary: A sample token
- *      responses:
- *        "200":
- *          description: 회원탈퇴 완료
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: delete user infomation & token
- */
 router.delete('/signout', signout); // 회원탈퇴 요청
 /**
  * @swagger
@@ -183,9 +53,9 @@ router.delete('/signout', signout); // 회원탈퇴 요청
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
+ *                        { "id": 3, "title": "test title", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript","thumbnail": "test", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript","thumbnail": "test", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript","thumbnail": "test", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  *        "400":
  *          description: 파라미터 에러
@@ -342,5 +212,165 @@ router.patch('/password', password); // 마이페이지에서 비밀번호 변�
  *
  */
 router.get('/auth', auth);
-
+/**
+ * @swagger
+ *  /user/login:
+ *    post:
+ *      summary: 로그인
+ *      tags: [User]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                   type: string
+ *                   example: test1@coala.com
+ *                password:
+ *                   type: string
+ *                   example: 1111
+ *      responses:
+ *        "200":
+ *          description: 로그인 성공
+ *          headers:
+ *            jwt:
+ *              schema:
+ *                type: string
+ *              description: accesToken
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: token return
+ *        "400":
+ *          description: 로그인 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid request
+ *        "409":
+ *          description: 이메일이 디비에 없는 경우
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: 존재하지 않는 유저 입니다.
+ *
+ * @swagger
+ *  /user/logout:
+ *    post:
+ *      summary: 로그아웃
+ *      tags: [User]
+ *      responses:
+ *        "200":
+ *          description: 로그아웃 성공
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: logout suceess
+ * @swagger
+ *  /user/signup:
+ *    post:
+ *      summary: 회원가입
+ *      tags: [User]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                   type: string
+ *                   example: test@coala.com
+ *                username:
+ *                   type: string
+ *                   example: coala
+ *                password:
+ *                   type: string
+ *                   example: 1111
+ *      responses:
+ *        "201":
+ *          description: 회원가입 완료
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: 회원가입 완료
+ *        "400":
+ *          description: 파라미터 부족 회원가입 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid request
+ *        "409":
+ *          description: 회원가입 실패(이미 존재하는 이메일)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: e-mail already exists
+ * @swagger
+ *  /user/signout:
+ *    delete:
+ *      summary: 회원탈퇴
+ *      tags: [User]
+ *      parameters:
+ *      - name: token
+ *        in: header
+ *        description: token
+ *        schema:
+ *          type: string
+ *        examples:
+ *          sample:
+ *            value: token
+ *            summary: A sample token
+ *      responses:
+ *        "200":
+ *          description: 회원탈퇴 완료
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: delete user infomation & token
+ *        "400":
+ *          description: 토큰이 유효하지 않는 경우
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
+ */
 module.exports = router;

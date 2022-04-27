@@ -31,3 +31,19 @@ module.exports = (sequelize, DataTypes) => {
   );
   return user_chatrooms;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      user_chatrooms:
+ *        type: object
+ *        required:
+ *          - chatroomId
+ *          - userId
+ *        properties:
+ *          chatroomId:
+ *            type: integer
+ *          userId:
+ *            type: integer
+
+ */
