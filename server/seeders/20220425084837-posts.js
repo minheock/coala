@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           userId: 1,
-          title: 'package.json은 왜필요한가요?',
+          title: 'JavaScript는 왜필요한가요?',
           content: '질문 드립니다',
           stack: 'JavaScript',
           chatroomId: '1',
