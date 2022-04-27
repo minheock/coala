@@ -2,13 +2,13 @@ import produce from 'immer';
 
 export const dummyContent = {
   id: 1,
-  userInfo: {
+  user: {
     userId: 1,
     username: '성민',
     profile: 'https://joeschmoe.io/api/v1/random',
   },
-  likers: [1, 2, 3, 4, 5, 6],
-  solved: true,
+  likes: [1, 2, 3, 4, 5, 6],
+  done: true,
   description:
     'It has been released as opensource in 2018 and has continually evolved to receive 10k GitHub ⭐️ Stars.It has been released as opensource in 2018 and has continually evolved to receive 10k GitHub ⭐️ Stars.',
   updateAt: '2022-03-01 04:45:40',
@@ -23,6 +23,8 @@ const initialized = {
   or: false,
 };
 
+export const LOAD_CONTENTS_SUCCESS = 'LOAD_CONTENTS_SUCCESS';
+
 export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
 
 const reducer = (state = initialized, action) =>
@@ -30,6 +32,9 @@ const reducer = (state = initialized, action) =>
     switch (action.type) {
       case CONTENT_LIKE_REQUEST:
         draft.or = true;
+        break;
+      case LOAD_CONTENTS_SUCCESS:
+        draft.mainContents = [...action.data, dummyContent];
         break;
       default:
         break;

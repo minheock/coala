@@ -51,8 +51,8 @@ const CardContainer = styled(Card)`
 const { Meta } = Card;
 
 function Content({ contentInfo }) {
-  const { profile, username } = contentInfo.userInfo;
-  const { thumbnail, updateAt, stack, title, description, likers, solved } =
+  const { profile, username } = contentInfo.user;
+  const { thumbnail, updateAt, stack, title, description, likes, done } =
     contentInfo;
   const customUpdate = updateAt.split(' ')[0];
 
@@ -79,13 +79,13 @@ function Content({ contentInfo }) {
             title={username}
             description={customUpdate}
           />
-          {solved ? (
+          {done ? (
             <Tag className="solved-tag" color="gold">
               solved
             </Tag>
           ) : null}
           <div className="heart-icon">
-            <HeartFilled /> {likers.length}
+            <HeartFilled /> {likes.length}
           </div>
         </div>
       </div>
