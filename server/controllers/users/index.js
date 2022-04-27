@@ -121,7 +121,7 @@ module.exports = {
     }
   },
   post: async (req, res) => {
-    // include / 최신 작성이 위로 올라오게
+    // include / 최신 작성이 위로
     // 해당유저의 작성한 게시글 불러오기
     const verify = isAuthorized(req);
     const { userId } = req.body;
