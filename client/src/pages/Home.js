@@ -6,6 +6,7 @@ import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
 import { getContentsAPI } from '../api/content';
 import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
+import LoadingContents from '../components/LoadingContents';
 
 function Home() {
   const { mainContents } = useSelector(state => state.content);
@@ -36,7 +37,15 @@ function Home() {
   //     })
   //     .catch(error => console.error(error));
   // }, []);
-
+  if (isLoading) {
+    return (
+      <div>
+        <Header page="Home" />
+        <NavBar />
+        <LoadingContents />
+      </div>
+    );
+  }
   return (
     <div>
       <Header page="Home" />
