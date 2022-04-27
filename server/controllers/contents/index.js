@@ -3,8 +3,7 @@ const { posts, like } = require('../../models');
 module.exports = {
   allPost: async (req, res) => {
     // 모든 컨텐츠 정보 불러오기 (제목,사진?)
-    const { stack } = req.query;
-    const a = await posts.findAll({ where: { stack: stack } });
+    const a = await posts.findAll({});
     res.send(a);
   },
   filterPost: (req, res) => {
