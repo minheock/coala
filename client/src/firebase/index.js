@@ -4,10 +4,16 @@ import { storage } from './config';
 async function uploadFiles(file) {
   try {
     if (!file) return;
-    const storageRef = ref(storage, `/file/sub/sub2/${file.name}`);
+
+    // 이미지 이름 new Date().getTime() 형식으로 바꾸기.
+    const nowtime = new Date().getTime();
+    let filename = file.name.split('.');
+    filename = `${nowtime}.${filename[filename.length - 1]}`;
+    const storageRef = ref(storage, `/file/sub/sub2/${filename}`);
     const snapshot = await uploadBytes(storageRef, file);
     const { bucket } = snapshot.metadata;
 
+    // path 변환
     const ethierPath = snapshot.metadata.fullPath.split('/');
     let path = '';
     for (let i = 0; i < ethierPath.length; i++) {
