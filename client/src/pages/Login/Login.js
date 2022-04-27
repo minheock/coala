@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SET_ERROR_MESSAGE } from '../../reducer/modal';
 import { loginAPI } from '../../api/user';
 import { LOG_IN_SUCCESS } from '../../reducer/user';
@@ -16,6 +16,10 @@ function Login() {
   const loginMutation = useMutation(loginAPI);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { userInfo } = useSelector(state => state.user);
+  if (userInfo) {
+    navigate('/');
+  }
   function inputhandler(e, key) {
     setValue({ ...inputValue, [key]: e.target.value });
   }
@@ -33,11 +37,11 @@ function Login() {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
-      const userInfo = loginMutation.data.data;
-      console.log(userInfo);
+      const userinfo = loginMutation.data.data;
+      console.log(userinfo);
       dispatch({
         type: LOG_IN_SUCCESS,
-        data: userInfo.data,
+        data: userinfo.data,
       });
       navigate('/');
     } else if (loginMutation.isError) {

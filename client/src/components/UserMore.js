@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOG_OUT_SUCCESS } from '../reducer/user';
 import { CoalaGreen, CoalaGrey } from '../config';
 
 const Container = styled.div`
@@ -37,8 +39,17 @@ const Container = styled.div`
 `;
 
 function UserMore() {
+  const { userInfo } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  function handleLogout() {
+    if (userInfo) {
+      dispatch({
+        type: LOG_OUT_SUCCESS,
+      });
+    }
+  }
   return (
-    <Container>
+    <Container className={userInfo ? null : 'hidden'}>
       <ul>
         <Link className="link" to="/write">
           <li>질문작성</li>
@@ -46,7 +57,9 @@ function UserMore() {
         <li>메세지 </li>
         <li>댓글</li>
         <li>마이페이지</li>
-        <li>로그아웃</li>
+        <div className="logout" onClick={handleLogout}>
+          <li>로그아웃</li>
+        </div>
       </ul>
     </Container>
   );
