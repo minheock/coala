@@ -1,4 +1,4 @@
-const { posts, like, chatrooms } = require('../../models');
+const { users, posts, like, chatrooms, post_comment } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
@@ -116,22 +116,67 @@ module.exports = {
     const { postId } = req.params;
     if (postId) {
       await posts
-        .findAll({
+        .findOne({
           where: { id: postId },
+          include: [
+            {
+              model: users,
+              required: true,
+              as: 'userInfo',
+              attributes: ['id', 'username', 'profile'],
+            },
+            {
+              model: like,
+              as: 'likers',
+              attributes: ['userId'],
+            },
+            // 코멘트 뒤집어서
+            {
+              model: post_comment,
+              as: 'comments',
+              attributes: ['postId', 'userId', 'comment', 'createdAt'],
+              include: [
+                {
+                  model: users,
+                  as: 'userinfo',
+                  required: true,
+                  attributes: ['username', 'profile'],
+                },
+              ],
+            },
+          ],
+          order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
         })
         .then((data) => {
           res.status(200).send(data);
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500);
         });
     } else {
       // 예외 처리 다시 확인할것
       res.status(400).send({ message: 'Invalid request' });
     }
   },
-  comment: (req, res) => {
+  comment: async (req, res) => {
     // 댓글 작성
+    const { userId, comment, postId } = req.body;
+    if (!postId || !comment || !userId) {
+      res.status(400).send({ message: 'Invalid request' });
+    } else {
+      await post_comment
+        .create({
+          userId,
+          comment,
+          postId,
+        })
+        .then((data) => {
+          res
+            .status(200)
+            .send({ message: 'comment is saved', data: { commentId: data } });
+        });
+    }
+  },
+  commentRemove: async (req, res) => {
+    // 댓글 삭제
+    // 작성한 유저의 경우에만 삭제 가능
+    // 유저 아이디랑 코멘트아이디를
   },
 };
