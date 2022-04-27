@@ -1,10 +1,39 @@
-const { posts, like } = require('../../models');
+const { posts, like, users } = require('../../models');
+const { sequelize } = require('sequelize');
 
 module.exports = {
   allPost: async (req, res) => {
     // 모든 컨텐츠 정보 불러오기 (제목,사진?)
-    const a = await posts.findAll({});
-    res.send(a);
+    await posts
+      .findAll({
+        include: [
+          {
+            model: users,
+            required: true,
+            attributes: ['id', 'username', 'profile'],
+          },
+          {
+            model: like,
+            attributes: ['userId'],
+          },
+        ],
+        attributes: [
+          'done',
+          'title',
+          'description',
+          'updatedAt',
+          'stack',
+          'thumbnail',
+        ],
+      })
+      .then((data) => {
+        // console.log(
+        //   data[0].dataValues.likes.map((a) => {
+        //     return a.like;
+        //   }),
+        // );
+        res.status(200).send(data);
+      });
   },
   filterPost: (req, res) => {
     // 스택별로 필터링 해서 컨텐츠 정보 불러오기

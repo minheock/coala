@@ -6,8 +6,10 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
+import { SET_ERROR_MESSAGE } from '../../reducer/modal';
 import { loginAPI } from '../../api/user';
 import { LOG_IN_SUCCESS } from '../../reducer/user';
+import { SView } from '../../config';
 
 function Login() {
   const [inputValue, setValue] = useState({ email: '', password: '' });
@@ -39,7 +41,10 @@ function Login() {
       });
       navigate('/');
     } else if (loginMutation.isError) {
-      console.error(loginMutation.isError);
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: loginMutation.error.response.data.message,
+      });
     }
   }, [loginMutation.status]);
 
@@ -86,11 +91,8 @@ function Login() {
                   }
                 />
               </div>
-              <div className="fail-message hidden">
-                아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
-                확인해주세요.
-              </div>
             </div>
+            <br />
             <LoginBtn type="submit">
               {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
             </LoginBtn>
@@ -105,41 +107,38 @@ function Login() {
 }
 
 const LoginWrapper = styled.div`
+  background: linear-gradient(15deg, green, #999999);
+  background-size: cover;
   align-items: center;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  height: 60%;
-  width: 80%;
+  height: 100%;
+  width: 100%;
 
   .logo {
+    height: 50px;
     font-size: 150%;
     font-family: sans-serif;
     position: absolute;
     transform: translate(-50%, -50%);
     left: 50%;
-    top: 10%;
-    color: black;
+    top: 15%;
+    color: whitesmoke;
   }
   .login-container {
-    border: solid 1px #dadada;
+    background-color: rgba(30, 30, 30, 0.5);
     justify-content: center;
     border-radius: 6%;
-    height: 53vh;
-    width: 20vw;
-    /* align-items: center; */
+    height: 600px;
+    width: 450px;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
   .login-box {
-    /* border: 1px solid #dadada; */
-    height: 20vw;
+    height: 300px;
     padding-top: 5vh;
-    /* padding-right: 5vw; */
-    padding-left: 5vw;
+    padding-left: 110px;
     width: 100%;
     left: 50%;
     top: 50%;
@@ -151,29 +150,22 @@ const LoginWrapper = styled.div`
   .inputIdPw {
     display: inline-block;
     margin-top: 3vh;
-    /* table-layout: fixed; */
-    /* position: relative; */
-    /* width: 100%; */
-    /* box-sizing: border-box; */
   }
   .id-close {
     position: relative;
     margin-top: 1.6vh;
+    color: whitesmoke;
   }
   .pw-close {
     position: relative;
     margin-top: 1.6vh;
+    color: whitesmoke;
   }
   .inputIdBox {
     display: flex;
-    /* position: relative; */
     width: 11vw;
     margin-bottom: 3em;
     height: 4vh;
-    /* padding: 16px 18px 15px; */
-    /* box-sizing: border-box; */
-    /* text-align: left; */
-    /* box-shadow: 0 2px 6px 0 rgb(68 68 68 / 8%); */
   }
   .inputPasswordBox {
     display: flex;
@@ -191,20 +183,54 @@ const LoginWrapper = styled.div`
     font-size: 10.5px;
   }
   .sighup {
-    color: black;
+    color: white;
     font-size: 11px;
-    margin-top: 45px;
-    font-weight: 300;
+    margin-top: 35px;
+    font-weight: 400;
+    font-family: 'montserrat', sans-serif;
     border: none;
-    background-color: white;
     cursor: pointer;
+    transition: 0.3s;
+    :hover {
+      font-size: 11.4px;
+      font-weight: 500;
+    }
+  }
+
+  @media screen and (max-width: ${SView}px) {
+    & {
+      width: 90%;
+    }
+    .login-container {
+      height: 500px;
+      width: 400px;
+    }
+    .login-box {
+      padding-left: 5%;
+      width: 70%;
+    }
+    .sighup {
+      margin-top: 25px;
+    }
+    @media screen and (max-width: ${SView - 180}px) {
+      .login-container {
+        height: 400px;
+        width: 350px;
+      }
+      .login-box {
+        padding-left: 5%;
+      }
+      .sighup {
+        margin-top: 15px;
+      }
+    }
   }
 `;
 
 const Input = styled.input`
   padding: 14px 17px 13px;
   display: block;
-  width: 10vw;
+  width: 300px;
   height: 4vh;
   font-size: 14px;
   font-weight: 350;
@@ -212,7 +238,7 @@ const Input = styled.input`
   border-top: none;
   border-left: none;
   border-right: none;
-  color: #222;
+  color: white;
   box-sizing: border-box;
   z-index: 4;
   border-radius: 0;
@@ -227,14 +253,18 @@ const LoginBtn = styled.button`
   margin-top: 1vh;
   border-radius: 10px;
   border: none;
-  width: 6vw;
-  height: 4vh;
+  width: 215px;
+  height: 45px;
   font-size: 20px;
-  margin-left: 1.8vw;
+
   font-weight: bold;
   background-color: #555555;
   color: white;
+  transition: 0.6s;
   cursor: pointer;
+  :hover {
+    transform: scale(0.97);
+  }
 `;
 
 export default Login;
