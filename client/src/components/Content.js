@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import { SView, MView } from '../config';
 
 const CardContainer = styled(Card)`
@@ -69,8 +70,14 @@ function Content({ contentInfo }) {
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
   const customUpdate = updatedAt.split(' ')[0];
+  const navigate = useNavigate();
+
+  const handleDetail = () => {
+    navigate(`/content/${contentInfo.id}`);
+  };
   return (
     <CardContainer
+      onClick={handleDetail}
       cover={
         thumbnail ? (
           <img className="thumbnail" alt="example" src={thumbnail} />
