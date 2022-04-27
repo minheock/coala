@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
+import { SET_ERROR_MESSAGE } from '../../reducer/modal';
 import { loginAPI } from '../../api/user';
 import { LOG_IN_SUCCESS } from '../../reducer/user';
 import { SView } from '../../config';
@@ -40,7 +41,10 @@ function Login() {
       });
       navigate('/');
     } else if (loginMutation.isError) {
-      console.error(loginMutation.error);
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: loginMutation.error.response.data.message,
+      });
     }
   }, [loginMutation.status]);
 
@@ -87,10 +91,6 @@ function Login() {
                   }
                 />
               </div>
-              <div className="fail-message hidden">
-                아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시
-                확인해주세요.
-              </div>
             </div>
             <LoginBtn type="submit">
               {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
@@ -106,13 +106,10 @@ function Login() {
 }
 
 const LoginWrapper = styled.div`
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgPqmG4jkW21I8b4vcgQ4WaHYEkulAkGK-0w&usqp=CAU');
+  background: linear-gradient(15deg, green, #999999);
   background-size: cover;
   align-items: center;
   position: absolute;
-  /* left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%); */
   height: 100%;
   width: 100%;
 
@@ -127,23 +124,19 @@ const LoginWrapper = styled.div`
     color: whitesmoke;
   }
   .login-container {
-    /* border: solid 1px #dadada; */
     background-color: rgba(30, 30, 30, 0.5);
     justify-content: center;
     border-radius: 6%;
     height: 600px;
     width: 450px;
-    /* align-items: center; */
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
   .login-box {
-    /* border: 1px solid #dadada; */
     height: 300px;
     padding-top: 5vh;
-    /* padding-right: 5vw; */
     padding-left: 110px;
     width: 100%;
     left: 50%;
@@ -156,29 +149,22 @@ const LoginWrapper = styled.div`
   .inputIdPw {
     display: inline-block;
     margin-top: 3vh;
-    /* table-layout: fixed; */
-    /* position: relative; */
-    /* width: 100%; */
-    /* box-sizing: border-box; */
   }
   .id-close {
     position: relative;
     margin-top: 1.6vh;
+    color: whitesmoke;
   }
   .pw-close {
     position: relative;
     margin-top: 1.6vh;
+    color: whitesmoke;
   }
   .inputIdBox {
     display: flex;
-    /* position: relative; */
     width: 11vw;
     margin-bottom: 3em;
     height: 4vh;
-    /* padding: 16px 18px 15px; */
-    /* box-sizing: border-box; */
-    /* text-align: left; */
-    /* box-shadow: 0 2px 6px 0 rgb(68 68 68 / 8%); */
   }
   .inputPasswordBox {
     display: flex;
