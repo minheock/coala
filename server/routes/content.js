@@ -32,6 +32,7 @@ const router = express.Router();
  *              properties:
  *                userId:
  *                   type: integer
+ *                   example: 1
  *                title:
  *                   type: string
  *                content:

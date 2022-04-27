@@ -3,18 +3,7 @@ module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
     const { userId, title, content, stack, thumbnail, description } = req.body;
-    if (
-      !title
-      // user_id는 필수값 없으면 400 //db에서도 null안받게
-      // userId === undefined ||
-      // userId === '' ||
-      // title === undefined ||
-      // title === '' ||
-      // content === undefined ||
-      // content === '' ||
-      // stack === undefined ||
-      // stack === ''
-    ) {
+    if (!title || !content || !stack || !description || !userId) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
       const chatroom = await chatrooms.create({ userId });
@@ -66,14 +55,7 @@ module.exports = {
     const { title, content, stack } = req.body;
     if (req.params.postId) {
       // 파라미터가 없으면 400 있으면 200
-      if (
-        title === undefined ||
-        title === '' ||
-        content === undefined ||
-        content === '' ||
-        stack === undefined ||
-        stack === ''
-      ) {
+      if (!title || !content || !stack) {
         res.status(400).send({ message: 'Invalid request' });
       } else {
         await posts
