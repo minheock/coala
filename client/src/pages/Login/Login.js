@@ -127,7 +127,7 @@ const LoginWrapper = styled.div`
   .login-container {
     background-color: rgba(30, 30, 30, 0.5);
     justify-content: center;
-    border-radius: 6%;
+    border-radius: 45px;
     height: 600px;
     width: 450px;
     position: absolute;
