@@ -1,4 +1,4 @@
-const { users, posts, like } = require('../../models');
+const { users, posts } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -21,7 +21,7 @@ module.exports = {
         .then((data) => {
           if (!data) {
             // db에 정보가 없을때
-            res.status(400).send({ message: '존재하지 않는 유저 입니다.' });
+            res.status(409).send({ message: '존재하지 않는 유저 입니다.' });
           } else {
             // 토큰생성 및 쿠키로 전달
             // 보낼때 비번 정보 제외
@@ -85,7 +85,7 @@ module.exports = {
         .then(([result, created]) => {
           if (!created) {
             // 겹치는 이메일이 있는경우
-            res.status(400).send({ message: 'e-mail already exists' });
+            res.status(409).send({ message: 'e-mail already exists' });
           } else {
             res.status(201).send({ message: '회원가입 완료' });
           }
@@ -123,44 +123,27 @@ module.exports = {
   post: async (req, res) => {
     // include / 최신 작성이 위로 올라오게
     // 해당유저의 작성한 게시글 불러오기
+    const verify = isAuthorized(req);
     const { userId } = req.body;
-    if (userId) {
+    if (verify) {
       await posts
         .findAll({
-          where: { userId },
-          include: [
-            {
-              model: users,
-              required: true,
-              as: 'userInfo',
-              attributes: ['id', 'username', 'profile'],
-            },
-            {
-              model: like,
-              as: 'likers',
-              attributes: ['userId'],
-            },
-          ],
-          attributes: [
-            'id',
-            'title',
-            'description',
-            'updatedAt',
-            'stack',
-            'thumbnail',
-            'done',
-          ],
-          order: [['id', 'DESC']],
+          order: [['id', 'desc']],
+          where: {
+            userId,
+          },
+          attributes: ['id', 'title', 'content', 'stack', 'done'],
         })
         .then((data) => {
-          res.status(200).send(data);
+          // console.log(data);
+          res.status(200).send({ post: data });
         })
         .catch((err) => {
           console.log(err);
           res.status(500);
         });
     } else {
-      res.status(400).send({ message: 'invalid request' });
+      res.status(400).send({ message: 'invalid Token' });
     }
   },
   userInfo: async (req, res) => {
@@ -249,4 +232,3 @@ module.exports = {
     }
   },
 };
-// {id,username, profile,email,password}

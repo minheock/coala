@@ -73,14 +73,16 @@ module.exports = (sequelize, DataTypes) => {
  *      Post:
  *        type: object
  *        required:
- *          - user_id
+ *          - userId
  *          - title
  *          - content
+ *          - thumbnail
+ *          - description
  *          - stack
  *          - chatroomId
  *          - done
  *        properties:
- *          user_id:
+ *          userId:
  *            type: integer
  *          title:
  *            type: string

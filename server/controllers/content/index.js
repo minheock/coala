@@ -151,7 +151,16 @@ module.exports = {
           order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
         })
         .then((data) => {
-          res.status(200).send(data);
+          // const post = [data].map((el) => el.get({ plain: true }));
+          // for (let i = 0; i < post[0].likers.length; i++) {
+          //   post[0].likers[i] = post[0].likers[i].userId;
+          // }
+          data.dataValues.likers = data.dataValues.likers.map((el) => {
+            el = el.userId;
+            return el;
+          });
+          // console.log(data.dataValues);
+          res.status(200).send({ message: '요청 성공', data: data.dataValues });
         });
     } else {
       // 예외 처리 다시 확인할것
