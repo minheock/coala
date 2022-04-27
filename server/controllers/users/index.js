@@ -220,5 +220,16 @@ module.exports = {
         });
     }
   },
+  auth: async (req, res) => {
+    const verify = isAuthorized(req);
+    if (verify) {
+      const { username, email, profile } = verify;
+      res
+        .status(200)
+        .send({ message: 'ok', data: { username, email, profile } });
+    } else {
+      res.status(400).send({ message: 'Invalid Token' });
+    }
+  },
 };
 // {id,username, profile,email,password}

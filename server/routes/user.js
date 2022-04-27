@@ -7,6 +7,7 @@ const {
   post,
   userInfo,
   password,
+  auth,
 } = require('../controllers/users');
 /**
  * @swagger
@@ -301,5 +302,45 @@ router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변�
  *
  */
 router.patch('/password', password); // 마이페이지에서 비밀번호 변경 요청
+/**
+ * @swagger
+ *  /user/auth:
+ *    get:
+ *      summary: 마이페이지에서 비밀번호 변경 요청
+ *      tags: [User]
+ *      parameters:
+ *      - name: token
+ *        in: header
+ *        description: token
+ *        schema:
+ *          type: string
+ *        examples:
+ *          sample:
+ *            value: example
+ *            summary: A sample token
+ *      responses:
+ *        "200":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: password changed
+ *        "400":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: wrong password
+ *
+ */
+router.get('/auth', auth);
 
 module.exports = router;

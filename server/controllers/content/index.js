@@ -18,7 +18,10 @@ module.exports = {
           chatroomId: chatroom.dataValues.id,
         })
         .then((data) => {
-          res.status(200).send({ message: 'post is saved' });
+          res.status(200).send({
+            message: 'post is saved',
+            data: { contentId: data.dataValues.id },
+          });
         })
         .catch((err) => {
           console.log(err);
