@@ -1,5 +1,4 @@
 const { posts, like, users } = require('../../models');
-const { sequelize } = require('sequelize');
 
 module.exports = {
   allPost: async (req, res) => {
@@ -31,21 +30,11 @@ module.exports = {
         order: [['id', 'DESC']],
       })
       .then((data) => {
-        // console.log(data[0].dataValues.likers[0].dataValues.userId);
-        const post = data.map((el) => el.get({ plain: true }));
-        post.map((el) => {
-          if (el.likers) {
-            el.likers.map((ele) => {
-              ele = ele.userId;
-              console.log(ele);
-              return ele;
-            });
-          }
-          return el;
-          // console.log(el.likers);
-        });
-        console.log(post);
         res.status(200).send(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500);
       });
   },
   filterPost: (req, res) => {
