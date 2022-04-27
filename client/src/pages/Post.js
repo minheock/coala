@@ -108,22 +108,24 @@ function Post() {
       ).replace(/<[^>]*>?/g, '');
 
       // 첫번째 이미지를 썸네일로 지정.
-      const tumb = JSON.stringify(
+      let tumb = JSON.stringify(
         editorRef.current.getInstance().getHTML(),
       ).split(`<img src=`);
       if (tumb.length > 1) {
-        setThumbnail(
-          tumb[1].split(' ')[0].substring(2, tumb[1].split(' ')[0].length - 2),
-        );
+        tumb = tumb[1]
+          .split(' ')[0]
+          .substring(2, tumb[1].split(' ')[0].length - 2);
       }
-
-      const description = `${des.substring(1, 150)}...`;
+      let description = des;
+      if (des.length > 150) {
+        description = `${des.substring(1, 150)}...`;
+      }
       const contentInfo = {
         userId: userInfo.id,
         title,
         stack: tag.stack,
         content: editorRef.current.getInstance().getHTML(),
-        thumbnail,
+        thumbnail: tumb,
         description,
       };
       // console.log(contentInfo);
