@@ -10,28 +10,34 @@ module.exports = {
           {
             model: users,
             required: true,
+            as: 'userInfo',
             attributes: ['id', 'username', 'profile'],
           },
           {
             model: like,
+            as: 'likers',
             attributes: ['userId'],
           },
         ],
         attributes: [
-          'done',
+          'id',
           'title',
           'description',
           'updatedAt',
           'stack',
           'thumbnail',
+          'done',
         ],
       })
       .then((data) => {
-        // console.log(
-        //   data[0].dataValues.likes.map((a) => {
-        //     return a.like;
-        //   }),
-        // );
+        // console.log(data[0].dataValues.likers[0].dataValues.userId);
+        // data.map((el) => {
+        //   if(el.dataValues.likers) {
+        //     el.dataValues.likers.map(like=> {
+
+        //     })
+        //   }
+        // });
         res.status(200).send(data);
       });
   },
