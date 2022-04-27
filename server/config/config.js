@@ -7,6 +7,14 @@ module.exports = {
     port: process.env.DATABASE_PORT,
     host: process.env.DATABASE_HOST,
     dialect: 'mysql',
+    timezone: '+09:00', // 한국 timezone 설정
+    dialectOptions: {
+      dateStrings: true, // 가져올 때 string으로 가져오기
+      typeCast: true,
+    },
+    define: {
+      timestamps: true,
+    },
   },
   test: {
     username: process.env.DATABASE_USERNAME,

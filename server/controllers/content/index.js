@@ -129,8 +129,25 @@ module.exports = {
       res.send();
     }
   },
-  post: (req, res) => {
+  post: async (req, res) => {
     // 컨텐츠 작성정보 가져오기
+    const { postId } = req.params;
+    if (postId) {
+      await posts
+        .findAll({
+          where: { id: postId },
+        })
+        .then((data) => {
+          res.status(200).send(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500);
+        });
+    } else {
+      // 예외 처리 다시 확인할것
+      res.status(400).send({ message: 'Invalid request' });
+    }
   },
   comment: (req, res) => {
     // 댓글 작성
