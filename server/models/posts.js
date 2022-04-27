@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.users, {
         foreignKey: 'userId', // posts 의 userId
         sourceKey: 'id',
+        as: 'userInfo',
       });
       this.hasMany(models.like, {
         foreignKey: 'postId',
         sourceKey: 'id',
+        as: 'likers',
       });
       this.hasMany(models.post_comment, {
         foreignKey: 'postId',
