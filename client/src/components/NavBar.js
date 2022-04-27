@@ -50,6 +50,7 @@ const Menu = styled.div`
 `;
 const DividerCustom = styled(Divider)`
   margin-top: 0px !important;
+  margin-bottom: 0px !important;
 `;
 
 function NavBar() {

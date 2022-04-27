@@ -8,6 +8,7 @@ import { getContentsAPI } from '../api/content';
 import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
 
 function Home() {
+  const { mainContents } = useSelector(state => state.content);
   const dispatch = useDispatch();
   const {
     isLoading,
@@ -15,15 +16,19 @@ function Home() {
     data: contentsData,
     error,
   } = useQuery('contents', getContentsAPI, {
-    retry: 0,
+    refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+    retry: 0, // 실페시 재실행 여부
   });
-  if (contentsData) {
-    console.log(contentsData);
-    dispatch({
-      type: LOAD_CONTENTS_SUCCESS,
-      data: contentsData.data,
-    });
-  }
+
+  useEffect(() => {
+    if (contentsData) {
+      dispatch({
+        type: LOAD_CONTENTS_SUCCESS,
+        data: contentsData.data,
+      });
+    }
+  }, [contentsData]);
+
   // useEffect(() => {
   //   getContentsAPI()
   //     .then(data => {
@@ -36,7 +41,7 @@ function Home() {
     <div>
       <Header page="Home" />
       <NavBar />
-      <Contents />
+      <Contents mainContents={mainContents} />
     </div>
   );
 }
