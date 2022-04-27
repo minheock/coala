@@ -85,7 +85,7 @@ function Content({ contentInfo }) {
             </Tag>
           ) : null}
           <div className="heart-icon">
-            <HeartFilled /> {likers.length}
+            <HeartFilled /> {likers}
           </div>
         </div>
       </div>

@@ -115,8 +115,10 @@ function Post() {
         tumb = tumb[1]
           .split(' ')[0]
           .substring(2, tumb[1].split(' ')[0].length - 2);
+      } else {
+        tumb = null;
       }
-      let description = des;
+      let description = des.substring(1, des.length - 1);
       if (des.length > 150) {
         description = `${des.substring(1, 150)}...`;
       }
@@ -128,7 +130,6 @@ function Post() {
         thumbnail: tumb,
         description,
       };
-      // console.log(contentInfo);
       postContentMutation.mutate(contentInfo);
     } else {
       dispatch({
