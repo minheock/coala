@@ -92,6 +92,7 @@ function Login() {
                 />
               </div>
             </div>
+            <br />
             <LoginBtn type="submit">
               {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
             </LoginBtn>
@@ -201,19 +202,26 @@ const LoginWrapper = styled.div`
       width: 90%;
     }
     .login-container {
-      height: 70%;
-      width: 70%;
+      height: 500px;
+      width: 400px;
     }
     .login-box {
-      padding-left: 12%;
+      padding-left: 5%;
       width: 70%;
     }
     .sighup {
-      margin-top: 15px;
+      margin-top: 25px;
     }
     @media screen and (max-width: ${SView - 180}px) {
+      .login-container {
+        height: 400px;
+        width: 350px;
+      }
       .login-box {
         padding-left: 5%;
+      }
+      .sighup {
+        margin-top: 15px;
       }
     }
   }
