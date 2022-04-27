@@ -265,11 +265,12 @@ const SignLogo = styled(Link)`
   text-decoration-line: none;
   font-size: 50px;
   margin-top: 80px;
+  margin-bottom: 20px;
   font-weight: 600;
   font-style: italic;
   text-align: center;
   cursor: pointer;
-  transition: 1s;
+  transition: 2s;
 `;
 // 회원가입 화면
 const SignupDiv = styled.div`
@@ -296,6 +297,10 @@ const SignupDiv = styled.div`
     background-color: #555555;
     color: white;
     cursor: pointer;
+    transition: 0.6s;
+    :hover {
+      transform: scale(0.98);
+    }
   }
   .InputName,
   .InputPassword,
