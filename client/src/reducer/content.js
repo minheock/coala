@@ -7,7 +7,7 @@ export const dummyContent = {
     username: '성민',
     profile: 'https://joeschmoe.io/api/v1/random',
   },
-  likers: 6,
+  likers: [1, 2, 3, 4, 5, 6],
   solved: true,
   description:
     'It has been released as opensource in 2018 and has continually evolved to receive 10k GitHub ⭐️ Stars.It has been released as opensource in 2018 and has continually evolved to receive 10k GitHub ⭐️ Stars.',
