@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import 'antd/dist/antd.min.css';
 import { useSelector } from 'react-redux';
