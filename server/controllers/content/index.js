@@ -1,25 +1,33 @@
-const { posts, like } = require('../../models');
+const { posts, like, chatrooms } = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텍츠 작성
     const { userId, title, content, stack, thumbnail, description } = req.body;
     if (
+      !title
       // user_id는 필수값 없으면 400 //db에서도 null안받게
-      userId === undefined ||
-      userId === '' ||
-      title === undefined ||
-      title === '' ||
-      content === undefined ||
-      content === '' ||
-      stack === undefined ||
-      stack === ''
-      // chatroomId === undefined ||
-      // chatroomId === ''
+      // userId === undefined ||
+      // userId === '' ||
+      // title === undefined ||
+      // title === '' ||
+      // content === undefined ||
+      // content === '' ||
+      // stack === undefined ||
+      // stack === ''
     ) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
-      await posts // User_id = 로그인 유저의 pk id 받음
-        .create({ userId, title, content, stack, thumbnail, description }) // chatroomId
+      const chatroom = await chatrooms.create({ userId });
+      await posts
+        .create({
+          userId,
+          title,
+          content,
+          stack,
+          thumbnail,
+          description,
+          chatroomId: chatroom.dataValues.id,
+        })
         .then((data) => {
           res.status(200).send({ message: 'post is saved' });
         })

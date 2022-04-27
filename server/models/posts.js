@@ -49,10 +49,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      // chatroomId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      // },
+      chatroomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
     },
     {
