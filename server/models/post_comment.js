@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.posts, {
         foreignKey: 'postId',
         sourceKey: 'id',
+        as: 'comments',
       });
       this.belongsTo(models.users, {
         foreignKey: 'userId',
         sourceKey: 'id',
+        as: 'userinfo',
       });
     }
   }

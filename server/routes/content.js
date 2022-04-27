@@ -8,6 +8,7 @@ const {
   unlikePost,
   post,
   comment,
+  commentRemove,
 } = require('../controllers/content');
 
 /**
@@ -314,5 +315,6 @@ router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
  */
 router.get('/:postId', post); // 컨텐츠 디테일 정보 가져오기
 router.post('/comment', comment); // 댓글 요청
+router.delete('/comment', commentRemove); // 댓글 삭제
 
 module.exports = router;

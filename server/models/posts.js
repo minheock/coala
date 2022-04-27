@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.post_comment, {
         foreignKey: 'postId',
         sourceKey: 'id',
+        as: 'comments',
       });
     }
   }
