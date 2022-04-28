@@ -16,7 +16,6 @@ module.exports = {
           description:
             '삼항연산자를 다중으로 사용할 시 마지막 태그 및 변수만 출력되는 현상이 나타났습니다</p><p>어째서 제가 처음 쓴 코드는 어째서 뒷내용만 출력되는지 알고 싶습니다 (제가 놓치는 부분이 정확히 어떤것인지 잘 모르겠습니다)',
           stack: 'JavaScript',
-          chatroomId: '1',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -31,7 +30,6 @@ module.exports = {
           description:
             '현재 쿠키 설정은 domain:"*"와 httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 이 세 옵션만 설정한 상태입니다.조사를 한 결과 클라이언트와 서버의 도메인이 다르고, 크롬의 samesite 기본값이 lax로 설정되어 있기 ...',
           stack: 'SQL',
-          chatroomId: '2',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -45,7 +43,6 @@ module.exports = {
           description:
             '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?파이널 프로젝트 진행중 create-react-app대신 babel과 webpack을 사용하여 리엑트 환경을 구축하였습니다.npm start명령어 실행 시, 웹페이지가 뜨긴 하지만 새로고침(F5)를 누르거나 ...',
           stack: 'Shell',
-          chatroomId: '3',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -59,7 +56,6 @@ module.exports = {
           description:
             '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?im-sprint-practice-deployEC2 인스턴스를 통한 서버 실행 후 포스트맨 테스트 시 에러MySQL 클라이언트를 통한 RDS DB 인스턴스 및 EC2 인스턴스 서버 연결 에러안 되는 부분을 해...',
           stack: 'Bash',
-          chatroomId: '4',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -73,7 +69,6 @@ module.exports = {
           description:
             '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?Learn SQL Part3 을 진행 중입니다.아래와 같은 오류로 인해 스프린트 진행이 안되고 있습니다.&gt; learn-sql@1.0.0 test:part-3\\n&gt; mocha __tests__/par...',
           stack: 'C++',
-          chatroomId: '5',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -88,7 +83,6 @@ module.exports = {
           description:
             '저 부분은 해당 스프린트의 server-token폴더의 메인 index.js 파일 부분입니다.마지막 부분에 module.exports = server; 부분이 있는데요 ^^왜 있는지, 왜 exports했으나 require로 가져다 쓰는 곳은 한 곳도 없는지 궁금합니다...',
           stack: 'JSON',
-          chatroomId: '6',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -104,7 +98,6 @@ module.exports = {
           description:
             'firstproject에서 https 인증서를 사용해서 배포했음에도 불구하고 보안연결(https)가 사용되지 않았음이라고 뜬다.처음부터 다시 해보기도 하고, 코드스테이츠에서 제공한 레퍼런스를 통해 다시 해보기도 했지만 https인증서가 브라우저에서는 유효하다고 뜨고 ...',
           stack: 'React',
-          chatroomId: '7',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -118,7 +111,6 @@ module.exports = {
           description:
             '하나의 값을 넣어야 할 때는 1차원 배열로 넣어야하고, bulk insert할 때에는 2차원으로 한다는 것 같기는 한데..에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. 라고 되어있는 부분에 기입한 코드를 보시면코드에 querySt...',
           stack: 'Java',
-          chatroomId: '8',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -134,7 +126,6 @@ module.exports = {
           description:
             '서버 배포중 npm start를 하면 이미 사용중인 포트번호라고 합니다.listen EADDRINUSE: address already in use ::: 포트번호이렇게 에러가 나오는데 문제는 포트번호를 바꿔서 배포해봐도 똑같이 바꾼 포트번호로 사용중이라고 합니다. 여...',
           stack: 'Vue',
-          chatroomId: '9',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

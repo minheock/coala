@@ -51,5 +51,4 @@ module.exports = (sequelize, DataTypes) => {
  *            type: integer
  *          userId:
  *            type: integer
-
  */
