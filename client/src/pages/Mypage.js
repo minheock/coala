@@ -135,9 +135,9 @@ const MypageWrapper = styled.div`
     width: 40px;
     border-radius: 10px;
     cursor: pointer;
-    .icon:hover {
-      color: green;
-    }
+  }
+  .editInfo:hover .icon {
+    color: green;
   }
 
   .userContents {
