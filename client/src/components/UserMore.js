@@ -56,7 +56,9 @@ function UserMore() {
         </Link>
         <li>메세지 </li>
         <li>댓글</li>
-        <li>마이페이지</li>
+        <Link className="link" to="/mypage">
+          <li>마이페이지</li>
+        </Link>
         <div className="logout" onClick={handleLogout}>
           <li>로그아웃</li>
         </div>
