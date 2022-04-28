@@ -20,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   chatrooms.init(
     {
-      userId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,
@@ -29,3 +32,19 @@ module.exports = (sequelize, DataTypes) => {
   );
   return chatrooms;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      chatrooms:
+ *        type: object
+ *        required:
+ *          - id
+ *          - userId
+ *        properties:
+ *          id:
+ *            type: integer
+ *          userId:
+ *            type: integer
+
+ */

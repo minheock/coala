@@ -1,5 +1,4 @@
 const { posts, like, users } = require('../../models');
-const { sequelize } = require('sequelize');
 
 module.exports = {
   allPost: async (req, res) => {
@@ -31,21 +30,18 @@ module.exports = {
         order: [['id', 'DESC']],
       })
       .then((data) => {
-        // console.log(data[0].dataValues.likers[0].dataValues.userId);
         const post = data.map((el) => el.get({ plain: true }));
-        post.map((el) => {
-          if (el.likers) {
-            el.likers.map((ele) => {
-              ele = ele.userId;
-              console.log(ele);
-              return ele;
-            });
+        for (let i = 0; i < post.length; i++) {
+          if (post[i].likers) {
+            for (let q = 0; q < post[i].likers.length; q++) {
+              post[i].likers[q] = post[i].likers[q].userId;
+            }
           }
-          return el;
-          // console.log(el.likers);
+        }
+        post.map((el) => {
+          return (el.chatroomId = el.id);
         });
-        console.log(post);
-        res.status(200).send(data);
+        res.status(200).send({ message: '요청 성공', data: post });
       });
   },
   filterPost: (req, res) => {

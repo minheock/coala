@@ -18,6 +18,14 @@ const {
 
 const router = express.Router();
 
+router.post('/login', login); // 로그인 요청
+router.post('/logout', logout); // 로그아웃 요청
+router.post('/signup', signup); // 회원가입 요청
+router.delete('/signout', signout); // 회원탈퇴 요청
+router.get('/contents/:userId', post); // 마이페이지에서 유저가 작성한 컨텐츠 요청
+router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변경 요청
+router.patch('/password', password); // 마이페이지에서 비밀번호 변경 요청
+router.get('/auth', auth); // 새로고침시에 유저 정보 요청
 /**
  * @swagger
  *  /user/login:
@@ -33,12 +41,18 @@ const router = express.Router();
  *              properties:
  *                email:
  *                   type: string
- *                   example: abcde@holy.com
+ *                   example: test1@coala.com
  *                password:
  *                   type: string
+ *                   example: 1111
  *      responses:
  *        "200":
  *          description: 로그인 성공
+ *          headers:
+ *            jwt:
+ *              schema:
+ *                type: string
+ *              description: accesToken
  *          content:
  *            application/json:
  *              schema:
@@ -48,7 +62,17 @@ const router = express.Router();
  *                    type: string
  *                    example: token return
  *        "400":
- *          description: 로그인 실패
+ *          description: 비밀 번호가 틀린 경우 또는 파라미터 부족으로 인한 로그인 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: 비밀번호가 틀립니다 또는 'Invalid request'
+ *        "409":
+ *          description: 이메일이 디비에 없는 경우
  *          content:
  *            application/json:
  *              schema:
@@ -57,11 +81,7 @@ const router = express.Router();
  *                  message:
  *                    type: string
  *                    example: 존재하지 않는 유저 입니다.
- *                headers:
  *
- */
-router.post('/login', login); // 로그인 요청
-/**
  * @swagger
  *  /user/logout:
  *    post:
@@ -78,9 +98,6 @@ router.post('/login', login); // 로그인 요청
  *                  message:
  *                    type: string
  *                    example: logout suceess
- */
-router.post('/logout', logout); // 로그아웃 요청
-/**
  * @swagger
  *  /user/signup:
  *    post:
@@ -95,11 +112,13 @@ router.post('/logout', logout); // 로그아웃 요청
  *              properties:
  *                email:
  *                   type: string
- *                   example: abcde@holy.com
+ *                   example: test@coala.com
  *                username:
  *                   type: string
+ *                   example: coala
  *                password:
  *                   type: string
+ *                   example: 1111
  *      responses:
  *        "201":
  *          description: 회원가입 완료
@@ -112,6 +131,16 @@ router.post('/logout', logout); // 로그아웃 요청
  *                    type: string
  *                    example: 회원가입 완료
  *        "400":
+ *          description: 파라미터 부족 회원가입 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid request
+ *        "409":
  *          description: 회원가입 실패(이미 존재하는 이메일)
  *          content:
  *            application/json:
@@ -121,9 +150,6 @@ router.post('/logout', logout); // 로그아웃 요청
  *                  message:
  *                    type: string
  *                    example: e-mail already exists
- */
-router.post('/signup', signup); // 회원가입 요청
-/**
  * @swagger
  *  /user/signout:
  *    delete:
@@ -137,7 +163,7 @@ router.post('/signup', signup); // 회원가입 요청
  *          type: string
  *        examples:
  *          sample:
- *            value: example
+ *            value: token
  *            summary: A sample token
  *      responses:
  *        "200":
@@ -150,24 +176,31 @@ router.post('/signup', signup); // 회원가입 요청
  *                  message:
  *                    type: string
  *                    example: delete user infomation & token
+ *        "401":
+ *          description: 토큰이 유효하지 않는 경우
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
  */
-router.delete('/signout', signout); // 회원탈퇴 요청
 /**
  * @swagger
- *  /user/contents:
+ *  /user/contents/{userId}:
  *    get:
  *      summary: 로그인한 유저가 작성한 컨텐츠 요청
  *      tags: [User]
- *      requestBody:
+ *      parameters:
+ *      - in: path
+ *        name: userId
  *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                user_id:
- *                   type: string
- *                   description: ""
+ *        description: 유저 아이디
+ *        schema:
+ *          type: integer
+ *          example: 1
  *      responses:
  *        "200":
  *          description: 요청 완료
@@ -183,14 +216,21 @@ router.delete('/signout', signout); // 회원탈퇴 요청
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3, "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2, "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1, "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  *        "400":
  *          description: 파라미터 에러
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: invalid request
  */
-router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨텐츠 요청
 /**
  * @swagger
  *  /user/userInfo:
@@ -204,15 +244,12 @@ router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨�
  *            schema:
  *              type: object
  *              properties:
- *                email:
- *                   type: string
- *                   description: ""
  *                username:
  *                   type: string
- *                   description: ""
+ *                   example: coala
  *                profile:
  *                   type: string
- *                   description: ""
+ *                   example: test
  *      parameters:
  *      - name: token
  *        in: header
@@ -221,7 +258,7 @@ router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨�
  *          type: string
  *        examples:
  *          sample:
- *            value: example
+ *            value: token
  *            summary: A sample token
  *      responses:
  *        "200":
@@ -235,7 +272,7 @@ router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨�
  *                    type: string
  *                    example: user information changed
  *        "400":
- *          description: 파라미터 에러
+ *          description: 존재하지 않는 email 일때
  *          content:
  *            application/json:
  *              schema:
@@ -244,8 +281,17 @@ router.get('/contents', post); // 마이페이지에서 유저가 작성한 컨�
  *                  message:
  *                    type: string
  *                    example: 존재하지 않는 유저입니다.
+ *        "401":
+ *          description: 유효하지 않은 토큰일때
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
  */
-router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변경 요청
 /**
  * @swagger
  *  /user/password:
@@ -259,15 +305,12 @@ router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변�
  *            schema:
  *              type: object
  *              properties:
- *                email:
- *                   type: string
- *                   description: ""
  *                password:
  *                   type: string
- *                   description: ""
- *                newpassword:
+ *                   example: 1111
+ *                newPassword:
  *                   type: string
- *                   description: ""
+ *                   example: 1234
  *      parameters:
  *      - name: token
  *        in: header
@@ -276,7 +319,7 @@ router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변�
  *          type: string
  *        examples:
  *          sample:
- *            value: example
+ *            value: token
  *            summary: A sample token
  *      responses:
  *        "200":
@@ -299,14 +342,22 @@ router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변�
  *                  message:
  *                    type: string
  *                    example: wrong password
- *
+ *        "401":
+ *          description: 유효하지 않은 토큰일때
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
  */
-router.patch('/password', password); // 마이페이지에서 비밀번호 변경 요청
 /**
  * @swagger
  *  /user/auth:
  *    get:
- *      summary: 마이페이지에서 비밀번호 변경 요청
+ *      summary: 새로고침시에 유저 정보 요청
  *      tags: [User]
  *      parameters:
  *      - name: token
@@ -316,7 +367,7 @@ router.patch('/password', password); // 마이페이지에서 비밀번호 변�
  *          type: string
  *        examples:
  *          sample:
- *            value: example
+ *            value: token
  *            summary: A sample token
  *      responses:
  *        "200":
@@ -328,8 +379,14 @@ router.patch('/password', password); // 마이페이지에서 비밀번호 변�
  *                properties:
  *                  message:
  *                    type: string
- *                    example: password changed
- *        "400":
+ *                    example: auth ok
+ *                  data:
+ *                    type: string
+ *                    example:
+ *                      [
+ *                        { "username": "John", "email": "test1@coala.com", "profile": "https://joeschmoe.io/api/v1/random" }
+ *                      ]
+ *        "401":
  *          description:
  *          content:
  *            application/json:
@@ -338,9 +395,6 @@ router.patch('/password', password); // 마이페이지에서 비밀번호 변�
  *                properties:
  *                  message:
  *                    type: string
- *                    example: wrong password
- *
+ *                    example: Invalid Token
  */
-router.get('/auth', auth);
-
 module.exports = router;
