@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
-const port = 4000;
 
 const userRouter = require('./routes/user');
 const contentsRouter = require('./routes/contents');
@@ -38,6 +37,32 @@ app.use('/contents', contentsRouter);
 app.use('/content', contentRouter);
 app.use('/admin', adminRouter);
 
-app.listen(port, () => {
+module.exports = app;
+
+const http = require('http');
+const server = http.createServer(app);
+const port = 4000;
+
+const socketIO = require('socket.io');
+const io = socketIO(server, {
+  cors: {
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('on chat');
+
+  socket.on('join', (chatroomId) => {
+    socket.join(chatroomId);
+  });
+  socket.on('send', (content) => {
+    socket.to(1).emit('onsend', content);
+  });
+});
+
+server.listen(port, () => {
   console.log(`현재 ${port}에서 서버 가동 중`);
 });
