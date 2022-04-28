@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'comments',
       });
+      this.hasMany(models.chattings, {
+        foreignKey: 'chatroomId',
+        sourceKey: 'id',
+      });
     }
   }
   posts.init(

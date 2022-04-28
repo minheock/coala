@@ -1,4 +1,11 @@
-const { users, posts, like, chatrooms, post_comment } = require('../../models');
+const {
+  users,
+  posts,
+  like,
+  chatrooms,
+  post_comment,
+  chattings,
+} = require('../../models');
 module.exports = {
   write: async (req, res) => {
     // 컨텐츠 작성
@@ -152,10 +159,20 @@ module.exports = {
                 },
               ],
             },
+            {
+              model: chattings,
+              attributes: ['userId', 'content'],
+              include: [
+                {
+                  model: users,
+                  attributes: ['username', 'profile'],
+                },
+              ],
+            },
           ],
           order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
         })
-        .then((data) => {
+        .then(async (data) => {
           // const post = [data].map((el) => el.get({ plain: true }));
           // for (let i = 0; i < post[0].likers.length; i++) {
           //   post[0].likers[i] = post[0].likers[i].userId;
