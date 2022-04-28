@@ -52,10 +52,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      chatroomId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
     },
     {
@@ -79,7 +75,6 @@ module.exports = (sequelize, DataTypes) => {
  *          - thumbnail
  *          - description
  *          - stack
- *          - chatroomId
  *          - done
  *        properties:
  *          userId:
@@ -94,8 +89,6 @@ module.exports = (sequelize, DataTypes) => {
  *            type: string
  *          stack:
  *            type: string
- *          chatroomId:
- *            type: integer
  *          done:
  *            type: boolean
  */

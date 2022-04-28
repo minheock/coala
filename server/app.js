@@ -52,20 +52,40 @@ const io = socketIO(server, {
   },
 });
 
+const { chattings } = require('./models');
+
 io.on('connection', (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  console.log(
+    `-----------------------------------------------------
+    User Connected: ${socket.id}
+-----------------------------------------------------`,
+  );
 
   socket.on('join_room', (data) => {
     socket.join(data);
-    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    io.to(data.roomId).emit('send_connect', {
+      message: `${data.username}님이 입장했습니다`,
+    });
+    console.log(
+      `-----------------------------------------------------
+      User with ID: ${socket.id} joined room: ${data}
+-----------------------------------------------------`,
+    );
+    console.log(`11111`, io.sockets);
   });
 
-  socket.on('send_message', (data) => {
+  socket.on('send_message', async (data) => {
+    console.log(data);
     socket.to(data.room).emit('receive_message', data);
+    await chattings.create({
+      userId: data.userId,
+      chatroomId: data.room,
+      content: data.message,
+    });
   });
 
   socket.on('disconnect', () => {
-    console.log('User Disconnected', socket.id);
+    console.log(`User Disconnected: ${socket.id}`);
   });
 });
 

@@ -6,7 +6,7 @@ module.exports = {
     if (!title || !content || !stack || !description || !userId) {
       res.status(400).send({ message: 'Invalid request' });
     } else {
-      const chatroom = await chatrooms.create({ userId });
+      await chatrooms.create({ userId });
       await posts
         .create({
           userId,
@@ -15,12 +15,11 @@ module.exports = {
           stack,
           thumbnail,
           description,
-          chatroomId: chatroom.dataValues.id,
         })
         .then((data) => {
           res.status(200).send({
             message: 'post is saved',
-            data: { contentId: data.dataValues.id, chatroomId: chatroom.id },
+            data: { contentId: data.dataValues.id },
           });
         })
         .catch((err) => {
@@ -165,7 +164,6 @@ module.exports = {
             el = el.userId;
             return el;
           });
-          data.dataValues.chatroomId = data.dataValues.id;
           res.status(200).send({
             message: '요청 성공',
             data: data.dataValues,

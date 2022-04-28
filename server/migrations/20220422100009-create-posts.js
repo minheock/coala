@@ -27,9 +27,6 @@ module.exports = {
       stack: {
         type: Sequelize.STRING,
       },
-      chatroomId: {
-        type: Sequelize.INTEGER,
-      },
       done: {
         type: Sequelize.BOOLEAN,
       },
