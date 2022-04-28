@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
 import Home from './pages/Home';
 import Post from './pages/Post';
+import Mypage from './pages/Mypage';
 import ContentDetail from './pages/ContentDetail';
 import AlertModal from './components/AlertModal';
 
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/mypage" element={<Mypage />} />
         <Route path="/write" element={<Post />} />
         <Route path="/content/:contentId" element={<ContentDetail />} />
       </Routes>
