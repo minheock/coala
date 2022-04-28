@@ -101,7 +101,8 @@ function Post() {
 
   useEffect(() => {
     if (postContentMutation.isSuccess) {
-      console.log(postContentMutation.data);
+      const { contentId } = postContentMutation.data.data.data;
+      navigate(`/content/${contentId}`);
     } else if (postContentMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
