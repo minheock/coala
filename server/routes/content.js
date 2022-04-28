@@ -59,10 +59,6 @@ router.delete('/comment/:commentId', commentR); // 댓글 삭제
  *                stack:
  *                   type: string
  *                   example: Javascript
- *                chatroomId:
- *                   type: integer
- *                   example: 1
- *
  *      responses:
  *        "200":
  *          description: 컨텐츠 저장 완료
@@ -78,7 +74,7 @@ router.delete('/comment/:commentId', commentR); // 댓글 삭제
  *                    type: string
  *                    example:
  *                      [
- *                        { "contentId": 1, "chatroomId": 1 }
+ *                        { "contentId": 1 }
  *                      ]
  *        "400":
  *          description: 컨텐츠 저장 실패
@@ -354,7 +350,7 @@ router.delete('/comment/:commentId', commentR); // 댓글 삭제
  *                  data:
  *                    type: string
  *                    example:
- *                        { "id": 1, "title": "test title","content":"test","thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [3,2,1], "comments": [{"postId": 1, "userId": 1,"comment": "test 1","createdAt": "20xx-xx-xx xx:xx:xx","userInfo": { "username": "tester", "profile": "test" }}] }
+ *                        { "id": 1, "title": "test title","content":"test","thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [3,2,1], "comments": [{"postId": 1, "userId": 1,"comment": "test 1","createdAt": "20xx-xx-xx xx:xx:xx","userInfo": { "username": "tester", "profile": "test" }}] }
  */
 /**
  * @swagger
