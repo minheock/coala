@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'chatroomId',
         sourceKey: 'id',
       });
+      this.belongsTo(models.posts, {
+        foreignKey: 'chatroomId',
+        sourceKey: 'id',
+      });
     }
   }
   chattings.init(
