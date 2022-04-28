@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { userpatchAPI } from '../api/user';
+import { edituserAPI } from '../api/user';
 import Header from '../components/Header';
 
 function Mypage() {
@@ -14,39 +14,44 @@ function Mypage() {
     navigate('/');
   }
   console.log(userInfo);
-  return (
-    <>
-      <Header />
-      <MypageWrapper>
-        <span className="mypageLogo">MyPage</span>
-        <div className="userInfoContaner">
-          <div className="profileBox">
-            <div className="xx">
-              <img
-                className="userProfile"
-                alt="profile"
-                src={userInfo.profile}
-              />
-              <div className="userProfileEdit">
-                <p className="editText">이미지 변경</p>
+  if (userInfo) {
+    return (
+      <>
+        <Header />
+        <MypageWrapper>
+          <span className="mypageLogo">MyPage</span>
+          <div className="userInfoContaner">
+            <div className="profileBox">
+              <div className="xx">
+                <img
+                  className="userProfile"
+                  alt="profile"
+                  src={userInfo.profile}
+                />
+                <div className="userProfileEdit">
+                  <p className="editText">이미지 변경</p>
+                </div>
               </div>
             </div>
+            <div className="userInfoBox">
+              <span className="userName">
+                {userInfo.username}님 반갑습니다.
+              </span>
+              <br />
+              <span className="userId">{userInfo.email}</span>
+              <br />
+              <span className="usertext">아무거나</span>
+            </div>
+            <button type="button" className="editInfo">
+              <EditOutlined className="icon" />
+            </button>
           </div>
-          <div className="userInfoBox">
-            <span className="userName">{userInfo.username}님 반갑습니다.</span>
-            <br />
-            <span className="userId">{userInfo.email}</span>
-            <br />
-            <span className="usertext">아무거나</span>
-          </div>
-          <button type="button" className="editInfo">
-            <EditOutlined className="icon" />
-          </button>
-        </div>
-        <div className="userContents" src={userInfo.profile} />
-      </MypageWrapper>
-    </>
-  );
+          <div className="userContents" src={userInfo.profile} />
+        </MypageWrapper>
+      </>
+    );
+  }
+  return null;
 }
 const MypageWrapper = styled.div`
   background-image: url('https://i.pinimg.com/736x/a5/d8/93/a5d89325265e24e0d3852e622b0739d9.jpg');
