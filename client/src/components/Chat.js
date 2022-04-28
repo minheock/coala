@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Avatar, Divider } from 'antd';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
@@ -9,7 +10,68 @@ const Chatroom = styled.div`
   width: 330px;
   height: 550px;
   border: 1px solid black;
+  border-radius: 10px;
   margin-left: 0.5rem;
+  #divider {
+    margin-bottom: 0px !important;
+  }
+  .message-container {
+    height: 467px;
+    overflow-y: auto;
+  }
+  .input-message {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    border: 1px solid black;
+    bottom: 0px;
+    border-radius: 3px;
+  }
+  .input-message:focus {
+    outline: none;
+  }
+  .message {
+    .message-info {
+      display: flex;
+    }
+    .message-content {
+      margin-bottom: 5px;
+      color: #f5f6fa;
+    }
+  }
+  #you {
+    .message-info {
+      flex-direction: row-reverse;
+    }
+    .message-content {
+      margin-right: 0.2rem;
+      border-radius: 10px 0px 10px 10px;
+      padding: 0px 8px 0px 8px;
+      background-color: #63cdda;
+    }
+    #time {
+      margin-right: 3px;
+    }
+  }
+  #other {
+    .message-userInfo {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      #author {
+        margin-left: 0.3rem;
+      }
+    }
+    .message-content {
+      margin-left: 2rem;
+      border-radius: 0px 10px 10px 10px;
+      padding: 0px 8px 0px 8px;
+      background-color: #8c7ae6;
+    }
+    #time {
+      margin-left: 3px;
+    }
+  }
 `;
 
 function Chat({ socket, room, userInfo }) {
@@ -23,15 +85,17 @@ function Chat({ socket, room, userInfo }) {
   // 메시지 전송 메서드
   const sendMessage = async () => {
     if (currentMessage !== '') {
+      let minutes = new Date(Date.now()).getMinutes();
+      if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
       const messageData = {
         room,
         author: userInfo.username,
         profile: userInfo.profile,
         userId: userInfo.id,
         message: currentMessage,
-        time: `${new Date(Date.now()).getHours()}:${new Date(
-          Date.now(),
-        ).getMinutes()}`,
+        time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
       await socket.emit('send_message', messageData);
       setMessageList(list => [...list, messageData]);
@@ -40,30 +104,37 @@ function Chat({ socket, room, userInfo }) {
   };
 
   useEffect(() => {
+    console.log('hello');
     socket.on('receive_message', data => {
       setMessageList(list => [...list, data]);
     });
-  }, [socket]);
+  }, []);
 
   return (
     <Chatroom>
       <div className="chat-header">
-        <p>Live Chat</p>
+        <h3>Coala Chat</h3>
+        <Divider id="divider" />
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
           {messageList.map(messageContent => (
             <div
               className="message"
-              id={userInfo.username === messageContent.author ? 'you' : 'other'}
+              id={userInfo.id === messageContent.userId ? 'you' : 'other'}
             >
-              <div>
+              {userInfo.id === messageContent.userId ? null : (
+                <div className="message-userInfo">
+                  <p id="author">{messageContent.author}</p>
+                  <Avatar src={messageContent.profile} />
+                </div>
+              )}
+              <div className="message-info">
                 <div className="message-content">
-                  <p>{messageContent.message}</p>
+                  <span>{messageContent.message}</span>
                 </div>
                 <div className="message-meta">
-                  <p id="time">{messageContent.time}</p>
-                  <p id="author">{messageContent.author}</p>
+                  <span id="time">{messageContent.time}</span>
                 </div>
               </div>
             </div>
@@ -73,22 +144,18 @@ function Chat({ socket, room, userInfo }) {
 
       <div className="chat-footer">
         {userInfo ? (
-          <>
-            <input
-              type="text"
-              value={currentMessage}
-              placeholder="Hey..."
-              onChange={event => {
-                setCurrentMessage(event.target.value);
-              }}
-              onKeyPress={event => {
-                event.key === 'Enter' && sendMessage();
-              }}
-            />
-            <button type="button" onClick={sendMessage}>
-              &#9658;
-            </button>
-          </>
+          <input
+            className="input-message"
+            type="text"
+            value={currentMessage}
+            placeholder="메시지 입력해주세요"
+            onChange={event => {
+              setCurrentMessage(event.target.value);
+            }}
+            onKeyPress={event => {
+              event.key === 'Enter' && sendMessage();
+            }}
+          />
         ) : (
           <span>로그인후 사용해주세요.</span>
         )}
