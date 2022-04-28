@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { userpatchAPI } from '../api/user';
 import Header from '../components/Header';
 
 function Mypage() {
+  const [info, setInfo] = useState(false);
   const { userInfo } = useSelector(state => state.user);
   const navigate = useNavigate();
   if (!userInfo) {
