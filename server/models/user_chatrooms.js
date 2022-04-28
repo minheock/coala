@@ -21,8 +21,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_chatrooms.init(
     {
-      userId: DataTypes.INTEGER,
-      chatroomId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      chatroomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,

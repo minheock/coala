@@ -1,7 +1,7 @@
 const { users, posts, like, chatrooms, post_comment } = require('../../models');
 module.exports = {
   write: async (req, res) => {
-    // 컨텍츠 작성
+    // 컨텐츠 작성
     const { userId, title, content, stack, thumbnail, description } = req.body;
     if (!title || !content || !stack || !description || !userId) {
       res.status(400).send({ message: 'Invalid request' });
@@ -20,7 +20,7 @@ module.exports = {
         .then((data) => {
           res.status(200).send({
             message: 'post is saved',
-            data: { contentId: data.dataValues.id },
+            data: { contentId: data.dataValues.id, chatroomId: chatroom.id },
           });
         })
         .catch((err) => {
@@ -29,33 +29,9 @@ module.exports = {
         });
     }
   },
-  remove: async (req, res) => {
-    // params :contentId?id=1
-    // 컨텐츠 삭제
-    // console.log(req.query);
-    if (req.params.postId) {
-      // 파라미터가 없으면 400 있으면 200
-      await posts
-        .destroy({
-          where: { id: req.params.postId },
-        })
-        .then((data) => {
-          // 게시글을 서택해서 삭제하는거니까 없는 id를 선택하는 경우가 없을까요?
-          // 지금 포스트맨은 없는 아이디값 넣어도 삭제 성공했다고 나오게 되어있어서 고민중입니다
-          res.status(200).send({ message: 'post delete' });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500);
-        });
-    } else {
-      res.status(400).send({ message: 'Invalid request' });
-    }
-  },
   update: async (req, res) => {
-    // params
     // 컨텐츠 수정
-    const { title, content, stack } = req.body;
+    const { title, content, stack, thumbnail, description } = req.body;
     if (req.params.postId) {
       // 파라미터가 없으면 400 있으면 200
       if (!title || !content || !stack) {
@@ -67,13 +43,20 @@ module.exports = {
               title,
               content,
               stack,
+              thumbnail,
+              description,
             },
             {
               where: { id: req.params.postId },
             },
           )
           .then((data) => {
-            res.status(200).send({ message: 'post update' });
+            res.status(200).send({
+              message: 'post update',
+              data: {
+                contentId: data[0],
+              },
+            });
           })
           .catch((err) => {
             console.log(err);
@@ -81,7 +64,26 @@ module.exports = {
           });
       }
     } else {
-      res.status(400).send({ message: 'does not exist id' });
+      res.status(400).send({ message: 'does not exist postId' });
+    }
+  },
+  remove: async (req, res) => {
+    // 컨텐츠 삭제
+    if (req.params.postId) {
+      // 파라미터가 없으면 400 있으면 200
+      await posts
+        .destroy({
+          where: { id: req.params.postId },
+        })
+        .then(() => {
+          res.status(200).send({ message: 'post delete' });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500);
+        });
+    } else {
+      res.status(400).send({ message: 'does not exist postId' });
     }
   },
   donePost: async (req, res) => {
@@ -91,7 +93,7 @@ module.exports = {
       await posts.update({ done: true }, { where: { id: postId } });
       res.status(200).send({ message: 'post done' });
     } else {
-      res.status(400).send({ message: 'does not exist id' });
+      res.status(400).send({ message: 'does not exist postId' });
     }
   },
   likePost: async (req, res) => {
@@ -101,7 +103,9 @@ module.exports = {
 
     if (!postId || !userId) {
       await like.create({ postId: postId, userId: userId });
-      res.send();
+      res.status(200).send({ message: 'post like' });
+    } else {
+      res.status(400).send({ message: 'does not exist postId' });
     }
   },
   unlikePost: async (req, res) => {
@@ -111,11 +115,13 @@ module.exports = {
 
     if (!postId || !userId) {
       await like.destroy({ where: { postId: postId, userId: userId } });
-      res.send();
+      res.status(200).send({ message: 'post unlike' });
+    } else {
+      res.status(400).send({ message: 'does not exist postId' });
     }
   },
   post: async (req, res) => {
-    // 컨텐츠 작성정보 가져오기
+    // 컨텐츠 디테일 정보 가져오기
     const { postId } = req.params;
     if (postId) {
       await posts
@@ -159,8 +165,11 @@ module.exports = {
             el = el.userId;
             return el;
           });
-          // console.log(data.dataValues);
-          res.status(200).send({ message: '요청 성공', data: data.dataValues });
+          data.dataValues.chatroomId = data.dataValues.id;
+          res.status(200).send({
+            message: '요청 성공',
+            data: data.dataValues,
+          });
         });
     } else {
       // 예외 처리 다시 확인할것
@@ -169,6 +178,7 @@ module.exports = {
   },
   comment: async (req, res) => {
     // 댓글 작성
+    console.log(1111);
     const { userId, comment, postId } = req.body;
     if (!postId || !comment || !userId) {
       res.status(400).send({ message: 'Invalid request' });
@@ -180,15 +190,29 @@ module.exports = {
           postId,
         })
         .then((data) => {
-          res
-            .status(200)
-            .send({ message: 'comment is saved', data: { commentId: data } });
+          res.status(200).send({
+            message: 'comment is saved',
+            data: { commentId: data.id },
+          });
         });
     }
   },
-  commentRemove: async (req, res) => {
+  commentR: async (req, res) => {
     // 댓글 삭제
-    // 작성한 유저의 경우에만 삭제 가능
-    // 유저 아이디랑 코멘트아이디를
+    const { userId, postId } = req.body;
+    const { commentId } = req.params;
+    if (!postId || !userId) {
+      res.status(400).send({ message: 'Invalid request' });
+    } else {
+      await post_comment
+        .destroy({ where: { userId, postId, id: commentId } })
+        .then((data) => {
+          if (data) {
+            res.status(200).send({ message: 'comment delete' });
+          } else {
+            res.status(409).send({ message: '요청 실패' });
+          }
+        });
+    }
   },
 };

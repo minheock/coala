@@ -17,6 +17,12 @@ const {
 
 const router = express.Router();
 
+router.get('/', allPost); // 모든컨텐츠 가져오기
+router.get('/', filterPost); // 스택별로 필터링해서 컨텐츠 가져오기.
+router.get('/', scrollPost); // 무한스크롤 시 마지막 아이디 보내서 나머지 컨텐츠 요청
+router.get('/', findPost); // 키워드로 컨텐츠 검색
+router.get('/done', findDone); // 해결완료만 필터
+router.get('/undone', findUndone); // 미해결만 필터
 /**
  * @swagger
  *  /contents:
@@ -38,12 +44,11 @@ const router = express.Router();
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
-router.get('/', allPost); // 모든컨텐츠 가져오기
 /**
  * @swagger
  *  /contents?stack={stack}:
@@ -72,12 +77,11 @@ router.get('/', allPost); // 모든컨텐츠 가져오기
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
-router.get('/', filterPost); // 스택별로 필터링해서 컨텐츠 가져오기.
 /**
  * @swagger
  *  /contents?lastId={lastId}:
@@ -106,12 +110,11 @@ router.get('/', filterPost); // 스택별로 필터링해서 컨텐츠 가져오
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
-router.get('/', scrollPost); // 무한스크롤 시 마지막 아이디 보내서 나머지 컨텐츠 요청
 /**
  * @swagger
  *  /contents?keyword={keyword}:
@@ -140,14 +143,11 @@ router.get('/', scrollPost); // 무한스크롤 시 마지막 아이디 보내�
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
-router.get('/', findPost); // 키워드로 컨텐츠 검색
-router.get('/done', findDone); // 해결완료만 필터
-router.get('/undone', findUndone); // 미해결만 필터
 /**
  * @swagger
  *  /contents/done:
@@ -169,9 +169,9 @@ router.get('/undone', findUndone); // 미해결만 필터
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": true },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
 /**
@@ -195,9 +195,10 @@ router.get('/undone', findUndone); // 미해결만 필터
  *                    type: string
  *                    example:
  *                      [
- *                        { "id": 3, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 2, "title": "js", "content": "hellow world", "stack":"javascript", "done": false },
- *                        { "id": 1, "title": "js", "content": "hellow world", "stack":"javascript", done": false },
+ *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 3,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 2,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
+ *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
  *                      ]
  */
+
 module.exports = router;

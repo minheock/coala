@@ -8,7 +8,7 @@ const {
   unlikePost,
   post,
   comment,
-  commentRemove,
+  commentR,
 } = require('../controllers/content');
 
 /**
@@ -18,6 +18,16 @@ const {
  *   description: Contents management
  */
 const router = express.Router();
+
+router.post('/', write); // 컨텐츠 작성
+router.patch('/:postId', update); // 작성한 컨텐츠 수정
+router.delete('/:postId', remove); // 컨텐츠 삭제
+router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
+router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
+router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
+router.get('/:postId', post); // 컨텐츠 디테일 정보 가져오기
+router.post('/comment', comment); // 댓글 요청
+router.delete('/comment/:commentId', commentR); // 댓글 삭제
 /**
  * @swagger
  *  /content:
@@ -36,12 +46,22 @@ const router = express.Router();
  *                   example: 1
  *                title:
  *                   type: string
+ *                   example: test
  *                content:
  *                   type: string
+ *                   example: test
+ *                thumbnail:
+ *                   type: string
+ *                   example: test
  *                description:
  *                   type: string
+ *                   example: test
  *                stack:
  *                   type: string
+ *                   example: Javascript
+ *                chatroomId:
+ *                   type: integer
+ *                   example: 1
  *
  *      responses:
  *        "200":
@@ -54,6 +74,12 @@ const router = express.Router();
  *                  message:
  *                    type: string
  *                    example: post is saved
+ *                  data:
+ *                    type: string
+ *                    example:
+ *                      [
+ *                        { "contentId": 1, "chatroomId": 1 }
+ *                      ]
  *        "400":
  *          description: 컨텐츠 저장 실패
  *          content:
@@ -65,7 +91,6 @@ const router = express.Router();
  *                    type: string
  *                    example: Invalid request
  */
-router.post('/', write); // 컨텐츠 작성
 /**
  * @swagger
  *  /content/{postId}:
@@ -88,13 +113,19 @@ router.post('/', write); // 컨텐츠 작성
  *              properties:
  *                title:
  *                   type: string
- *                   description: ""
+ *                   example: test
  *                content:
- *                   type: text
- *                   description: ""
+ *                   type: string
+ *                   example: test
  *                stack:
  *                   type: string
- *                   description: ""
+ *                   example: Javascript
+ *                thumbnail:
+ *                   type: string
+ *                   example: test
+ *                description:
+ *                   type: string
+ *                   example: test
  *      responses:
  *        "200":
  *          description: 컨텐츠 수정 완료
@@ -106,6 +137,12 @@ router.post('/', write); // 컨텐츠 작성
  *                  message:
  *                    type: string
  *                    example: post update
+ *                  data:
+ *                    type: string
+ *                    example:
+ *                      [
+ *                        { "contentId": 1 }
+ *                      ]
  *        "400":
  *          description: 컨텐츠 수정 실패
  *          content:
@@ -116,8 +153,17 @@ router.post('/', write); // 컨텐츠 작성
  *                  message:
  *                    type: string
  *                    example: Invalid request
+ *        "409":
+ *          description: 파라미터 부족 컨텐츠 수정 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: does not exist postId
  */
-router.patch('/:postId', update); // 작성한 컨텐츠 수정
 /**
  * @swagger
  *  /content/{postId}:
@@ -151,9 +197,8 @@ router.patch('/:postId', update); // 작성한 컨텐츠 수정
  *                properties:
  *                  message:
  *                    type: string
- *                    example: Invalid request
+ *                    example: does not exist postId
  */
-router.delete('/:postId', remove); // 컨텐츠 삭제
 /**
  * @swagger
  *  /content/{postId}/done:
@@ -187,9 +232,8 @@ router.delete('/:postId', remove); // 컨텐츠 삭제
  *                properties:
  *                  message:
  *                    type: string
- *                    example: Invalid request
+ *                    example: does not exist postId
  */
-router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
 /**
  * @swagger
  *  /content/{postId}/like:
@@ -203,6 +247,7 @@ router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
  *        description: 컨텐츠 아이디
  *        schema:
  *          type: integer
+ *          example: 1
  *      requestBody:
  *        required: true
  *        content:
@@ -212,7 +257,7 @@ router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
  *              properties:
  *                userId:
  *                   type: integer
- *                   description: ""
+ *                   example: 1
  *      responses:
  *        "200":
  *          description: 컨텐츠 좋아요 완료
@@ -233,9 +278,8 @@ router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
  *                properties:
  *                  message:
  *                    type: string
- *                    example: Invalid request
+ *                    example: does not exist postId
  */
-router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
 /**
  * @swagger
  *  /content/{postId}/unlike:
@@ -249,6 +293,7 @@ router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
  *        description: 컨텐츠 아이디
  *        schema:
  *          type: integer
+ *          example: 1
  *      requestBody:
  *        required: true
  *        content:
@@ -258,7 +303,7 @@ router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
  *              properties:
  *                userId:
  *                   type: integer
- *                   description: ""
+ *                   example: 1
  *      responses:
  *        "200":
  *          description: 컨텐츠 좋아요 취소 완료
@@ -279,9 +324,8 @@ router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
  *                properties:
  *                  message:
  *                    type: string
- *                    example: Invalid request
+ *                    example: does not exist postId
  */
-router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
 /**
  * @swagger
  *  /content/{postId}:
@@ -295,6 +339,7 @@ router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
  *        description: 컨텐츠 아이디
  *        schema:
  *          type: integer
+ *          example: 1
  *      responses:
  *        "200":
  *          description: 요청 성공
@@ -309,12 +354,113 @@ router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
  *                  data:
  *                    type: string
  *                    example:
- *                      [
- *                        { "title": "js", "content": "hellow world", "stack":"javascript", "done": true },
- *                      ]
+ *                        { "id": 1, "title": "test title","content":"test","thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "chatroomId": 1,"done": true, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [3,2,1], "comments": [{"postId": 1, "userId": 1,"comment": "test 1","createdAt": "20xx-xx-xx xx:xx:xx","userInfo": { "username": "tester", "profile": "test" }}] }
  */
-router.get('/:postId', post); // 컨텐츠 디테일 정보 가져오기
-router.post('/comment', comment); // 댓글 요청
-router.delete('/comment', commentRemove); // 댓글 삭제
-
+/**
+ * @swagger
+ *  /content/comment:
+ *    post:
+ *      summary: 댓글 작성 요청
+ *      tags: [Content]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                   type: integer
+ *                   example: 1
+ *                postId:
+ *                   type: integer
+ *                   example: 1
+ *                comment:
+ *                  type: string
+ *                  example: test
+ *      responses:
+ *        "200":
+ *          description: 코멘트 작성 완료
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: comment is saved
+ *                  data:
+ *                    type: string
+ *                    example:
+ *                      {"commentId": 1}
+ *        "400":
+ *          description: 파라미터 에러로 인한 작성 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid request
+ */
+/**
+ * @swagger
+ *  /content/comment/{commentId}:
+ *    delete:
+ *      summary: 댓글 삭제 요청
+ *      tags: [Content]
+ *      parameters:
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        description: 코멘트 아이디
+ *        schema:
+ *          type: integer
+ *          example: 1
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                   type: integer
+ *                   example: 1
+ *                postId:
+ *                   type: integer
+ *                   example: 1
+ *      responses:
+ *        "200":
+ *          description: 코멘트 삭제 완료
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: comment delete
+ *        "400":
+ *          description: 파라미터 에러로 인한 작성 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid request
+ *        "409":
+ *          description: 요청 실패
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: 요청 실패
+ */
 module.exports = router;
