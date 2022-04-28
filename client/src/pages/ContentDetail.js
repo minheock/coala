@@ -61,7 +61,6 @@ function ContentDetail() {
   const { socket } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
-  console.log(userInfo);
   const {
     isError,
     isLoading,
@@ -103,7 +102,7 @@ function ContentDetail() {
             <div className="tag">{contentDetail.data.data.stack}</div>
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
-          <Chat socket={socket} username={userInfo.username} room={contentId} />
+          <Chat socket={socket} userInfo={userInfo || null} room={contentId} />
         </Container>
       </>
     );
