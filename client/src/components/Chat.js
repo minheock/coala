@@ -15,6 +15,9 @@ const Chatroom = styled.div`
 function Chat({ socket, room, username }) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
+  useEffect(() => {
+    socket.emit('join_room', room);
+  }, []);
   const sendMessage = async () => {
     if (currentMessage !== '') {
       const messageData = {

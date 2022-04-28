@@ -103,7 +103,7 @@ function ContentDetail() {
             <div className="tag">{contentDetail.data.data.stack}</div>
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
-          <Chat socket={socket} username={null} room={contentId} />
+          <Chat socket={socket} username={userInfo.username} room={contentId} />
         </Container>
       </>
     );

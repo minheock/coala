@@ -17,7 +17,7 @@ function App() {
   const dispatch = useDispatch();
   const { error, success } = useSelector(state => state.modal);
   dispatch({
-    action: INIT_SOCKETIO,
+    type: INIT_SOCKETIO,
     data: socket,
   });
   return (
