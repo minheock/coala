@@ -71,26 +71,27 @@ function ContentDetail() {
     return <h1>Loading....</h1>;
   }
   if (isSuccess) {
-    // console.log(contentDetail.data.content);
     return (
       <Container>
         <Header />
         <article>
-          <h1 className="content-title">{contentDetail.data.title}</h1>
+          <h1 className="content-title">{contentDetail.data.data.title}</h1>
           <div className="user-info">
             <Avatar
               className="user-profile"
               src={
-                contentDetail.data.userInfo.profile
-                  ? contentDetail.data.userInfo.profile
+                contentDetail.data.data.userInfo.profile
+                  ? contentDetail.data.data.userInfo.profile
                   : 'https://joeschmoe.io/api/v1/random'
               }
             />
-            <span>{contentDetail.data.userInfo.username}</span>
-            <span className="updateAt">{contentDetail.data.updatedAt}</span>
+            <span>{contentDetail.data.data.userInfo.username}</span>
+            <span className="updateAt">
+              {contentDetail.data.data.updatedAt}
+            </span>
           </div>
-          <div className="tag">{contentDetail.data.stack}</div>
-          <Viewer initialValue={contentDetail.data.content} />
+          <div className="tag">{contentDetail.data.data.stack}</div>
+          <Viewer initialValue={contentDetail.data.data.content} />
         </article>
       </Container>
     );

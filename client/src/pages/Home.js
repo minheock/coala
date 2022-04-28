@@ -25,7 +25,7 @@ function Home() {
     if (contentsData) {
       dispatch({
         type: LOAD_CONTENTS_SUCCESS,
-        data: contentsData.data,
+        data: contentsData.data.data,
       });
     }
   }, [contentsData]);
