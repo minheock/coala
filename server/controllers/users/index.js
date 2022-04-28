@@ -1,4 +1,4 @@
-const { users, posts } = require('../../models');
+const { users, posts, like } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -101,7 +101,7 @@ module.exports = {
     // 토큰 검증 한 내용으로 db 유저의 아이디 칼럼 destroy
     const verify = isAuthorized(req);
     if (!verify) {
-      res.status(400).send({ message: 'Invalid Token' });
+      res.status(401).send({ message: 'Invalid Token' });
     } else {
       const { id, email } = verify;
       await users
@@ -121,38 +121,66 @@ module.exports = {
     }
   },
   post: async (req, res) => {
-    // include / 최신 작성이 위로 올라오게
     // 해당유저의 작성한 게시글 불러오기
-    const verify = isAuthorized(req);
-    const { userId } = req.body;
-    if (verify) {
+    const { userId } = req.params;
+    if (userId) {
       await posts
         .findAll({
-          order: [['id', 'desc']],
-          where: {
-            userId,
-          },
-          attributes: ['id', 'title', 'content', 'stack', 'done'],
+          where: { userId },
+          include: [
+            {
+              model: users,
+              required: true,
+              as: 'userInfo',
+              attributes: ['id', 'username', 'profile'],
+            },
+            {
+              model: like,
+              as: 'likers',
+              attributes: ['userId'],
+            },
+          ],
+          attributes: [
+            'id',
+            'title',
+            'thumbnail',
+            'description',
+            'updatedAt',
+            'stack',
+            'done',
+          ],
+          order: [['id', 'DESC']],
         })
         .then((data) => {
-          // console.log(data);
-          res.status(200).send({ post: data });
+          const post = data.map((el) => el.get({ plain: true }));
+          for (let i = 0; i < post.length; i++) {
+            if (post[i].likers) {
+              for (let q = 0; q < post[i].likers.length; q++) {
+                post[i].likers[q] = post[i].likers[q].userId;
+              }
+            }
+          }
+          post.map((el) => {
+            return (el.chatroomId = el.id);
+          });
+          res.status(200).send({ message: '요청 성공', data: post });
         })
         .catch((err) => {
           console.log(err);
           res.status(500);
         });
     } else {
-      res.status(400).send({ message: 'invalid Token' });
+      res.status(400).send({ message: 'invalid request' });
     }
   },
   userInfo: async (req, res) => {
     // 유저 정보 변경
     const verify = isAuthorized(req);
     if (!verify) {
-      res.status(400).send({ message: 'Invalid Token' });
+      res.status(401).send({ message: 'Invalid Token' });
     } else {
-      const { username, email, profile } = verify;
+      const { email } = verify;
+      const { username, profile } = req.body;
       await users
         .findOne({
           where: { email },
@@ -169,8 +197,11 @@ module.exports = {
                   where: { email },
                 },
               )
-              .then((data) => {
-                res.status(200).send({ message: 'user information changed' });
+              .then(() => {
+                res.status(200).send({
+                  message: 'user information changed',
+                  data: { username, profile },
+                });
               });
           } else {
             res.status(400).send({ message: '존재하지 않는 유저입니다.' });
@@ -186,38 +217,42 @@ module.exports = {
     // 유저 비밀번호 변경 원래비번 바꿀 비번 들어옴 원래 비번이 맞으면 바꿀비번으로 바꿔줌
     const verify = isAuthorized(req);
     if (!verify) {
-      res.status(400).send({ message: 'Invalid Token' });
+      res.status(401).send({ message: 'Invalid Token' });
     } else {
-      const { email, password, newpassword } = verify;
-
-      await users
-        .findOne({
-          where: { email, password },
-        })
-        .then((data) => {
-          if (data) {
-            users
-              .update(
-                {
-                  password: newpassword,
-                },
-                {
-                  where: { email: email },
-                },
-              )
-              .then(() => {
-                // 클라에서 password confirm 유효성 검사 했다는 가정
-                res.status(200).send({ message: ' password changed' });
-              });
-          } else {
-            // 기존 비번을 틀렸을때
-            res.status(400).send({ message: 'wrong password' });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500);
-        });
+      const { email } = verify;
+      const { newPassword } = req.body;
+      const usreInfo = await users.findOne({ where: { email } });
+      const { password, salt } = usreInfo;
+      const original = req.body.password;
+      const originalPassword = crypto
+        .createHash('sha512')
+        .update(original + salt)
+        .digest('hex');
+      if (password === originalPassword) {
+        const newSalt = Math.round(new Date().valueOf() * Math.random()) + '';
+        console.log(salt, newSalt);
+        const hashPassword = crypto
+          .createHash('sha512')
+          .update(newPassword + newSalt)
+          .digest('hex');
+        await users
+          .update(
+            {
+              password: hashPassword,
+              salt: newSalt,
+            },
+            { where: { email } },
+          )
+          .then(() => {
+            res.status(200).send({ message: 'password changed' });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500);
+          });
+      } else {
+        res.status(400).send({ message: 'wrong password' });
+      }
     }
   },
   auth: async (req, res) => {
@@ -226,9 +261,9 @@ module.exports = {
       const { username, email, profile } = verify;
       res
         .status(200)
-        .send({ message: 'ok', data: { username, email, profile } });
+        .send({ message: 'auth ok', data: { username, email, profile } });
     } else {
-      res.status(400).send({ message: 'Invalid Token' });
+      res.status(401).send({ message: 'Invalid Token' });
     }
   },
 };

@@ -1,5 +1,4 @@
 const { posts, like, users } = require('../../models');
-const { sequelize } = require('sequelize');
 
 module.exports = {
   allPost: async (req, res) => {
@@ -39,6 +38,9 @@ module.exports = {
             }
           }
         }
+        post.map((el) => {
+          return (el.chatroomId = el.id);
+        });
         res.status(200).send({ message: '요청 성공', data: post });
       });
   },
