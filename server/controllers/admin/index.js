@@ -2,6 +2,7 @@ const { posts, users } = require('../../models');
 module.exports = {
   allUser: (req, res) => {
     // 전체 유저 목록
+    // 비번 솔트 업데이트 일을 제외한 모든 정보
   },
   allPost: (req, res) => {
     // 전체 컨텐츠 목록
@@ -20,3 +21,4 @@ module.exports = {
     // 특정 컨텐츠 삭제
   },
 };
+// 어드민 계정을 로그인하면 어드민 주소로 보내는 방법

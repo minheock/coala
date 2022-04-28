@@ -18,9 +18,9 @@ const {
 const router = express.Router();
 
 router.get('/', allPost); // 모든컨텐츠 가져오기
-router.get('/', filterPost); // 스택별로 필터링해서 컨텐츠 가져오기.
-router.get('/', scrollPost); // 무한스크롤 시 마지막 아이디 보내서 나머지 컨텐츠 요청
-router.get('/', findPost); // 키워드로 컨텐츠 검색
+router.get('/:stack', filterPost); // 스택별로 필터링해서 컨텐츠 가져오기.
+router.get('/:lastId', scrollPost); // 무한스크롤 시 마지막 아이디 보내서 나머지 컨텐츠 요청
+router.get('/:keyword', findPost); // 키워드로 컨텐츠 검색
 router.get('/done', findDone); // 해결완료만 필터
 router.get('/undone', findUndone); // 미해결만 필터
 /**
