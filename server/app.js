@@ -53,13 +53,19 @@ const io = socketIO(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log('on chat');
+  console.log(`User Connected: ${socket.id}`);
 
-  socket.on('join', (chatroomId) => {
-    socket.join(chatroomId);
+  socket.on('join_room', (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
-  socket.on('send', (content) => {
-    socket.to(1).emit('onsend', content);
+
+  socket.on('send_message', (data) => {
+    socket.to(data.room).emit('receive_message', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User Disconnected', socket.id);
   });
 });
 
