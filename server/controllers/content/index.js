@@ -161,7 +161,7 @@ module.exports = {
             },
             {
               model: chattings,
-              attributes: ['userId', 'content', 'time'],
+              attributes: ['id', 'userId', 'content', 'time'],
               include: [
                 {
                   model: users,
@@ -170,9 +170,12 @@ module.exports = {
               ],
             },
           ],
-          order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
+          order: [
+            [{ model: post_comment, as: 'comments' }, 'id', 'DESC'],
+            [{ model: chattings }, 'id', 'ASC'],
+          ],
         })
-        .then(async (data) => {
+        .then((data) => {
           // const post = [data].map((el) => el.get({ plain: true }));
           // for (let i = 0; i < post[0].likers.length; i++) {
           //   post[0].likers[i] = post[0].likers[i].userId;
