@@ -161,7 +161,7 @@ module.exports = {
             },
             {
               model: chattings,
-              attributes: ['userId', 'content', 'time'],
+              attributes: ['id', 'userId', 'content', 'time'],
               include: [
                 {
                   model: users,
@@ -170,7 +170,10 @@ module.exports = {
               ],
             },
           ],
-          order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
+          order: [
+            [{ model: post_comment, as: 'comments' }, 'id', 'DESC'],
+            [{ model: chattings }, 'id', 'ASC'],
+          ],
         })
         .then((data) => {
           // const post = [data].map((el) => el.get({ plain: true }));
