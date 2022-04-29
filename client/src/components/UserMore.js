@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
 import { LOG_OUT_SUCCESS } from '../reducer/user';
@@ -43,6 +43,7 @@ const Container = styled.div`
 function UserMore() {
   const { userInfo } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logoutMutation = useMutation(logoutAPI);
 
@@ -51,6 +52,7 @@ function UserMore() {
       dispatch({
         type: LOG_OUT_SUCCESS,
       });
+      navigate('/');
     }
   }, [logoutMutation.status]);
 

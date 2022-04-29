@@ -255,10 +255,10 @@ module.exports = {
   auth: async (req, res) => {
     const verify = isAuthorized(req);
     if (verify) {
-      const { username, email, profile } = verify;
+      const { id, username, email, profile } = verify;
       res
         .status(200)
-        .send({ message: 'auth ok', data: { username, email, profile } });
+        .send({ message: 'auth ok', data: { id, username, email, profile } });
     } else {
       res.status(401).send({ message: 'Invalid Token' });
     }
