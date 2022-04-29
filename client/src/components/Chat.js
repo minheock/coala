@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Divider } from 'antd';
+import { Avatar, Divider, message } from 'antd';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
@@ -74,16 +74,36 @@ const Chatroom = styled.div`
   }
 `;
 
-function Chat({ socket, room, userInfo }) {
+function Chat({ socket, room, userInfo, chattings }) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
+    const messages = chattings.map(chatting => ({
+      id: chatting.id,
+      room,
+      author: chatting.user.username,
+      profile: chatting.user.profile,
+      userId: chatting.userId,
+      message: chatting.content,
+      time: chatting.time,
+    }));
+    setMessageList([...messages]);
     socket.emit('join_room', room);
   }, []);
   // 메시지 전송 메서드
   const sendMessage = async () => {
     if (currentMessage !== '') {
+      //   console.log(currentMessage);
+      let customMessage = '';
+      for (let i = 0; i < currentMessage.length; i++) {
+        if (i > 0 && i % 28 === 0) {
+          customMessage += `\n ${currentMessage[i]}`;
+        } else {
+          customMessage += currentMessage[i];
+        }
+      }
+      //   console.log(customMessage);
       let minutes = new Date(Date.now()).getMinutes();
       if (minutes < 10) {
         minutes = `0${minutes}`;
@@ -93,7 +113,7 @@ function Chat({ socket, room, userInfo }) {
         author: userInfo.username,
         profile: userInfo.profile,
         userId: userInfo.id,
-        message: currentMessage,
+        message: customMessage,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
       await socket.emit('send_message', messageData);
@@ -118,6 +138,7 @@ function Chat({ socket, room, userInfo }) {
         <ScrollToBottom className="message-container">
           {messageList.map(messageContent => (
             <div
+              key={messageContent.id}
               className="message"
               id={userInfo.id === messageContent.userId ? 'you' : 'other'}
             >
