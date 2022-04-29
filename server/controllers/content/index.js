@@ -172,7 +172,7 @@ module.exports = {
           ],
           order: [[{ model: post_comment, as: 'comments' }, 'id', 'DESC']],
         })
-        .then(async (data) => {
+        .then((data) => {
           // const post = [data].map((el) => el.get({ plain: true }));
           // for (let i = 0; i < post[0].likers.length; i++) {
           //   post[0].likers[i] = post[0].likers[i].userId;
