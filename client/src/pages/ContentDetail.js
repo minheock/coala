@@ -79,7 +79,6 @@ function ContentDetail() {
     return <h1>Loading....</h1>;
   }
   if (isSuccess) {
-    console.log(contentDetail);
     return (
       <>
         <Header />
@@ -103,7 +102,12 @@ function ContentDetail() {
             <div className="tag">{contentDetail.data.data.stack}</div>
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
-          <Chat socket={socket} userInfo={userInfo || null} room={contentId} />
+          <Chat
+            socket={socket}
+            chattings={contentDetail.data.data.chattings}
+            userInfo={userInfo || null}
+            room={contentId}
+          />
         </Container>
       </>
     );

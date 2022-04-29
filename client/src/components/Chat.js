@@ -74,10 +74,11 @@ const Chatroom = styled.div`
   }
 `;
 
-function Chat({ socket, room, userInfo }) {
+function Chat({ socket, room, userInfo, chattings }) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
+  console.log(chattings);
   useEffect(() => {
     socket.emit('join_room', room);
   }, []);
