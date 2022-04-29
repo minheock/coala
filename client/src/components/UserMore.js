@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMutation } from 'react-query';
 import { LOG_OUT_SUCCESS } from '../reducer/user';
 import { CoalaGreen, CoalaGrey } from '../config';
+import { logoutAPI } from '../api/user';
 
 const Container = styled.div`
   position: absolute;
@@ -41,12 +43,19 @@ const Container = styled.div`
 function UserMore() {
   const { userInfo } = useSelector(state => state.user);
   const dispatch = useDispatch();
-  function handleLogout() {
-    if (userInfo) {
+
+  const logoutMutation = useMutation(logoutAPI);
+
+  useEffect(() => {
+    if (logoutMutation.isSuccess) {
       dispatch({
         type: LOG_OUT_SUCCESS,
       });
     }
+  }, [logoutMutation.status]);
+
+  function handleLogout() {
+    logoutMutation.mutate({});
   }
   return (
     <Container className={userInfo ? null : 'hidden'}>

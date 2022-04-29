@@ -79,6 +79,7 @@ function ContentDetail() {
     return <h1>Loading....</h1>;
   }
   if (isSuccess) {
+    console.log(contentDetail);
     return (
       <>
         <Header />

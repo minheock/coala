@@ -81,7 +81,6 @@ function Chat({ socket, room, userInfo }) {
   useEffect(() => {
     socket.emit('join_room', room);
   }, []);
-  console.log(userInfo);
   // 메시지 전송 메서드
   const sendMessage = async () => {
     if (currentMessage !== '') {
@@ -104,7 +103,6 @@ function Chat({ socket, room, userInfo }) {
   };
 
   useEffect(() => {
-    console.log('hello');
     socket.on('receive_message', data => {
       setMessageList(list => [...list, data]);
     });
