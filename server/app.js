@@ -50,6 +50,9 @@ const io = socketIO(server, {
     methods: ['GET', 'POST'],
     credentials: true,
   },
+  // 배포후 핑인터벌 에러 핸들링
+  // pingInterval: 10000000000,
+  // pingTimeout: 5000000000,
 });
 
 const { chattings } = require('./models');
@@ -88,7 +91,7 @@ io.on('connection', (socket) => {
     console.log(`User Disconnected: ${socket.id}`);
   });
 });
-
+// io.set('transports', [ 'websocket', 'flashsocket', 'polling' ] );
 server.listen(port, () => {
   console.log(`현재 ${port}에서 서버 가동 중`);
 });
