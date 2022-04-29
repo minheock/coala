@@ -161,7 +161,7 @@ module.exports = {
             },
             {
               model: chattings,
-              attributes: ['userId', 'content'],
+              attributes: ['userId', 'content', 'time'],
               include: [
                 {
                   model: users,

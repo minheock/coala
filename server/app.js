@@ -71,16 +71,17 @@ io.on('connection', (socket) => {
       User with ID: ${socket.id} joined room: ${data}
 -----------------------------------------------------`,
     );
-    console.log(`11111`, io.sockets);
+    // console.log(`11111`, io.sockets);
   });
 
   socket.on('send_message', async (data) => {
-    // console.log(data);
+    console.log(data);
     socket.to(data.room).emit('receive_message', data);
     await chattings.create({
       userId: data.userId,
       chatroomId: data.room,
       content: data.message,
+      time: data.time,
     });
   });
 
