@@ -72,7 +72,7 @@ const Container = styled.main`
 `;
 
 function ContentDetail() {
-  const [isChat, setIsChat] = useState(true);
+  const [isChat, setIsChat] = useState(false);
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
