@@ -196,7 +196,6 @@ module.exports = {
   },
   comment: async (req, res) => {
     // 댓글 작성
-    console.log(1111);
     const { userId, comment, postId } = req.body;
     if (!postId || !comment || !userId) {
       res.status(400).send({ message: 'Invalid request' });
