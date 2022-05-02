@@ -1,35 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Divider, message } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Avatar, Divider, Button } from 'antd';
+import {
+  CloseOutlined,
+  FileImageOutlined,
+  CodeOutlined,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 const Chatroom = styled.div`
   background-color: white;
   position: fixed;
-  right: 0px;
-  width: 330px;
-  height: 550px;
-  border: 1px solid black;
-  border-radius: 10px;
+  -webkit-box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
+  box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
+  right: 0.2rem;
+  width: 530px;
+  height: 650px;
+  /* border-radius: 10px 10px 0px 0px; */
   margin-left: 0.5rem;
+  .close-btn {
+    position: absolute;
+    top: 0.2rem;
+    font-size: 15px;
+    right: 0.2rem;
+    cursor: pointer;
+  }
   #divider {
-    margin-bottom: 0px !important;
+    margin-bottom: 3px !important;
   }
   .message-container {
-    height: 467px;
+    height: 560px;
     overflow-y: auto;
   }
-  .input-message {
-    position: absolute;
-    width: 100%;
-    height: 30px;
-    border: 1px solid black;
-    bottom: 0px;
-    border-radius: 3px;
+  .input-box {
+    display: flex;
+    .icons-box {
+      display: flex;
+      align-items: center;
+      .input-icon {
+        cursor: pointer;
+        margin-left: 0.2rem;
+        font-size: 23px;
+      }
+    }
+
+    .input-message {
+      margin-left: 0.5rem;
+      width: 80%;
+      height: 35px;
+      border-radius: 3px;
+    }
+    .input-message:focus {
+      outline: none;
+    }
+
+    button {
+      width: 68px;
+      border-style: none;
+      background-color: #63cdda;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+    }
   }
-  .input-message:focus {
-    outline: none;
-  }
+
   .message {
     .message-info {
       display: flex;
@@ -72,11 +106,56 @@ const Chatroom = styled.div`
       margin-left: 3px;
     }
   }
+  .img-wrapper {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    align-items: center;
+    .img-preview {
+      display: block;
+      max-width: 255px;
+      max-height: 229px;
+    }
+    .img-preview-btn {
+      width: 140px;
+    }
+  }
+  #image-upload {
+    display: none;
+  }
 `;
 
-function Chat({ socket, room, userInfo, chattings }) {
+function Chat({ socket, room, userInfo, chattings, handleClose }) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
+
+  const [image, setImage] = useState('');
+  const imgUploadRef = useRef();
+  const uploadFiles = e => {
+    e.preventDefault();
+    const fileReader = new FileReader();
+    if (e.target.files[0]) {
+      fileReader.readAsDataURL(e.target.files[0]);
+    }
+    fileReader.onload = () => {
+      setImage({
+        image_file: e.target.files[0],
+        preview_URL: fileReader.result,
+      });
+    };
+  };
+
+  const deleteImage = () => {
+    setImage('');
+  };
+
+  const sendImageToServer = () => {};
+
+  const handlesubmitImg = () => {
+    imgUploadRef.current.click();
+  };
 
   useEffect(() => {
     const messages = chattings.map(chatting => ({
@@ -97,7 +176,7 @@ function Chat({ socket, room, userInfo, chattings }) {
       //   console.log(currentMessage);
       let customMessage = '';
       for (let i = 0; i < currentMessage.length; i++) {
-        if (i > 0 && i % 28 === 0) {
+        if (i > 0 && i % 35 === 0) {
           customMessage += `\n ${currentMessage[i]}`;
         } else {
           customMessage += currentMessage[i];
@@ -133,6 +212,10 @@ function Chat({ socket, room, userInfo, chattings }) {
       <div className="chat-header">
         <h3>Coala Chat</h3>
         <Divider id="divider" />
+        <CloseOutlined
+          onClick={() => handleClose(false)}
+          className="close-btn"
+        />
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -140,9 +223,9 @@ function Chat({ socket, room, userInfo, chattings }) {
             <div
               key={messageContent.id}
               className="message"
-              id={userInfo.id === messageContent.userId ? 'you' : 'other'}
+              id={userInfo?.id === messageContent.userId ? 'you' : 'other'}
             >
-              {userInfo.id === messageContent.userId ? null : (
+              {userInfo?.id === messageContent.userId ? null : (
                 <div className="message-userInfo">
                   <p id="author">{messageContent.author}</p>
                   <Avatar src={messageContent.profile} />
@@ -160,21 +243,62 @@ function Chat({ socket, room, userInfo, chattings }) {
           ))}
         </ScrollToBottom>
       </div>
+      {image ? (
+        <div className="img-wrapper">
+          <img
+            alt="preview-img"
+            className="img-preview"
+            src={image.preview_URL}
+          />
+          <Button
+            className="img-preview-btn"
+            type="primary"
+            onClick={deleteImage}
+            danger
+          >
+            취소
+          </Button>
+          <Button
+            className="img-preview-btn"
+            type="ghost"
+            onClick={sendImageToServer}
+          >
+            확인
+          </Button>
+        </div>
+      ) : null}
 
       <div className="chat-footer">
+        <input
+          ref={imgUploadRef}
+          type="file"
+          id="image-upload"
+          accrpt="img/*"
+          onChange={uploadFiles}
+        />
         {userInfo ? (
-          <input
-            className="input-message"
-            type="text"
-            value={currentMessage}
-            placeholder="메시지 입력해주세요"
-            onChange={event => {
-              setCurrentMessage(event.target.value);
-            }}
-            onKeyPress={event => {
-              event.key === 'Enter' && sendMessage();
-            }}
-          />
+          <div className="input-box">
+            <div className="icons-box">
+              <FileImageOutlined
+                onClick={handlesubmitImg}
+                className="input-icon img-icon"
+              />
+              <CodeOutlined className="input-icon code-icon" />
+            </div>
+            <input
+              className="input-message"
+              type="text"
+              value={currentMessage}
+              placeholder="메시지 입력해주세요"
+              onChange={event => {
+                setCurrentMessage(event.target.value);
+              }}
+              onKeyPress={event => {
+                event.key === 'Enter' && sendMessage();
+              }}
+            />
+            <button type="button">전송</button>
+          </div>
         ) : (
           <span>로그인후 사용해주세요.</span>
         )}
