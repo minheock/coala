@@ -11,6 +11,7 @@ import { getContentAPI } from '../api/content';
 import Header from '../components/Header';
 import { CoalaGreen, CoalaGrey, SView } from '../config';
 import Chat from '../components/Chat';
+import ZoomImage from '../components/ZoomImage';
 
 const Container = styled.main`
   width: 85%;
@@ -72,7 +73,7 @@ const Container = styled.main`
 
 function ContentDetail() {
   const [isChat, setIsChat] = useState(true);
-  const { socket } = useSelector(state => state.chat);
+  const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
   const {
@@ -90,6 +91,7 @@ function ContentDetail() {
   if (isSuccess) {
     return (
       <>
+        {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
         <Header />
         <Container>
           <article>
