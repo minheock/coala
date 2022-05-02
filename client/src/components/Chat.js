@@ -7,6 +7,8 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { useDispatch } from 'react-redux';
+import { ZOOM_CHAT_IMAGE } from '../reducer/chat';
 import { uploadChatFiles } from '../firebase';
 
 const Chatroom = styled.div`
@@ -74,6 +76,7 @@ const Chatroom = styled.div`
       color: #f5f6fa;
     }
     .chat-img-box {
+      cursor: pointer;
       padding: 2px;
       .chat-img {
         max-width: 248px;
@@ -136,6 +139,7 @@ const Chatroom = styled.div`
 `;
 
 function Chat({ socket, room, userInfo, chattings, handleClose }) {
+  const dispatch = useDispatch();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
@@ -156,6 +160,12 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
     };
   };
 
+  const handlezoomImage = imgUrl => {
+    dispatch({
+      type: ZOOM_CHAT_IMAGE,
+      data: imgUrl,
+    });
+  };
   const deleteImage = () => {
     setImage('');
   };
@@ -177,7 +187,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
         image: dataurl,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
-      // await socket.emit('send_message', messageData);
+      await socket.emit('send_message', imgData);
       setMessageList(list => [...list, imgData]);
       setImage('');
       setUploading(false);
@@ -267,7 +277,10 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
               <div className="message-info">
                 <div className="message-content">
                   {messageContent.image ? (
-                    <div className="chat-img-box">
+                    <div
+                      onClick={() => handlezoomImage(messageContent.image)}
+                      className="chat-img-box"
+                    >
                       <img
                         className="chat-img"
                         alt="chat-img"
