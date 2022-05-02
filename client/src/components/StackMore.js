@@ -40,30 +40,16 @@ const Container = styled.div`
 `;
 function StackMore({ closeMenuList }) {
   const dispatch = useDispatch();
-  let curstack = null;
-  const { data, isLoading, refetch } = useQuery(
-    ['getStackContents'],
-    () => getfilterContentsAPI({ stack: curstack }),
-    {
-      refetchOnWindowFocus: false,
-      enabled: false,
-    },
-  );
   const handleStackContents = (e, stack) => {
     e.stopPropagation(); // 버블링 방지.
-    curstack = stack;
-    refetch();
-  };
-  useEffect(() => {
-    console.log('useEffect');
-    console.log(data);
-    if (data) {
+    getfilterContentsAPI({ stack }).then(contents => {
       dispatch({
         type: LOAD_CONTENTS_SUCCESS,
-        data: data.data.data,
+        data: contents.data.data,
       });
-    }
-  }, [data]);
+      closeMenuList(false);
+    });
+  };
 
   return (
     <Container>
