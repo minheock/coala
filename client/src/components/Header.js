@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useQuery } from 'react-query';
 import { XLView, LView, MView, SView } from '../config';
 import UserMore from './UserMore';
-import { LOG_IN_SUCCESS } from '../reducer/user';
+import { getfilterContentsAPI } from '../api/content';
+import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
 
 const { Search } = Input;
 
@@ -100,12 +102,35 @@ const HeaderWrapper = styled.header`
 
 function Header({ page }) {
   const [isUserMore, setIsUserMore] = useState(false);
+  const [search, setSearch] = useState('');
   const { userInfo } = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const navigator = useNavigate();
-  const handleSearch = value => console.log(value);
+  const { data, refetch } = useQuery(
+    ['getKeywordContents'],
+    () => getfilterContentsAPI({ keyword: search }),
+    {
+      refetchOnWindowFocus: false,
+      enabled: false,
+    },
+  );
+
+  const handleSearch = value => {
+    refetch();
+  };
+
+  useEffect(() => {
+    if (data) {
+      dispatch({
+        type: LOAD_CONTENTS_SUCCESS,
+        data: data.data.data,
+      });
+    }
+  }, [data]);
   const handleLogin = () => {
     navigator('/login');
   };
+
   return (
     <HeaderWrapper>
       {isUserMore ? <UserMore /> : null}
@@ -118,6 +143,7 @@ function Header({ page }) {
         {page === 'Home' ? (
           <Search
             placeholder="search..."
+            onChange={e => setSearch(e.target.value)}
             onSearch={handleSearch}
             className="search-input"
           />
