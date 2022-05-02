@@ -84,6 +84,7 @@ io.on('connection', (socket) => {
       userId: data.userId,
       chatroomId: data.room,
       content: data.message,
+      image: data.image,
       time: data.time,
     });
   });
