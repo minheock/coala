@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
@@ -6,17 +6,18 @@ import { useParams } from 'react-router-dom';
 import { Avatar } from 'antd';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
+import { CommentOutlined } from '@ant-design/icons';
 import { getContentAPI } from '../api/content';
 import Header from '../components/Header';
 import { CoalaGreen, CoalaGrey, SView } from '../config';
 import Chat from '../components/Chat';
 
 const Container = styled.main`
-  width: 95%;
+  width: 85%;
   margin: auto;
   display: flex;
   article {
-    width: 65%;
+    width: 100%;
     .content-title {
       text-align: center;
       margin-top: 10px;
@@ -45,6 +46,18 @@ const Container = styled.main`
       margin-left: 1rem;
     }
   }
+  .chat-icon {
+    position: fixed;
+    bottom: 5rem;
+    right: 2.5rem;
+    z-index: 1000px;
+    font-size: 33px;
+    cursor: pointer;
+    transition: 0.3s ease-in;
+  }
+  .chat-icon:hover {
+    transform: scale(1.1, 1.1);
+  }
   // 반응형
   @media screen and (max-width: ${SView}px) {
     & {
@@ -58,6 +71,7 @@ const Container = styled.main`
 `;
 
 function ContentDetail() {
+  const [isChat, setIsChat] = useState(true);
   const { socket } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
@@ -70,11 +84,6 @@ function ContentDetail() {
     refetchOnWindowFocus: false,
     retry: 0,
   });
-  // useEffect(() => {
-  //   if (contentDetail) {
-  //     contentDetail = data.data;
-  //   }
-  // }, [isSuccess]);
   if (isLoading) {
     return <h1>Loading....</h1>;
   }
@@ -102,12 +111,20 @@ function ContentDetail() {
             <div className="tag">{contentDetail.data.data.stack}</div>
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
-          <Chat
-            socket={socket}
-            chattings={contentDetail.data.data.chattings}
-            userInfo={userInfo || null}
-            room={contentId}
-          />
+          {isChat ? (
+            <Chat
+              socket={socket}
+              chattings={contentDetail.data.data.chattings}
+              userInfo={userInfo || null}
+              room={contentId}
+              handleClose={setIsChat}
+            />
+          ) : (
+            <CommentOutlined
+              onClick={() => setIsChat(true)}
+              className="chat-icon"
+            />
+          )}
         </Container>
       </>
     );
