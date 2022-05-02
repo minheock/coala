@@ -1,4 +1,5 @@
 const { posts, users } = require('../../models');
+const { Op } = require('sequelize');
 
 module.exports = {
   allUser: async (req, res) => {
@@ -19,6 +20,33 @@ module.exports = {
   findUser: async (req, res) => {
     // 특정 유저 검색
     // 이메일, 유저 네임으로 검색
+    const { user } = req.params;
+    console.log(user);
+    await users
+      .findAll({
+        where: {
+          [Op.or]: [
+            {
+              username: {
+                [Op.like]: `${user}%`,
+              },
+            },
+            {
+              email: {
+                [Op.like]: `${user}%`,
+              },
+            },
+          ],
+        },
+        attributes: { exclude: ['password', 'salt', 'updatedAt'] },
+      })
+      .then((data) => {
+        res.status(200).send({ message: '요청 성공', userInfo: data });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500);
+      });
   },
   delUser: async (req, res) => {
     // 특정 유저 탈퇴
@@ -51,5 +79,5 @@ module.exports = {
       });
   },
 };
-// 어드민 계정을 로그인하면 어드민 주소로 보내는 방법
+// 어드민 계정 로그인하면 어드민 주소로 보내는 방법
 // 배포상 서버 에러 핸들링 하기
