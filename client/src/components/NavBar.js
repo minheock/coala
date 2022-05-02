@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { Divider } from 'antd';
 import { XLView, LView, MView, SView, CoalaGreen } from '../config';
 import StackMore from './StackMore';
+import { getfilterContentsAPI } from '../api/content';
+import { useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
 
 const Menu = styled.div`
   margin: auto;
@@ -55,13 +59,54 @@ const DividerCustom = styled(Divider)`
 
 function NavBar() {
   const [MenuList, setMenuList] = useState(false);
+  const dispatch = useDispatch();
+  const { data: doneContents, refetch: doneRefetch } = useQuery(
+    ['doneContents'],
+    () => getfilterContentsAPI({ done: 1 }),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
+  const { data: resolvingContents, refetch: resolvingRefetch } = useQuery(
+    ['resolvingContents'],
+    () => getfilterContentsAPI({ done: 0 }),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
+  const handleDone = () => {
+    doneRefetch();
+  };
+
+  const handleResolving = () => {
+    resolvingRefetch();
+  };
+  useEffect(() => {
+    if (doneContents) {
+      dispatch({
+        type: LOAD_CONTENTS_SUCCESS,
+        data: doneContents.data.data,
+      });
+    }
+    if (resolvingContents) {
+      dispatch({
+        type: LOAD_CONTENTS_SUCCESS,
+        data: resolvingContents.data.data,
+      });
+    }
+  }, [doneContents, resolvingContents]);
+
   return (
     <Menu>
       <ul>
-        <li>
+        <li onClick={handleResolving}>
           <p>미해결문제</p>
         </li>
-        <li>
+        <li onClick={handleDone}>
           <p>해결된문제</p>
         </li>
         <li onClick={() => setMenuList(prev => !prev)}>

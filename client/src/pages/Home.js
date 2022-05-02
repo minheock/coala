@@ -30,13 +30,6 @@ function Home() {
     }
   }, [contentsData]);
 
-  // useEffect(() => {
-  //   getContentsAPI()
-  //     .then(data => {
-  //       console.log(data);
-  //     })
-  //     .catch(error => console.error(error));
-  // }, []);
   if (isLoading) {
     return (
       <div>

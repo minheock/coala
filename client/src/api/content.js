@@ -5,4 +5,6 @@ axios.defaults.withCredentials = true;
 
 export const postContentAPI = data => axios.post('/content', data);
 export const getContentsAPI = () => axios.get('/contents');
+export const getfilterContentsAPI = params =>
+  axios.get('/contents/filter', { params });
 export const getContentAPI = data => axios.get(`/content/${data}`);
