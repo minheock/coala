@@ -177,7 +177,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
         image: dataurl,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
-      // await socket.emit('send_message', messageData);
+      await socket.emit('send_message', imgData);
       setMessageList(list => [...list, imgData]);
       setImage('');
       setUploading(false);
