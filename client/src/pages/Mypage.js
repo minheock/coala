@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +10,12 @@ function Mypage() {
   const [info, setInfo] = useState(false);
   const { userInfo } = useSelector(state => state.user);
   const navigate = useNavigate();
-  if (!userInfo) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/');
+    }
+  }, []);
+
   console.log(userInfo);
   if (userInfo) {
     return (
@@ -40,7 +43,7 @@ function Mypage() {
               <br />
               <span className="userId">{userInfo.email}</span>
               <br />
-              <span className="usertext">아무거나</span>
+              <span className="usertext">{`내 게시물 총${3}개`}</span>
             </div>
             <button type="button" className="editInfo">
               <EditOutlined className="icon" />
@@ -66,7 +69,8 @@ const MypageWrapper = styled.div`
     position: absolute;
     top: 120px;
     left: 30vw;
-    font-size: 22px;
+    font-size: 28px;
+    font-style: sans-serif;
   }
   .userInfoContaner {
     width: 300px;
