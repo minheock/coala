@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
-import uploadFiles from '../firebase';
+import { uploadFiles } from '../firebase';
 import { postContentAPI } from '../api/content';
 
 const Container = styled.div`

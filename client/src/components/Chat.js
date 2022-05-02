@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { uploadChatFiles } from '../firebase';
 
 const Chatroom = styled.div`
   background-color: white;
@@ -72,6 +73,13 @@ const Chatroom = styled.div`
       margin-bottom: 5px;
       color: #f5f6fa;
     }
+    .chat-img-box {
+      padding: 2px;
+      .chat-img {
+        max-width: 248px;
+        max-height: 220px;
+      }
+    }
   }
   #you {
     .message-info {
@@ -132,6 +140,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
   const [messageList, setMessageList] = useState([]);
 
   const [image, setImage] = useState('');
+  const [uploading, setUploading] = useState(false);
   const imgUploadRef = useRef();
   const uploadFiles = e => {
     e.preventDefault();
@@ -151,7 +160,29 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
     setImage('');
   };
 
-  const sendImageToServer = () => {};
+  const sendImageToServer = () => {
+    setUploading(true);
+    uploadChatFiles(image.image_file, room).then(async dataurl => {
+      console.log(dataurl);
+      let minutes = new Date(Date.now()).getMinutes();
+      if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
+      const imgData = {
+        room,
+        author: userInfo.username,
+        profile: userInfo.profile,
+        userId: userInfo.id,
+        message: null,
+        image: dataurl,
+        time: `${new Date(Date.now()).getHours()}:${minutes}`,
+      };
+      // await socket.emit('send_message', messageData);
+      setMessageList(list => [...list, imgData]);
+      setImage('');
+      setUploading(false);
+    });
+  };
 
   const handlesubmitImg = () => {
     imgUploadRef.current.click();
@@ -165,6 +196,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
       profile: chatting.user.profile,
       userId: chatting.userId,
       message: chatting.content,
+      image: chatting.image,
       time: chatting.time,
     }));
     setMessageList([...messages]);
@@ -193,6 +225,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
         profile: userInfo.profile,
         userId: userInfo.id,
         message: customMessage,
+        image: null,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
       await socket.emit('send_message', messageData);
@@ -233,7 +266,17 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
               )}
               <div className="message-info">
                 <div className="message-content">
-                  <span>{messageContent.message}</span>
+                  {messageContent.image ? (
+                    <div className="chat-img-box">
+                      <img
+                        className="chat-img"
+                        alt="chat-img"
+                        src={messageContent.image}
+                      />
+                    </div>
+                  ) : (
+                    <span>{messageContent.message}</span>
+                  )}
                 </div>
                 <div className="message-meta">
                   <span id="time">{messageContent.time}</span>
@@ -259,6 +302,7 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
             취소
           </Button>
           <Button
+            loading={uploading}
             className="img-preview-btn"
             type="ghost"
             onClick={sendImageToServer}
@@ -297,7 +341,9 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
                 event.key === 'Enter' && sendMessage();
               }}
             />
-            <button type="button">전송</button>
+            <button onClick={sendMessage} type="button">
+              전송
+            </button>
           </div>
         ) : (
           <span>로그인후 사용해주세요.</span>
