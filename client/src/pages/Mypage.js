@@ -14,7 +14,7 @@ function Mypage() {
     if (!userInfo) {
       navigate('/');
     }
-  }, []);
+  }, [userInfo]);
 
   console.log(userInfo);
   if (userInfo) {
