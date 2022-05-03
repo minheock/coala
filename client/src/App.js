@@ -31,11 +31,12 @@ function App() {
   });
   const dispatch = useDispatch();
   const { error, success } = useSelector(state => state.modal);
-  dispatch({
-    type: INIT_SOCKETIO,
-    data: socket,
-  });
-
+  useEffect(() => {
+    dispatch({
+      type: INIT_SOCKETIO,
+      data: socket,
+    });
+  }, [socket]);
   useEffect(() => {
     if (isSuccess) {
       dispatch({
