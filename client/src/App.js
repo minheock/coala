@@ -16,7 +16,10 @@ import { INIT_SOCKETIO } from './reducer/chat';
 import { getuserAPI } from './api/user';
 import { LOG_IN_SUCCESS } from './reducer/user';
 
-const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL);
+const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL, {
+  transports: ['websocket'],
+  withCredentials: true,
+});
 
 function App() {
   const {
