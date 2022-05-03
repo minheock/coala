@@ -3,15 +3,18 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { Avatar } from 'antd';
+import { Avatar, Tag } from 'antd';
+import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { CommentOutlined } from '@ant-design/icons';
 import { getContentAPI } from '../api/content';
 import Header from '../components/Header';
 import { CoalaGreen, CoalaGrey, SView } from '../config';
 import Chat from '../components/Chat';
 import ZoomImage from '../components/ZoomImage';
+import ConfirmModal from '../components/ConfirmModal';
+import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 
 const Container = styled.main`
   width: 85%;
@@ -19,6 +22,21 @@ const Container = styled.main`
   display: flex;
   article {
     width: 100%;
+    ul {
+      padding: 0;
+      margin-bottom: 0px;
+      li {
+        list-style: none;
+        display: inline-block;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      li:hover {
+        color: ${CoalaGreen};
+      }
+    }
     .content-title {
       text-align: center;
       margin-top: 10px;
@@ -38,6 +56,8 @@ const Container = styled.main`
     }
   }
   .user-info {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 1rem;
     .user-profile {
       margin-right: 5px;
@@ -45,6 +65,9 @@ const Container = styled.main`
     .updateAt {
       display: inline-block;
       margin-left: 1rem;
+    }
+    .solved-tag {
+      margin-left: 0.5rem;
     }
   }
   .chat-icon {
@@ -63,16 +86,20 @@ const Container = styled.main`
   @media screen and (max-width: ${SView}px) {
     & {
       flex-direction: column;
+      width: 98%;
     }
     article {
-      width: 90%;
+      width: 100%;
       margin: auto;
     }
   }
 `;
 
 function ContentDetail() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isChat, setIsChat] = useState(false);
+  const [confirm, setConfirm] = useState('');
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
@@ -81,36 +108,75 @@ function ContentDetail() {
     isLoading,
     data: contentDetail,
     isSuccess,
+    refetch,
   } = useQuery(['content', contentId], () => getContentAPI(contentId), {
     refetchOnWindowFocus: false,
     retry: 0,
   });
+
+  const handleEdit = () => {
+    dispatch({
+      type: EDIT_CONTENT_REQUEST,
+      data: contentDetail.data.data,
+    });
+    navigate('/edit');
+  };
+
   if (isLoading) {
     return <h1>Loading....</h1>;
   }
   if (isSuccess) {
+    const { id } = contentDetail.data.data.userInfo;
+    const { done } = contentDetail.data.data;
+
     return (
       <>
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
+        {confirm ? (
+          <ConfirmModal
+            refetch={refetch}
+            confirm={confirm}
+            contentId={contentId}
+            closeConfirm={setConfirm}
+            contentData={contentDetail.data.data}
+          />
+        ) : null}
         <Header />
         <Container>
           <article>
             <h1 className="content-title">{contentDetail.data.data.title}</h1>
             <div className="user-info">
-              <Avatar
-                className="user-profile"
-                src={
-                  contentDetail.data.data.userInfo.profile
-                    ? contentDetail.data.data.userInfo.profile
-                    : 'https://joeschmoe.io/api/v1/random'
-                }
-              />
-              <span>{contentDetail.data.data.userInfo.username}</span>
-              <span className="updateAt">
-                {contentDetail.data.data.updatedAt}
-              </span>
+              <div>
+                <Avatar
+                  className="user-profile"
+                  src={
+                    contentDetail.data.data.userInfo.profile
+                      ? contentDetail.data.data.userInfo.profile
+                      : 'https://joeschmoe.io/api/v1/random'
+                  }
+                />
+                <span>{contentDetail.data.data.userInfo.username}</span>
+                <span className="updateAt">
+                  {contentDetail.data.data.updatedAt}
+                </span>
+                <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
+                  {done ? 'solved' : 'resolving'}
+                </Tag>
+              </div>
+              {id === userInfo?.id ? (
+                <div>
+                  <ul>
+                    {done ? null : (
+                      <li onClick={() => setConfirm('solved')}>해결완료</li>
+                    )}
+                    <li onClick={handleEdit}>수정</li>
+                    <li onClick={() => setConfirm('delete')}>삭제</li>
+                  </ul>
+                </div>
+              ) : null}
             </div>
             <div className="tag">{contentDetail.data.data.stack}</div>
+
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
           {isChat ? (

@@ -31,6 +31,7 @@ function App() {
   });
   const dispatch = useDispatch();
   const { error, success } = useSelector(state => state.modal);
+  const { editContent } = useSelector(state => state.content);
   useEffect(() => {
     dispatch({
       type: INIT_SOCKETIO,
@@ -58,6 +59,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/write" element={<Post />} />
+        <Route path="/edit" element={<Post isEdit={editContent} />} />
         <Route path="/content/:contentId" element={<ContentDetail />} />
       </Routes>
     </div>
