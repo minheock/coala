@@ -78,7 +78,8 @@ const Container = styled.div`
   }
 `;
 
-function Post() {
+function Post({ isEdit }) {
+  console.log(isEdit);
   const [tagsInfo, setTagsInfo] = useState([]);
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState(null);
