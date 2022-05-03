@@ -1,3 +1,4 @@
+const { verify } = require('jsonwebtoken');
 const {
   users,
   posts,

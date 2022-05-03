@@ -1,12 +1,5 @@
 const express = require('express');
-const {
-  allPost,
-  filterPost,
-  scrollPost,
-  findPost,
-  findDone,
-  findUndone,
-} = require('../controllers/contents');
+const { allPost, filterPost } = require('../controllers/contents');
 
 /**
  * @swagger
