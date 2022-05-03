@@ -122,52 +122,57 @@ module.exports = {
   },
   post: async (req, res) => {
     // 해당유저의 작성한 게시글 불러오기
-    const { userId } = req.params;
-    if (userId) {
-      await posts
-        .findAll({
-          where: { userId },
-          include: [
-            {
-              model: users,
-              required: true,
-              as: 'userInfo',
-              attributes: ['id', 'username', 'profile'],
-            },
-            {
-              model: like,
-              as: 'likers',
-              attributes: ['userId'],
-            },
-          ],
-          attributes: [
-            'id',
-            'title',
-            'thumbnail',
-            'description',
-            'updatedAt',
-            'stack',
-            'done',
-          ],
-          order: [['id', 'DESC']],
-        })
-        .then((data) => {
-          const post = data.map((el) => el.get({ plain: true }));
-          for (let i = 0; i < post.length; i++) {
-            if (post[i].likers) {
-              for (let q = 0; q < post[i].likers.length; q++) {
-                post[i].likers[q] = post[i].likers[q].userId;
+    const verify = isAuthorized(req);
+    if (verify) {
+      const { userId } = req.params;
+      if (userId) {
+        await posts
+          .findAll({
+            where: { userId },
+            include: [
+              {
+                model: users,
+                required: true,
+                as: 'userInfo',
+                attributes: ['id', 'username', 'profile'],
+              },
+              {
+                model: like,
+                as: 'likers',
+                attributes: ['userId'],
+              },
+            ],
+            attributes: [
+              'id',
+              'title',
+              'thumbnail',
+              'description',
+              'updatedAt',
+              'stack',
+              'done',
+            ],
+            order: [['id', 'DESC']],
+          })
+          .then((data) => {
+            const post = data.map((el) => el.get({ plain: true }));
+            for (let i = 0; i < post.length; i++) {
+              if (post[i].likers) {
+                for (let q = 0; q < post[i].likers.length; q++) {
+                  post[i].likers[q] = post[i].likers[q].userId;
+                }
               }
             }
-          }
-          res.status(200).send({ message: '요청 성공', data: post });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500);
-        });
+            res.status(200).send({ message: '요청 성공', data: post });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500);
+          });
+      } else {
+        res.status(400).send({ message: 'invalid request' });
+      }
     } else {
-      res.status(400).send({ message: 'invalid request' });
+      res.status(401).send({ message: 'Invalid Token' });
     }
   },
   userInfo: async (req, res) => {
