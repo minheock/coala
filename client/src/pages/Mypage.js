@@ -9,6 +9,7 @@ import { edituserAPI, editpasswordAPI, signoutAPI } from '../api/user';
 import Contents from '../components/Contents';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
+import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
@@ -44,7 +45,7 @@ function Mypage() {
     if (editValue.userName) {
       editMutation.mutate({
         username: editValue.userName,
-        profile: null,
+        profile: 'https://joeschmoe.io/api/v1/random',
       });
     } else {
       dispatch({
@@ -68,10 +69,10 @@ function Mypage() {
 
   useEffect(() => {
     if (editMutation.isSuccess || editPwMutation.isSuccess) {
-      console.log(editMutation.data);
+      console.log(editMutation.data.data.data);
       dispatch({
-        type: SET_SUCCESS_MESSAGE,
-        data: '수정 성공.',
+        type: EDIT_USERINFO_SUCCESS,
+        data: editMutation.data.data.data,
       });
     } else if (editMutation.isError || editPwMutation.isError) {
       dispatch({
@@ -80,7 +81,6 @@ function Mypage() {
       });
     }
   }, [editMutation.status, editPwMutation.status]);
-  console.log(editValue);
   if (userInfo) {
     return (
       <>
