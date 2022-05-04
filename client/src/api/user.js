@@ -9,3 +9,4 @@ export const loginAPI = data => axios.post('/user/login', data);
 export const logoutAPI = () => axios.post('/user/logout');
 export const edituserAPI = data => axios.patch('/user/userInfo', data);
 export const editpasswordAPI = data => axios.patch('/user/password', data);
+export const signoutAPI = () => axios.delete('/user/signout');

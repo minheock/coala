@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAPI, editpasswordAPI } from '../api/user';
+import { edituserAPI, editpasswordAPI, signoutAPI } from '../api/user';
 import Contents from '../components/Contents';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
@@ -15,6 +15,7 @@ function Mypage() {
   const { userInfo } = useSelector(state => state.user);
   const editMutation = useMutation(edituserAPI);
   const editPwMutation = useMutation(editpasswordAPI);
+  const signoutMutation = useMutation(signoutAPI);
   const { mainContents } = useSelector(state => state.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +44,11 @@ function Mypage() {
     });
   };
 
+  const signoutSubmit = () => {
+    console.log('-------', editValue);
+    signoutMutation.mutate({});
+  };
+
   useEffect(() => {}, []);
   console.log(userInfo);
   if (userInfo) {
@@ -66,7 +72,7 @@ function Mypage() {
               </div>
             </div>
             {info ? (
-              <form onSubmit={editSubmit}>
+              <form onSubmit={signoutSubmit}>
                 <div className="userInfoBox change">
                   <div className="form">
                     <input
