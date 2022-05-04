@@ -120,6 +120,7 @@ function NavBar() {
       });
     }
   }, [contentsData]);
+
   return (
     <Menu>
       <ul>

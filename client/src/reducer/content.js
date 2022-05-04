@@ -21,9 +21,11 @@ import produce from 'immer';
 const initialized = {
   mainContents: [],
   editContent: null,
+  hasMoreContents: true,
   or: false,
 };
 
+export const LOAD_MORE_CONTENTS = 'LOAD_MORE_CONTENTS';
 export const LOAD_CONTENTS_SUCCESS = 'LOAD_CONTENTS_SUCCESS';
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
@@ -40,6 +42,9 @@ const reducer = (state = initialized, action) =>
         break;
       case EDIT_CONTENT_REQUEST:
         draft.editContent = action.data;
+        break;
+      case LOAD_MORE_CONTENTS:
+        draft.mainContents = [...draft.mainContents, ...action.data];
         break;
       default:
         break;

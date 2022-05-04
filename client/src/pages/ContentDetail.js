@@ -127,7 +127,7 @@ function ContentDetail() {
   }
   if (isSuccess) {
     const { id } = contentDetail.data.data.userInfo;
-    const { done } = contentDetail.data.data;
+    const { done } = contentDetail.data.data; // 컨텐트 해결유무
 
     return (
       <>
@@ -179,6 +179,7 @@ function ContentDetail() {
 
             <Viewer initialValue={contentDetail.data.data.content} />
           </article>
+
           {isChat ? (
             <Chat
               socket={socket}
