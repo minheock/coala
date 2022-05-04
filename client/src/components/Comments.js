@@ -25,11 +25,7 @@ const CommentContainer = styled.div`
   }
 `;
 
-function Comments({ userInfo, contentDetail }) {
-  const { id } = contentDetail.data.data;
-  const { comments } = contentDetail.data.data;
-  console.log(comments);
-
+function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
   const postCommentMutation = useMutation(commentContentAPI);
@@ -41,6 +37,20 @@ function Comments({ userInfo, contentDetail }) {
 
   useEffect(() => {
     if (postCommentMutation.isSuccess) {
+      console.log(postCommentMutation.data);
+      console.log(commentsList);
+      // const dummyComment = {
+      //   commentId: 37,
+      //   comment: '새로운댓글',
+      //   createdAt: '2022-05-04 13:26:32',
+      //   postId: 32,
+      //   userId: 3,
+      //   userinfo: {
+      //     username: 'Zoro',
+      //     profile: 'https://joeschmoe.io/api/v1/random',
+      //   },
+      // };
+      // hadleInputComments(dummyComment, ...commentsList);
       setComment('');
     } else if (postCommentMutation.isError) {
       dispatch({
@@ -55,7 +65,7 @@ function Comments({ userInfo, contentDetail }) {
     if (comment) {
       const commentInfo = {
         userId: userInfo.id,
-        postId: id,
+        postId: contentId,
         comment,
       };
       postCommentMutation.mutate(commentInfo);
