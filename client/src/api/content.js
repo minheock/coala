@@ -10,3 +10,4 @@ export const getfilterContentsAPI = params =>
 export const getContentAPI = data => axios.get(`/content/${data}`);
 export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);
+export const commentContentAPI = data => axios.post('/content/comment', data);
