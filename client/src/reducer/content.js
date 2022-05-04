@@ -44,7 +44,7 @@ const reducer = (state = initialized, action) =>
         draft.editContent = action.data;
         break;
       case LOAD_MORE_CONTENTS:
-        draft.mainContents = [...draft.mainContents, ...action.data];
+        draft.mainContents = [...action.data];
         break;
       default:
         break;
