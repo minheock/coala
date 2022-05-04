@@ -127,8 +127,7 @@ function ContentDetail() {
   }
   if (isSuccess) {
     const { id } = contentDetail.data.data.userInfo;
-    const { done } = contentDetail.data.data; // 컨텐트 해결유무
-
+    const { done } = contentDetail.data.data;
     return (
       <>
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}

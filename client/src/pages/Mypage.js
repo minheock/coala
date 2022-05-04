@@ -1,28 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAPI } from '../api/user';
+import { edituserAPI, editpasswordAPI, signoutAPI } from '../api/user';
+import Contents from '../components/Contents';
 import Header from '../components/Header';
+import NavBar from '../components/NavBar';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
+  const [editValue, setValue] = useState({ email: '', password: '' });
   const { userInfo } = useSelector(state => state.user);
+  const editMutation = useMutation(edituserAPI);
+  const editPwMutation = useMutation(editpasswordAPI);
+  const signoutMutation = useMutation(signoutAPI);
+  const { mainContents } = useSelector(state => state.content);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  if (!userInfo) {
-    navigate('/');
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
+
+  function edithandler(e, key) {
+    setValue({ ...editValue, [key]: e.target.value });
   }
+
+  const InfoHandeler = () => {
+    setInfo(!info);
+  };
+  const editSubmit = () => {
+    console.log('-------', editValue);
+    editMutation.mutate({
+      username: editValue.userName,
+    });
+    editPwMutation.mutate({
+      password: editValue.currentPw,
+      newpassword: editValue.editurePw,
+    });
+  };
+
+  const signoutSubmit = e => {
+    console.log('-------', editValue);
+    signoutMutation.mutate({});
+  };
+
+  useEffect(() => {}, []);
   console.log(userInfo);
   if (userInfo) {
     return (
       <>
         <Header />
+        <NavBar />
         <MypageWrapper>
           <span className="mypageLogo">MyPage</span>
           <div className="userInfoContaner">
             <div className="profileBox">
-              <div className="xx">
+              <div className="imgBox">
                 <img
                   className="userProfile"
                   alt="profile"
@@ -33,21 +71,59 @@ function Mypage() {
                 </div>
               </div>
             </div>
-            <div className="userInfoBox">
-              <span className="userName">
-                {userInfo.username}님 반갑습니다.
-              </span>
-              <br />
-              <span className="userId">{userInfo.email}</span>
-              <br />
-              <span className="usertext">아무거나</span>
-            </div>
-            <button type="button" className="editInfo">
+            {info ? (
+              <form onSubmit={signoutSubmit}>
+                <div className="userInfoBox change">
+                  <div className="form">
+                    <input
+                      className="editInput"
+                      onChange={e => edithandler(e, 'userName')}
+                      type="text"
+                    />
+                    <span className="username">닉네임</span>
+                  </div>
+                  <div className="form">
+                    <input
+                      className="editInput-pw"
+                      type="password"
+                      onChange={e => edithandler(e, 'currentPw')}
+                    />
+                    <span className="useremail">현재 비밀번호</span>
+                  </div>
+                  <div className="form">
+                    <input
+                      className="editInput-succes"
+                      type="password"
+                      onChange={e => edithandler(e, 'editurePw')}
+                    />
+                    <span className="userpassword">변경할 비밀번호</span>
+                  </div>
+                  <button type="submit" className="Withdrawal">
+                    회원탈퇴
+                  </button>
+                  <button type="button" className="editPush">
+                    저장
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="userInfoBox">
+                <span className="userName">
+                  {userInfo.username}님 반갑습니다.
+                </span>
+                <br />
+                <span className="userId">{userInfo.email}</span>
+                <br />
+                <span className="userText">{`내 게시물 총${3}개`}</span>
+              </div>
+            )}
+            <button type="button" className="editInfo" onClick={InfoHandeler}>
               <EditOutlined className="icon" />
             </button>
           </div>
-          <div className="userContents" src={userInfo.profile} />
+          {/* <div className="userContents" /> */}
         </MypageWrapper>
+        <Contents mainContents={mainContents} />
       </>
     );
   }
@@ -62,11 +138,17 @@ const MypageWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 30px;
+  margin-bottom: 100px;
   .mypageLogo {
     position: absolute;
+    color: #999999;
     top: 120px;
-    left: 30vw;
-    font-size: 22px;
+    left: 280px;
+    width: 70%;
+    border-bottom: 1px solid #999999;
+    font-size: 28px;
+    font-style: sans-serif;
   }
   .userInfoContaner {
     width: 300px;
@@ -96,10 +178,11 @@ const MypageWrapper = styled.div`
       border: 1px whitesmoke solid;
       text-align: center;
     }
-    .xx .userProfileEdit {
+    .imgBox .userProfileEdit {
+      padding-top: 13%;
       transition: opacity 0.35s ease-in-out;
     }
-    .xx:hover .userProfileEdit {
+    .imgBox:hover .userProfileEdit {
       opacity: 1;
     }
     .userProfileEdit {
@@ -117,16 +200,108 @@ const MypageWrapper = styled.div`
       font-size: 20px;
       position: absolute;
     }
-    .userProfileEdit .editText {
-      margin-top: 40%;
+    .editText {
+      align-items: center;
+      justify-content: center;
     }
+    /* .userId,
+    .userText,
+    .userProfile,
+    .userProfileEdit,
+    .editText {
+      margin-top: 40%;
+    } */
   }
-
+  .change {
+  }
   .userInfoBox {
-    padding-top: 30px;
+    font-family: 'Convergence', sans-serif;
+    /* position: relative; */
+    padding-top: 40px;
     height: 100%;
     width: 300px;
     /* border: 1px solid black; */
+    .form {
+      position: relative;
+      margin-top: 10px;
+    }
+    .editInput,
+    .editInput-pw,
+    .editInput-succes {
+      /* margin-top: 3px; */
+      position: relative;
+      top: 0;
+      left: 0;
+      height: 80%;
+      width: 100%;
+      /* border-radius: 9px; */
+      border: 2px solid #999999;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      padding: 0.8rem;
+      padding-left: 0.7rem;
+      background-color: rgba(255, 255, 255, 0);
+    }
+    .username,
+    .useremail,
+    .userpassword {
+      position: absolute;
+      font-weight: 500;
+      font-size: 15px;
+      font-family: sans-serif;
+      left: 0.7rem;
+      top: 0.8rem;
+      padding: 0, 0.5rem;
+      cursor: text;
+      color: grey;
+      transition: 0.3s ease-in-out;
+      z-index: -1;
+      border-radius: 100%;
+    }
+
+    .editInput:focus ~ .username,
+    .editInput-pw:focus ~ .useremail,
+    .editInput-succes:focus ~ .userpassword {
+      /* border: dotted 1px blue; */
+      /* background-color: gray; */
+      /* color: #555555; */
+      top: -0.2rem;
+      font-size: 0.7rem;
+      left: 0.6rem;
+    }
+  }
+  .editPush {
+    position: relative;
+    color: white;
+    border-radius: 4px;
+    background: #a5e5cf;
+    left: 185px;
+    margin-top: 10px;
+    border: 1px solid #999999;
+    box-shadow: 1px 1px 2px black;
+    &:active {
+      bottom: -1px;
+      box-shadow: none;
+    }
+  }
+  .Withdrawal {
+    position: relative;
+    border-radius: 4px;
+    color: white;
+    background: #f44711;
+    margin-right: 10px;
+    left: 180px;
+    margin-top: 10px;
+    border: 1px solid #999999;
+    box-shadow: 1px 1px 2px black;
+    &:active {
+      bottom: -1px;
+      box-shadow: none;
+    }
   }
   .editInfo {
     background-color: rgba(255, 255, 255, 0.1);
@@ -146,6 +321,7 @@ const MypageWrapper = styled.div`
   }
   .editInfo:hover .icon {
     color: green;
+    font-size: 19px;
   }
 
   .userContents {

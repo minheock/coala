@@ -9,7 +9,7 @@ import { getContentsAPI } from '../api/content';
 import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
 
-const getMoreContentsAPI = async (lastId = 50) => {
+const getMoreContentsAPI = async lastId => {
   const response = await axios.get(
     `http://localhost:4000/contents?lastId=${lastId}`,
   );
@@ -29,31 +29,33 @@ function Home() {
     retry: 0, // 실페시 재실행 여부
   });
 
-  const {
-    data,
-    isLoading: scrollLoading,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery(
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
     ['getMoreContents'],
-    ({ lastId = 30 }) => getMoreContentsAPI(lastId),
+    ({ lastId = 20 }) => getMoreContentsAPI(lastId),
     {
       getNextPageParam: (lastPage, allPages) => {
         console.log(lastPage.data);
         return lastPage.data;
       },
+      enabled: false,
     },
   );
+  if (mainContents) {
+    console.log(mainContents[mainContents.length - 1]?.id);
+  }
 
   useEffect(() => {
-    const handleScroll = () => {
-      const lastId = mainContents[mainContents.length - 1]?.id;
+    const handleScroll = async () => {
+      // const lastId = mainContents[mainContents.length - 1]?.id;
+      let fetching = false;
       if (
-        !scrollLoading &&
+        !fetching &&
         window.scrollY + document.documentElement.clientHeight >
           document.documentElement.scrollHeight - 100
       ) {
-        fetchNextPage();
+        fetching = true;
+        await fetchNextPage();
+        fetching = false;
       }
     };
     window.addEventListener('scroll', handleScroll);
