@@ -4,14 +4,20 @@ import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../reducer/modal';
 import { edituserAPI, editpasswordAPI, signoutAPI } from '../api/user';
 import Contents from '../components/Contents';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
+import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
-  const [editValue, setValue] = useState({ email: '', password: '' });
+  const [editValue, setValue] = useState({
+    userName: '',
+    currentPw: '',
+    editurePw: '',
+  });
   const { userInfo } = useSelector(state => state.user);
   const editMutation = useMutation(edituserAPI);
   const editPwMutation = useMutation(editpasswordAPI);
@@ -33,24 +39,48 @@ function Mypage() {
   const InfoHandeler = () => {
     setInfo(!info);
   };
-  const editSubmit = () => {
+  const editSubmit = e => {
     console.log('-------', editValue);
-    editMutation.mutate({
-      username: editValue.userName,
-    });
-    editPwMutation.mutate({
-      password: editValue.currentPw,
-      newpassword: editValue.editurePw,
-    });
+    e.preventDefault();
+    if (editValue.userName) {
+      editMutation.mutate({
+        username: editValue.userName,
+        profile: 'https://joeschmoe.io/api/v1/random',
+      });
+    } else {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: '입력된 값이 없습니다.',
+      });
+    }
+    // if (editValue.currentPw && editValue.editurePw) {
+    //   editPwMutation.mutate({
+    //     password: editValue.currentPw,
+    //     newpassword: editValue.editurePw,
+    //   });
+    // }
   };
 
   const signoutSubmit = e => {
     console.log('-------', editValue);
+    e.preventDefault();
     signoutMutation.mutate({});
   };
 
-  useEffect(() => {}, []);
-  console.log(userInfo);
+  useEffect(() => {
+    if (editMutation.isSuccess || editPwMutation.isSuccess) {
+      console.log(editMutation.data.data.data);
+      dispatch({
+        type: EDIT_USERINFO_SUCCESS,
+        data: editMutation.data.data.data,
+      });
+    } else if (editMutation.isError || editPwMutation.isError) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: editMutation.error.response.data.message,
+      });
+    }
+  }, [editMutation.status, editPwMutation.status]);
   if (userInfo) {
     return (
       <>
@@ -72,7 +102,7 @@ function Mypage() {
               </div>
             </div>
             {info ? (
-              <form onSubmit={signoutSubmit}>
+              <form onSubmit={editSubmit}>
                 <div className="userInfoBox change">
                   <div className="form">
                     <input
@@ -80,7 +110,7 @@ function Mypage() {
                       onChange={e => edithandler(e, 'userName')}
                       type="text"
                     />
-                    <span className="username">닉네임</span>
+                    <span className="user-name">닉네임</span>
                   </div>
                   <div className="form">
                     <input
@@ -88,7 +118,7 @@ function Mypage() {
                       type="password"
                       onChange={e => edithandler(e, 'currentPw')}
                     />
-                    <span className="useremail">현재 비밀번호</span>
+                    <span className="user-email">현재 비밀번호</span>
                   </div>
                   <div className="form">
                     <input
@@ -96,23 +126,23 @@ function Mypage() {
                       type="password"
                       onChange={e => edithandler(e, 'editurePw')}
                     />
-                    <span className="userpassword">변경할 비밀번호</span>
+                    <span className="user-password">변경할 비밀번호</span>
                   </div>
-                  <button type="submit" className="Withdrawal">
+                  <button type="button" className="Withdrawal">
                     회원탈퇴
                   </button>
-                  <button type="button" className="editPush">
+                  <button type="submit" className="editPush">
                     저장
                   </button>
                 </div>
               </form>
             ) : (
               <div className="userInfoBox">
-                <span className="userName">
+                <span className="userinfoName">
                   {userInfo.username}님 반갑습니다.
                 </span>
                 <br />
-                <span className="userId">{userInfo.email}</span>
+                <span className="userinfoId">{userInfo.email}</span>
                 <br />
                 <span className="userText">{`내 게시물 총${3}개`}</span>
               </div>
@@ -246,9 +276,9 @@ const MypageWrapper = styled.div`
       padding-left: 0.7rem;
       background-color: rgba(255, 255, 255, 0);
     }
-    .username,
-    .useremail,
-    .userpassword {
+    .user-name,
+    .user-email,
+    .user-password {
       position: absolute;
       font-weight: 500;
       font-size: 15px;
@@ -263,9 +293,9 @@ const MypageWrapper = styled.div`
       border-radius: 100%;
     }
 
-    .editInput:focus ~ .username,
-    .editInput-pw:focus ~ .useremail,
-    .editInput-succes:focus ~ .userpassword {
+    .editInput:focus ~ .user-name,
+    .editInput-pw:focus ~ .user-email,
+    .editInput-succes:focus ~ .user-password {
       /* border: dotted 1px blue; */
       /* background-color: gray; */
       /* color: #555555; */

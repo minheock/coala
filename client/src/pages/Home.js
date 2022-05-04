@@ -54,7 +54,7 @@ function Home() {
           document.documentElement.scrollHeight - 100
       ) {
         fetching = true;
-        await fetchNextPage();
+        // await fetchNextPage();
         fetching = false;
       }
     };
