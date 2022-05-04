@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
@@ -125,6 +125,13 @@ function ContentDetail() {
     navigate('/edit');
   };
 
+  useEffect(() => {
+    if (contentDetail) {
+      setCommentsList(contentDetail.data.data.comments);
+    }
+    //
+  }, [isSuccess]);
+
   if (isLoading) {
     return <h1>Loading....</h1>;
   }
@@ -181,8 +188,13 @@ function ContentDetail() {
             <Viewer initialValue={contentDetail.data.data.content} />
             {done ? (
               <>
-                <CommentList comments={contentDetail.data.data.comments} />
-                <Comments userInfo={userInfo} contentDetail={contentDetail} />
+                <CommentList comments={commentsList} />
+                <Comments
+                  commentsList={commentsList}
+                  userInfo={userInfo}
+                  hadleInputComments={setCommentsList}
+                  contentId={contentId}
+                />
               </>
             ) : null}
           </article>
