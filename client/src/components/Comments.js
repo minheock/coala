@@ -39,18 +39,18 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
     if (postCommentMutation.isSuccess) {
       console.log(postCommentMutation.data);
       console.log(commentsList);
-      // const dummyComment = {
-      //   commentId: 37,
-      //   comment: '새로운댓글',
-      //   createdAt: '2022-05-04 13:26:32',
-      //   postId: 32,
-      //   userId: 3,
-      //   userinfo: {
-      //     username: 'Zoro',
-      //     profile: 'https://joeschmoe.io/api/v1/random',
-      //   },
-      // };
-      // hadleInputComments(dummyComment, ...commentsList);
+      const dummyComment = {
+        commentId: 37,
+        comment: '새로운댓글',
+        createdAt: '2022-05-04 13:26:32',
+        postId: 32,
+        userId: 3,
+        userinfo: {
+          username: 'Zoro',
+          profile: 'https://joeschmoe.io/api/v1/random',
+        },
+      };
+      hadleInputComments([dummyComment, ...commentsList]);
       setComment('');
     } else if (postCommentMutation.isError) {
       dispatch({
