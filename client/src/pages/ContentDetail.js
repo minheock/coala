@@ -14,6 +14,8 @@ import { CoalaGreen, CoalaGrey, SView } from '../config';
 import Chat from '../components/Chat';
 import ZoomImage from '../components/ZoomImage';
 import ConfirmModal from '../components/ConfirmModal';
+import Comments from '../components/Comments';
+import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 
 const Container = styled.main`
@@ -100,6 +102,7 @@ function ContentDetail() {
   const navigate = useNavigate();
   const [isChat, setIsChat] = useState(false);
   const [confirm, setConfirm] = useState('');
+  const [commentsList, setCommentsList] = useState([]);
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
@@ -113,7 +116,7 @@ function ContentDetail() {
     refetchOnWindowFocus: false,
     retry: 0,
   });
-
+  // console.log(contentDetail.data.data.comments);
   const handleEdit = () => {
     dispatch({
       type: EDIT_CONTENT_REQUEST,
@@ -128,7 +131,7 @@ function ContentDetail() {
   if (isSuccess) {
     const { id } = contentDetail.data.data.userInfo;
     const { done } = contentDetail.data.data;
-    console.log(done);
+
     return (
       <>
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
@@ -176,8 +179,13 @@ function ContentDetail() {
               ) : null}
             </div>
             <div className="tag">{contentDetail.data.data.stack}</div>
-
             <Viewer initialValue={contentDetail.data.data.content} />
+            {done ? (
+              <>
+                <CommentList comments={contentDetail.data.data.comments} />
+                <Comments userInfo={userInfo} contentDetail={contentDetail} />
+              </>
+            ) : null}
           </article>
           {isChat ? (
             <Chat
