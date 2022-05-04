@@ -44,7 +44,7 @@ function Mypage() {
     });
   };
 
-  const signoutSubmit = () => {
+  const signoutSubmit = e => {
     console.log('-------', editValue);
     signoutMutation.mutate({});
   };

@@ -10,7 +10,7 @@ import { useMutation } from 'react-query';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import { uploadFiles } from '../firebase';
-import { postContentAPI } from '../api/content';
+import { editContentAPI, postContentAPI } from '../api/content';
 
 const Container = styled.div`
   width: 95%;
@@ -81,16 +81,19 @@ const Container = styled.div`
 function Post({ isEdit }) {
   console.log(isEdit);
   const [tagsInfo, setTagsInfo] = useState([]);
-  const [title, setTitle] = useState('');
-  const [tag, setTag] = useState(null);
+  const [title, setTitle] = useState(isEdit ? isEdit.title : '');
+  const [tag, setTag] = useState(
+    isEdit ? { stack: isEdit.stack, color: 'gold' } : null,
+  );
   const [innerWidth, setInnerWidth] = useState(MView);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(isEdit ? isEdit.content : '');
   const editorRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.user);
 
   const postContentMutation = useMutation(postContentAPI);
+
   // 로그인 안하고 들어오면 메인페이지로 강제로 전환
   if (!userInfo) {
     navigate('/');
@@ -140,7 +143,20 @@ function Post({ isEdit }) {
         thumbnail: tumb,
         description,
       };
-      postContentMutation.mutate(contentInfo);
+      if (isEdit) {
+        editContentAPI(isEdit.id, contentInfo)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            dispatch({
+              type: SET_ERROR_MESSAGE,
+              data: '수정실패.',
+            });
+          });
+      } else {
+        postContentMutation.mutate(contentInfo);
+      }
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -236,9 +252,15 @@ function Post({ isEdit }) {
             <LeftOutlined />
             <p>나가기</p>
           </button>
-          <button className="submit-btn" type="submit">
-            출간하기
-          </button>
+          {isEdit ? (
+            <button className="submit-btn" type="submit">
+              수정하기
+            </button>
+          ) : (
+            <button className="submit-btn" type="submit">
+              출간하기
+            </button>
+          )}
         </div>
       </form>
     </Container>
