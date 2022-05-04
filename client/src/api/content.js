@@ -8,10 +8,7 @@ export const getContentsAPI = () => axios.get('/contents');
 export const getfilterContentsAPI = params =>
   axios.get('/contents/filter', { params });
 export const getContentAPI = data => axios.get(`/content/${data}`);
+
 export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);
-export const editContentAPI = (contentId, data) =>
-  axios.patch(`/content/${contentId}`, data);
-
-export const getMoreContentsAPI = lastId =>
-  axios.get(`/contents?lastId=${lastId}`);
+export const commentContentAPI = data => axios.post('/content/comment', data);

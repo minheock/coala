@@ -26,7 +26,7 @@ router.patch('/:postId/done', donePost); // 작성한 컨텐츠 문제 해결
 router.post('/:postId/like', likePost); // 컨텐츠 좋아요 요청
 router.post('/:postId/unlike', unlikePost); // 컨텐츠 좋아요 취소
 router.get('/:postId', post); // 컨텐츠 디테일 정보 가져오기
-router.post('/comment', comment); // 댓글 요청
+router.post('/comment', comment); // 댓글 작성
 router.delete('/comment/:commentId', commentR); // 댓글 삭제
 /**
  * @swagger
