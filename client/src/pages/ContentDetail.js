@@ -188,13 +188,13 @@ function ContentDetail() {
             <Viewer initialValue={contentDetail.data.data.content} />
             {done ? (
               <>
-                <CommentList comments={commentsList} />
                 <Comments
                   commentsList={commentsList}
                   userInfo={userInfo}
                   hadleInputComments={setCommentsList}
                   contentId={contentId}
                 />
+                <CommentList comments={commentsList} />
               </>
             ) : null}
           </article>
