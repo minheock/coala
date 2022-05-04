@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Comment, Avatar, Tooltip, List } from 'antd';
+import { Avatar } from 'antd';
 
 const CommentLists = styled.div`
   .comment-list {
@@ -13,14 +13,19 @@ const CommentLists = styled.div`
     margin: 1.5rem 0px;
     border-bottom: 1px solid #d9d9d9;
   }
+  .user-comment {
+    margin: 1.5rem 0px;
+  }
 `;
 
 function CommentList({ comments }) {
+  // console.log(comments);
   return (
     <CommentLists>
       <div className="comment-list">Comment List</div>
-      {comments.map(commentInfo => (
-        <div className="comment-box" key={commentInfo.id}>
+      {comments.map((commentInfo, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div className="comment-box" key={index}>
           <div className="userinfo-box">
             <Avatar src={commentInfo.userinfo.profile} />
             <span>{commentInfo.userinfo.username} </span>
