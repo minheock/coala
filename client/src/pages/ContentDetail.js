@@ -128,7 +128,7 @@ function ContentDetail() {
   if (isSuccess) {
     const { id } = contentDetail.data.data.userInfo;
     const { done } = contentDetail.data.data;
-
+    console.log(done);
     return (
       <>
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
