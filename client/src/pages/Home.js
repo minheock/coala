@@ -1,12 +1,20 @@
 import React, { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useInfiniteQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
 import { getContentsAPI } from '../api/content';
-import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
+import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
+
+const getMoreContentsAPI = async lastId => {
+  const response = await axios.get(
+    `http://localhost:4000/contents?lastId=${lastId}`,
+  );
+  return response;
+};
 
 function Home() {
   const { mainContents } = useSelector(state => state.content);
@@ -20,6 +28,41 @@ function Home() {
     refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
     retry: 0, // 실페시 재실행 여부
   });
+
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
+    ['getMoreContents'],
+    ({ lastId = 20 }) => getMoreContentsAPI(lastId),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        console.log(lastPage.data);
+        return lastPage.data;
+      },
+      enabled: false,
+    },
+  );
+  if (mainContents) {
+    console.log(mainContents[mainContents.length - 1]?.id);
+  }
+
+  useEffect(() => {
+    const handleScroll = async () => {
+      // const lastId = mainContents[mainContents.length - 1]?.id;
+      let fetching = false;
+      if (
+        !fetching &&
+        window.scrollY + document.documentElement.clientHeight >
+          document.documentElement.scrollHeight - 100
+      ) {
+        fetching = true;
+        await fetchNextPage();
+        fetching = false;
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [mainContents]);
 
   useEffect(() => {
     if (contentsData) {
