@@ -67,3 +67,31 @@ export const colors = [
   'pink',
   'error',
 ];
+
+// codeEditorlanguage
+
+export const codeEditorLang = [
+  'javascript',
+  'c_cpp',
+  'python',
+  'css',
+  'csharp',
+  'dart',
+  'dockerfile',
+  'golang',
+  'html',
+  'java',
+  'json',
+  'julia',
+  'kotlin',
+  'markdown',
+  'matlab',
+  'php',
+  'powershell',
+  'ruby',
+  'sql',
+  'typescript',
+  'swift',
+  'mysql',
+  'graphqlschema',
+];
