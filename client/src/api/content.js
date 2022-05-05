@@ -11,8 +11,18 @@ export const getContentAPI = data => axios.get(`/content/${data}`);
 export const editContentAPI = (contentId, data) =>
   axios.patch(`/content/${contentId}`, data);
 
-export const getMoreContentsAPI = lastId =>
-  axios.get(`/contents?lastId=${lastId}`);
+export const getMoreContentsAPI = async lastId => {
+  const response = await axios.get(
+    `http://localhost:4000/contents?lastId=${lastId}`,
+  );
+  const items = response.data.data;
+  return {
+    items,
+    nextPage: items[items.length - 1].id,
+    isLast: items.length < 8,
+  };
+};
+
 export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);
 export const commentContentAPI = data => axios.post('/content/comment', data);

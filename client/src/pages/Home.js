@@ -5,25 +5,12 @@ import axios from 'axios';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
-import { getContentsAPI } from '../api/content';
+import { getContentsAPI, getMoreContentsAPI } from '../api/content';
 import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
 
-const getMoreContentsAPI = async lastId => {
-  const response = await axios.get(
-    `http://localhost:4000/contents?lastId=${lastId}`,
-  );
-  const items = response.data.data;
-  return {
-    items,
-    nextPage: items[items.length - 1].id,
-    isLast: items.length < 8,
-  };
-};
-
 function Home() {
   const { mainContents } = useSelector(state => state.content);
-  const [initpageParam, setInitPageParam] = useState(0);
   const dispatch = useDispatch();
   const {
     isLoading,
@@ -36,7 +23,7 @@ function Home() {
   });
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['repositories'],
+    ['mainContents'],
     ({ pageParam = mainContents[0].id + 1 }) => getMoreContentsAPI(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
@@ -49,7 +36,7 @@ function Home() {
     },
   );
   // console.log('data:', data);
-  // console.log('hasNextpage:', hasNextPage);
+  console.log('hasNextpage:', hasNextPage);
 
   useEffect(() => {
     const handleScroll = async () => {
