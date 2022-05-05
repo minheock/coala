@@ -138,7 +138,14 @@ const Chatroom = styled.div`
   }
 `;
 
-function Chat({ socket, room, userInfo, chattings, handleClose }) {
+function Chat({
+  socket,
+  room,
+  userInfo,
+  chattings,
+  handleClose,
+  handleEditCodePage,
+}) {
   const dispatch = useDispatch();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
@@ -200,7 +207,9 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
   };
   // 이미지 영역.
 
-  const handleEditCode = () => {};
+  const handleEditCode = () => {
+    handleEditCodePage(true);
+  };
 
   useEffect(() => {
     const messages = chattings.map(chatting => ({

@@ -104,7 +104,7 @@ function ContentDetail() {
   const [isChat, setIsChat] = useState(false);
   const [confirm, setConfirm] = useState('');
   const [commentsList, setCommentsList] = useState([]);
-  const [isEditCode , setIsEditCode] = useState(false);
+  const [isEditCode, setIsEditCode] = useState(false);
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
@@ -152,6 +152,7 @@ function ContentDetail() {
             contentData={contentDetail.data.data}
           />
         ) : null}
+        {isEditCode ? <CodeEditor handleClose={setIsEditCode} /> : null}
         <Header />
         <Container>
           <article>
@@ -207,6 +208,7 @@ function ContentDetail() {
               chattings={contentDetail.data.data.chattings}
               userInfo={userInfo || null}
               room={contentId}
+              handleEditCodePage={setIsEditCode}
               handleClose={setIsChat}
             />
           ) : (
