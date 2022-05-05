@@ -17,6 +17,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import Comments from '../components/Comments';
 import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
+import CodeEditor from '../components/CodeEditor';
 
 const Container = styled.main`
   width: 85%;
@@ -103,6 +104,7 @@ function ContentDetail() {
   const [isChat, setIsChat] = useState(false);
   const [confirm, setConfirm] = useState('');
   const [commentsList, setCommentsList] = useState([]);
+  const [isEditCode , setIsEditCode] = useState(false);
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
