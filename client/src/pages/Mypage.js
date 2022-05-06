@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Avatar } from 'antd';
 import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../reducer/modal';
-import { edituserAPI, editpasswordAPI, signoutAPI } from '../api/user';
+import { edituserAPI, editpasswordAPI } from '../api/user';
 import Contents from '../components/Contents';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
@@ -17,6 +18,10 @@ import { SView } from '../config';
 function Mypage() {
   const [info, setInfo] = useState(false);
   const [out, setout] = useState(false);
+  const [Image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+  );
+  const [File, setFile] = useState('');
   const [editValue, setValue] = useState({
     userName: '',
     currentPw: '',
@@ -97,20 +102,41 @@ function Mypage() {
     }
   }, [editPwMutation.status]);
   // 이미지
-  useEffect(() => {
-    if (userRef.current) {
-      userRef.current.getInstance().removeHook('addImageBlobHook');
-      userRef.current
-        .getInstance()
-        .addHook('addImageBlobHook', (blob, callback) => {
-          // 이미지 파이어베이스 업로드
-          // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
-          uploadFiles(blob).then(imgPath => {
-            callback(imgPath, 'imageURL');
-          });
-        });
+  // useEffect(() => {
+  //   if (userRef.current) {
+  //     userRef.current.getInstance().removeHook('addImageBlobHook');
+  //     userRef.current
+  //       .getInstance()
+  //       .addHook('addImageBlobHook', (blob, callback) => {
+  //         // 이미지 파이어베이스 업로드
+  //         // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
+  //         uploadFiles(blob).then(imgPath => {
+  //           callback(imgPath, 'imageURL');
+  //         });
+  //       });
+  //   }
+  // }, []);
+  const onChange = e => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    } else {
+      // 업로드 취소할 시
+      setImage(userInfo.profile);
+      return;
     }
-  }, []);
+    // 화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  const imgUploadClick = e => {
+    e.preventDefault();
+    // userImgUpload.current.click();
+  };
   console.log(userInfo);
   if (userInfo) {
     return (
@@ -124,13 +150,22 @@ function Mypage() {
           <div className="userInfoContaner">
             <div className="profileBox">
               <div className="imgBox">
-                <img
-                  className="userProfile"
-                  alt="profile"
-                  src={userInfo.profile}
-                />
-                <div className="userProfileEdit">
-                  <p className="editText">이미지 변경</p>
+                <img className="userProfile" alt="profile" src={Image} />
+                <div
+                  className="userProfileEdit"
+                  onClick={() => {
+                    userRef.current.click();
+                  }}
+                >
+                  <input
+                    className="editText"
+                    type="file"
+                    style={{ display: 'none' }}
+                    accept="image/jpg,impge/png,image/jpeg"
+                    ref={userRef}
+                    onChange={onChange}
+                  />
+                  프로필 변경
                 </div>
               </div>
             </div>
@@ -294,7 +329,10 @@ const MypageWrapper = styled.div`
       margin-top: 40%;
     } */
   }
-  .change {
+  .userinfoName,
+  .userinfoId,
+  .userText {
+    font-size: 17px;
   }
   .userInfoBox {
     font-family: 'Convergence', sans-serif;
@@ -363,13 +401,18 @@ const MypageWrapper = styled.div`
     border-radius: 4px;
     /* background: #a5e5cf; */
     background-color: rgba(255, 255, 255, 0.1);
-    left: 185px;
+    left: 15px;
     margin-top: 10px;
     border: 1px solid #999999;
     box-shadow: 1px 1px 2px black;
+    cursor: pointer;
     &:active {
       bottom: -1px;
       box-shadow: none;
+    }
+    &:hover {
+      border: 1px solid black;
+      color: black;
     }
   }
   .Withdrawal {
