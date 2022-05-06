@@ -68,11 +68,11 @@ module.exports = {
                 where: { id: postId },
               },
             )
-            .then((data) => {
+            .then(() => {
               res.status(200).send({
                 message: 'post update',
                 data: {
-                  contentId: data[0],
+                  contentId: postId,
                 },
               });
             })
