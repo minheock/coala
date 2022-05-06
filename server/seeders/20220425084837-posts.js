@@ -503,36 +503,150 @@ module.exports = {
         {
           done: 0,
           userId: 3,
-          title: '',
-          content: '',
-          thumbnail: '',
-          description: '',
-          stack: '',
+          title: '클로저의 리턴값',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\nJS 클로저 함수 부분\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n콘솔로그로 디버깅\n\n어떠한 부분에서 이해가 안 되었나요?\n왜 undefined 가 나오는지 모르겟어요\n\n에러 코드를 붙여넣기 해 주세요.\n에러가 아님\n\n```js\nconst makeCounter = () => {\n    let value = 0;\n    return {\n        increase: () => {\n            value = value + 1;\n        },\n        decrease: () => {\n            value = value -1;\n        },\n        getValue: () => { value; }\n    }\n}\n\nlet result = 0;\nconst counter1 = makeCounter();\n\nresult = counter1.increase();\nconsole.log(result);\n```\n콘솔창에 찍힌 result 의 값을 1로 예상햇지만 undefind 가 나옵니다\n리턴할 때 임시변수에 값을 담아 복사하는거 아닌가요?\ncounter1함수의 리턴값이 객체인데 그 객체들의 변수는 함수들이고 그 중 하나인 함수를 호출해서 리턴하고 또 그 값을 리턴해서\n1이 나와야 될 것 같은데 undefind가 나오는 이유를 모르겠습니다',
+          thumbnail: null,
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?JS 클로저 함수 부분안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?콘솔로그로 디버깅어떠한 부분에서 이해가 안 되었나요?왜 undefined 가 나오는지 모르겟어요에러 코드를 붙여넣기 해 주세...',
+          stack: 'JavaScript',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 4,
+          title: 'mvc 스프린트 sequelize 테스트 실행 오류',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\nPart 1 - Sequelize 및 CLI 도구 이용 스프린트를 진행 중이고\n스프린트 진행을 위해 테스트를 실행하는 과정에서 오류가 생깁니다\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n\n파일 삭제 및 재설치\nSequelize ORM 재 다운로드\n오류 서치\n\n어떠한 부분에서 이해가 안 되었나요?\nSequelize ORM ,sequelize-cli 이 설치가 안됐을 때만 테스트가 실행이 안된다는 것으로\n유어클래스에서 확인을 하고 설치를 했을나 똑같이 테스트 진행이 안되는 게 이해가 가질 않습니다\n\n에러 코드를 붙여넣기 해 주세요.\n\n![image](https://user-images.githubusercontent.com/83568765/137681114-6c684353-ded5-41e5-ba4e-be9f7a16bfa5.png)',
+          thumbnail:
+            'https://user-images.githubusercontent.com/83568765/137681114-6c684353-ded5-41e5-ba4e-be9f7a16bfa5.png',
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?Part 1 - Sequelize 및 CLI 도구 이용 스프린트를 진행 중이고스프린트 진행을 위해 테스트를 실행하는 과정에서 오류가 생깁니다안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?파일 ...',
+          stack: 'MySQL',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 5,
+          title: '리엑트 usestate를 이용한 렌더링 오류',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\n\nfirst project도중 탭키로 반응형 리엑트로 렌더링하는 텝 메뉴를 구현하였습니다.\n\n텝메뉴를 클릭하면 로그인 과 회원가입 메뉴가 보이게하고 그상태에서 텝매뉴(로그인 과 회원가입 메뉴가 열린상태)밖을 클릭하면 다시 메뉴 텝만 보\n이게 할려고 하고있습니다. 처음 텝메뉴를 클릭하면 usestate가 작동하지만 그후 템메뉴밖 클릭하면 작동하지않습니다.\n콘솔을 찍어보니 텝메뉴밖을 클릭하면 state초기화 되지않는것같습니다.\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n\nconsole을 찍어봤고 같은 케이스가 있는지 구글링해보았습니다.\n진행 스프린트 :first project\n문제 :\n\n```js\nimport React, { useState, useEffect, useRef, useCallback } from "react";\nimport "./TabModal.css"\nimport { Link } from "react-router-dom";\n\nfunction TabModal(){\n const[showTabModal, setshowTabModal ] = useState(false) \n   const modalEl = useRef();\n   const openModal = () => {\n       setshowTabModal(!showTabModal)\n   }\n      const handleClickOutside = ({ target }) => {\n        console.log("modalEl은",modalEl)\n        console.log("showTabmodal은",showTabModal)\n        console.log("target은",target)\n        if (showTabModal && !modalEl.current.contains(target)){\n          \n         setshowTabModal(true);\n         console.log("hi33333333!!",showTabModal)\n        }\n        console.log("여기선?!!",showTabModal)\n      };\n\n       useEffect(() => {\n          window.addEventListener("click", handleClickOutside);\n        return () => {\n        window.removeEventListener("click", handleClickOutside);\n       };\n       }, []);\n   \n\n    return (\n             showTabModal === false ?\n            <div className="ModalContainer1" onClick= {showTabModal} >\n            <div onClick={openModal}>menu</div> \n            </div>\n          : <div className="ModalContainer2" ref={modalEl} >\n            <Link to="/login">\n            <div className="tablist">로그인</div>\n            </Link>\n            <Link to="/signup">\n            <div className="tablist">회원가입</div>\n            </Link>\n            </div >\n         \n       \n    )\n}\nexport default TabModal;\n```\n![image](https://user-images.githubusercontent.com/79184842/136656819-dc57e975-e4ba-470a-bd07-350ef0973519.png)\n\n첫화면입니다. 여기상단에 헤더에있는 menu가 텝을구현한것입니다\n![image](https://user-images.githubusercontent.com/79184842/136657029-109a8cc5-e53f-4154-8b5c-ed04bb097d62.png)\n\nmenu를 클릭했을때 나타나는 화면입니다 여기서 제예상은 showtabmodal은 onclickEvent로 openmodal함수를 통과하여 state가 변경되어 true 가\n되어야하지만 false가 출력됩니다. 그렇지만 텝은 열려있습니다.\n![image](https://user-images.githubusercontent.com/79184842/136657448-ec85c212-7c7b-4c5b-b869-9ed0963c3e3a.png)\n\n그리고 마지막 컴포넌트 밖을 클릭하면 handleClickOutside함수가 호출되어서 setShowtabmodal을 호출하고 state가 반대로 보여줘야하는데 아직도\nfalse입니다.',
+          thumbnail:
+            'https://user-images.githubusercontent.com/79184842/136656819-dc57e975-e4ba-470a-bd07-350ef0973519.png',
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?first project도중 탭키로 반응형 리엑트로 렌더링하는 텝 메뉴를 구현하였습니다.텝메뉴를 클릭하면 로그인 과 회원가입 메뉴가 보이게하고 그상태에서 텝매뉴(로그인 과 회원가입 메뉴가 열린상태)밖을 클릭하...',
+          stack: 'React',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 6,
+          title: 'Error: Element type is invalid',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\n\n추가 공부를 위해 개인적으로 게임 프로젝트를 진행하고 있습니다.\n바닥부터 만들어보고 싶어서 import, export 부분까지 다 해보고 있습니다.\n그러나 진행 중에\n"Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object. You likely forgot to export your component from the file it"s defined in, or you might have mixed up default and named imports.\n\nCheck the render method of Main."\n이와 같은 에러 메세지가 떠서 진행상황을 확인하지 못하는 문제에 부딪혔습니다.\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n주로 import, export에서 오타로 인해 발생하는 에러라고 해서 오타가 없는지 확인했지만, 전혀 없었습니다.\n\n어떠한 부분에서 이해가 안 되었나요?\n구글링을 통해 문제의 원인이 될 수 있을만한 부분을 다 고쳐봤는데 해결되지 않았습니다.\n\n에러 코드를 붙여넣기 해 주세요.\n"Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object. You likely forgot to export your component from the file it"s defined in, or you might have mixed up default and named imports.\n\nCheck the render method of Main."\n\n에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. (잘 모르겠으면 에러라고 생각하는 곳을 넣어주세요)\n```js\nimport React from "react";\nimport Header from "../components/Header";\nimport ButtonPlay from "../components/ButtonPlay";\n\nfunction Main({header, setHeader}) {\n  return (\n    <section>\n      <div>\n        <Header header={header} setHeader={setHeader}/>\n      </div>\n      <div>\n        {/* 이미지파일 */}\n      </div>\n      <div>\n        <ButtonPlay />\n      </div>\n  </section>\n  )\n}\n\nexport default Main;\n```',
+          thumbnail: null,
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?추가 공부를 위해 개인적으로 게임 프로젝트를 진행하고 있습니다.바닥부터 만들어보고 싶어서 import, export 부분까지 다 해보고 있습니다.그러나 진행 중에 "Error: Element type is in...',
+          stack: 'JavaScript',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 7,
+          title: 'HTTP 트랜잭션 해부에서 Buffer부분',
+          content:
+            'Mini node Server를 공부하는 중, HTTP 트랜잭션 해부 설명글을 읽는데\nPOST 또는 PUT요청을 받을때의 요청 바디 데이터를 받는 부분의 코드가 이해가 잘 가지 않습니다.\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n--> Buffer 부분을 사용하지 않고 코드를 작성해 보았습니다.\n\n어떠한 부분에서 이해가 안 되었나요?\n--> 제가 이해하기로는 POST 방식 또는 PUT방식으로 전송되는 요청 바디 데이터가 많은 경우를 대비해서 데이터들이 조각조각(청크) 들어와, body에 chunk들을 추가해줍니다.\n(body.push(chunk))\n\n그리고 데이터가 더이상 들어올 데이터가 없으면 "end" 다음의 콜백함수가 실행되는걸로 알고 있습니다.\n그 말은 즉, 이미 body(let body = [])에 모든 바디 데이터가 다 들어왔다는 의미인것 같은데..\n\n왜 여기서 추가적으로\nbody = Buffer.concat(body).toString();\n이렇게 Buffer에 더해주는지 이해가 가지 않습니다.\n그냥..\nbody = body.toString() 이렇게 하면 되지 않을까요?\n\n에러 코드를 붙여넣기 해 주세요.\n\n에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. (잘 모르겠으면 에러라고 생각하는 곳을 넣어주세요)\n\n```js\nlet body = [];\nrequest.on("data", (chunk) => {\n  body.push(chunk);\n}).on("end", () => {\n  body = Buffer.concat(body).toString();\n  // 여기서 `body`에 전체 요청 바디가 문자열로 담겨있습니다.\n});\n```',
+          thumbnail: null,
+          description:
+            'Mini node Server를 공부하는 중, HTTP 트랜잭션 해부 설명글을 읽는데POST 또는 PUT요청을 받을때의 요청 바디 데이터를 받는 부분의 코드가 이해가 잘 가지 않습니다.안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?--&gt; Buff...',
+          stack: 'JavaScript',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 8,
+          title: 'TypeError: Date is not a constructor 오류에 대하여',
+          content:
+            'solo day라서 혼자 react로 todolist를 만들던 중이었습니다. header부분에 날짜를 new Date()를 이용해서 넣어주려고 했는데, Date가 생성자가 아니라는 오류가 났습니다.\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n이전에 작성했던 코드를 그대로 복붙해보기도 하고, stackoverflow도 찾아봐서 여러 해결방법을 따라해봤지만(new Date()뒤에 toString()을 붙이기 등) 해결이 안됩니다. 제 검색능력에 한계가 있는 것 같아 도움 구하고자 올립니다.\n\n```js\nfunction TodoHeader() {\n    const today = new Date().toString();\n    const dateString = today.toLocaleDateString("ko-KR", {\n      year: "numeric",\n      month: "long",\n      day: "numeric"\n    });  \n\n    return(\n        <div>\n            <Title>Todo List</Title>\n            <Date>Today: {dateString}</Date>\n            <LeftWork>할일 1개 남음</LeftWork>\n        </div>\n    );\n}\n```',
+          thumbnail: null,
+          description:
+            'solo day라서 혼자 react로 todolist를 만들던 중이었습니다. header부분에 날짜를 new Date()를 이용해서 넣어주려고 했는데, Date가 생성자가 아니라는 오류가 났습니다.안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?이전에 ...',
+          stack: 'JavaScript',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 9,
+          title: 'OAuth 스프린트중 네이버api를 이용했을때 cors에러가 납니다...',
+          content:
+            'Oauth 스프린트를 베이스삼아 github api 대신 네이버 api를 이용하여 해보려고하는데 cors에러를 해결하지못하겠습니다\n\n네이버 api 문서와 구글검색을 통하여 해결하고자했고 cors부분이 해결이안되어서 프록시서버를 이용하여 해결하고자 했습니다\n\n그래서 proxy 모듈을 설치를 했고 설정까지 마친상태입니다 하지만 cors 에러가 납니다\n\n![image](https://user-images.githubusercontent.com/81817983/132866187-24ce1315-df8f-45d5-a7c4-f24451e838c5.png)\n\n```js\nclass Login extends Component {\n  constructor(props) {\n    super(props)\n\n    this.socialLoginHandler = this.socialLoginHandler.bind(this)\n\n    this.GITHUB_LOGIN_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="clientid"&redirect_uri=http://localhost:3000&state=qq123`\n    \n  }\n\n  socialLoginHandler() {\n    window.location.assign(this.GITHUB_LOGIN_URL)\n  }\n```\ncontroller/callback.js\n```js\nrequire("dotenv").config();\n\nconst clientID = process.env.GITHUB_CLIENT_ID;\nconst clientSecret = process.env.GITHUB_CLIENT_SECRET;\nconst axios = require("axios");\n\n\nmodule.exports = async (req, res) => {\n  // console.log(req.body);\n  const post = await axios.post("https://nid.naver.com/oauth2.0/token", {\n    grant_type:"authorization_code",\n    client_id: clientID,\n    client_secret: clientSecret,\n    redirect_uri:`http://localhost:3000`,\n    code: req.body.authorizationCode,\n    state:"qq123"\n  },{\n    headers: { accept: "application/json" } \n  });\n  console.log(post.data)\n  res.status(200).json({ accessToken: post.data.access_token });\n};\n```\nserver-oauth/index.js\n```js\nconst express = require("express");\nconst app = express();\nconst cors = require("cors");\nconst PORT = process.env.PORT || 8080;\nconst { createProxyMiddleware } = require("http-proxy-middleware");\n\nconst handleCallback = require("./controller/callback")\nconst handleImages = require("./controller/images")\n\napp.use(express.json());\n\napp.use(\n  cors({\n    origin: "http://localhost:3000", // 허락하고자 하는 요청 주소\n    credentials: true \n  })\n);\napp.use(\n  createProxyMiddleware( "/api", { \n  target: "https://nid.naver.com",\n  changeOrigin: true, // 하단 처리는 필수로 해주어야 한다. 아래의 내용이 없으면 url 경로에 // api가 추가되어 경로를 찾을 수 없어진다. \n  pathRewrite:{ "^/api/":"/" } })\n);\n\n\napp.post("/callback", handleCallback);\n\napp.get("/images", handleImages)\n\napp.listen(PORT, () => {\n  console.log(`listening on port ${PORT}`);\n});\n\nmodule.exports = app;\n```\n이렇게 진행했을시 터미널에서 나타나는 에러메세지\n```js\n{\n  error: "invalid_request",\n  error_description: "grant_type is missing."\n}\n```',
+          thumbnail:
+            'https://user-images.githubusercontent.com/81817983/132866187-24ce1315-df8f-45d5-a7c4-f24451e838c5.png',
+          description:
+            'Oauth 스프린트를 베이스삼아 github api 대신 네이버 api를 이용하여 해보려고하는데 cors에러를 해결하지못하겠습니다네이버 api 문서와 구글검색을 통하여 해결하고자했고 cors부분이 해결이안되어서 프록시서버를 이용하여 해결하고자 했습니다그래서 proxy...',
+          stack: 'JavaScript',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 1,
+          title: 'react-twittler-intro advanced FontAwesomeIcon 태그 CSS적용',
+          content:
+            '리액트 트위틀러 인트로 어드밴스드 진행 중입니다.\n폰트어썸 i태그 대신 FontAwesomeIcon태그를 사용하여 아이콘을 삽입하였습니다.\n기존에 CSS에서 font-size 속성이 적용이 안되고 있습니다.\n\ni 태그 i className="far fa-bell" /\n"꺽쇠속성을 넣어서 작성을 하니 글에 태그 내용이 보이질 않아서 정확한 질의가안되었던거 같습니다."\n\nFontAwesomeIcon 태그 FontAwesomeIcon icon={faBell} className="far fa-bell"/\n\nCSS파일 far 부분을 수정하여도 FontAwesomeIcon태그에\nfont-size 속성이 잘 적용이 되지 않고 있습니다.\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n구글 검색을 통해 확인해보아도 기존 CSS 적용방법이 적용된다고 합니다.\n\n어떠한 부분에서 이해가 안 되었나요?\nFontAwesomeIcon 태그 사용하여 CSS적용시 주의할 점이 있나요?',
+          thumbnail: null,
+          description:
+            '리액트 트위틀러 인트로 어드밴스드 진행 중입니다.폰트어썸 i태그 대신 FontAwesomeIcon태그를 사용하여 아이콘을 삽입하였습니다.기존에 CSS에서 font-size 속성이 적용이 안되고 있습니다.i 태그 i className=\\"far fa-bell\\" /\\"...',
+          stack: 'React',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          done: 0,
+          userId: 1,
+          title: 'axios 요청시 알 수 없는 에러가 납니다.',
+          content:
+            '프로젝트 진행 중 모든 axios 요청에 대해서 "TypeError: Failed to execute "setRequestHeader" on "XMLHttpRequest": String contains non ISO-8859-1 code point." 라는 에러가 나오면서 서버에 요청 자체가 가질 않습니다.(서버쪽에서 콘솔에 아무것도 찍히지 않습니다.)\n\n구글에 해당 에러를 검색해 보아도 명확한 원인과 해결을 알 수가 없습니다.\n\n제가 이해한 바로는 axios 요청시에 헤더에 적절하지 못한 값이 들어가는 것 같은데, 코드 상에서 axios 요청시에 헤더에 특별한 값을 넣은게 없습니다. 혹시나해서 요청 헤더에 headers: { "Content-Type": "application/json" }과 같이 추가를 해보아도 동일한 에러가 나옵니다.\n\n```js\nTypeError: Failed to execute "setRequestHeader" on "XMLHttpRequest": String contains non ISO-8859-1 code point.\n    at setRequestHeader (xhr.js:143)\n    at Object.forEach (utils.js:251)\n    at dispatchXhrRequest (xhr.js:137)\n    at new Promise (<anonymous>)\n    at xhrAdapter (xhr.js:13)\n    at dispatchRequest (dispatchRequest.js:53)\n    at Axios.request (Axios.js:108)\n    at Axios.<computed> [as get] (Axios.js:129)\n    at Function.wrap [as get] (bind.js:9)\n    at moveToTrackDetails (TrackList.js:13)\n    at onClick (TrackList.js:44)\n    at HTMLUnknownElement.callCallback (react-dom.development.js:3945)\n    at Object.invokeGuardedCallbackDev (react-dom.development.js:3994)\n    at invokeGuardedCallback (react-dom.development.js:4056)\n    at invokeGuardedCallbackAndCatchFirstError (react-dom.development.js:4070)\n    at executeDispatch (react-dom.development.js:8243)\n    at processDispatchQueueItemsInOrder (react-dom.development.js:8275)\n    at processDispatchQueue (react-dom.development.js:8288)\n    at dispatchEventsForPlugins (react-dom.development.js:8299)\n    at react-dom.development.js:8508\n    at batchedEventUpdates$1 (react-dom.development.js:22396)\n    at batchedEventUpdates (react-dom.development.js:3745)\n    at dispatchEventForPluginEventSystem (react-dom.development.js:8507)\n    at attemptToDispatchEvent (react-dom.development.js:6005)\n    at dispatchEvent (react-dom.development.js:5924)\n    at unstable_runWithPriority (scheduler.development.js:468)\n    at runWithPriority$1 (react-dom.development.js:11276)\n    at discreteUpdates$1 (react-dom.development.js:22413)\n    at discreteUpdates (react-dom.development.js:3756)\n    at dispatchDiscreteEvent (react-dom.development.js:5889)\n```',
+          thumbnail: null,
+          description:
+            '프로젝트 진행 중 모든 axios 요청에 대해서 "TypeError: Failed to execute "setRequestHeader" on "XMLHttpRequest": String contains non ISO-8859-1 code point." 라는 에러가 나...',
+          stack: 'JavaScript',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           done: 0,
           userId: 3,
-          title: '',
-          content: '',
-          thumbnail: '',
-          description: '',
-          stack: '',
+          title: '재귀함수로 DFS탐색하는 방법에 대해 질문있습니다',
+          content:
+            'dfs함수 안에 else 조건문 안에 있는 재귀함수만으로도 되지 않을까 싶은데 dfs함수 마지막에\n```js\njam(node.value, node.children)\nreturn result;\n```\n까지 작성이 되야 통과가 왜 되는지 궁금합니다.\n제 생각에는 재귀함수로 계속 함수가 돌아가고 마지막에 자식노드가 존재하지만 않으면\nchildren.length === 0 이므로 함수가 잘 종결 되지 않을까 싶은데 테스트는 통과가 되지를 않습니다.\n\n```js\nlet dfs = function (node) {\n  // TODO: 여기에 코드를 작성합니다.\n  let result = [];\n  const jam = (value, children) => {\n    result.push(value)\n    if(children.length === 0) \n      return result;\n    else{\n      // 재귀 계속 돌리는 거지\n      for(let i = 0; i < children.length; i++){\n        jam(children[i].value, children[i].children)\n      } \n    }\n  }  \n  jam(node.value, node.children)\n  return result;\n};\n\n// 이 아래 코드는 변경하지 않아도 됩니다. 자유롭게 참고하세요.\nlet Node = function (value) {\n  this.value = value;\n  this.children = [];\n};\n\n// 위 Node 객체로 구성되는 트리는 매우 단순한 형태의 트리입니다.\n// membership check(중복 확인)를 따로 하지 않습니다.\nNode.prototype.addChild = function (child) {\n  this.children.push(child);\n  return child;\n};\n```',
+          thumbnail: null,
+          description:
+            'dfs함수 안에 else 조건문 안에 있는 재귀함수만으로도 되지 않을까 싶은데 dfs함수 마지막에jam(node.value, node.children)\\nreturn result;까지 작성이 되야 통과가 왜 되는지 궁금합니다.제 생각에는 재귀함수로 계속 함수가 돌아가...',
+          stack: 'JavaScript',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        // {
-        //   done: 0,
-        //   userId: 3,
-        //   title: '',
-        //   content: '',
-        //   thumbnail: '',
-        //   description: '',
-        //   stack: '',
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
+        {
+          done: 0,
+          userId: 4,
+          title: 'MongDB Shall 설치에 관련해서 질문 드립니다.',
+          content:
+            'urCalss에 따라 모든 설정을 다 맞추고, brew install mongosh 프롬프트 명령어를 실행 중 아래와 같은 문제가 발생했습니다.\n\n![image](https://user-images.githubusercontent.com/78064720/131946062-d5f7b6a3-5300-4d4f-ac55-d887611beb59.png)\n\n결국 프로그램이 버전에 호환 조건에 맞지 않는 관계로 다른 방법을 찾던 중 MongoDB 사이트에 직접 설치 방법이 있어 설치를 진행하였습니다.\n\n해당 사이트: https://www.mongodb.com/try/download/shell\n\n![image](https://user-images.githubusercontent.com/78064720/131946493-904767e8-416a-4fdd-af33-62425bb4492d.png)\n\n설치 후 mongosh 프로그램을 실행한 결과.... [프로세스 완료됨] 출력창과 함께 더이상 실행 진행이 안되는거 같습니다.\n![image](https://user-images.githubusercontent.com/78064720/131946493-904767e8-416a-4fdd-af33-62425bb4492d.png)\n이 문제를 stack overflow에 검색하여 답변 설명대로 따라가보았지만, 문제가 여전히 해결되지 않습니다 ㅠㅠ',
+          thumbnail:
+            'https://user-images.githubusercontent.com/78064720/131946062-d5f7b6a3-5300-4d4f-ac55-d887611beb59.png',
+          description:
+            'urCalss에 따라 모든 설정을 다 맞추고, brew install mongosh 프롬프트 명령어를 실행 중 아래와 같은 문제가 발생했습니다.결국 프로그램이 버전에 호환 조건에 맞지 않는 관계로 다른 방법을 찾던 중 MongoDB 사이트에 직접 설치 방법이 있어 설...',
+          stack: 'MongoDB',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {},
     );
