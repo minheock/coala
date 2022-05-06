@@ -28,6 +28,7 @@ const initialized = {
 
 export const LOAD_MORE_CONTENTS = 'LOAD_MORE_CONTENTS';
 export const LOAD_CONTENTS_SUCCESS = 'LOAD_CONTENTS_SUCCESS';
+export const LOAD_USERCONTENTS_SUCCESS = 'LOAD_USERCONTENTS_SUCCESS';
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
 // export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
@@ -35,6 +36,9 @@ export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
 const reducer = (state = initialized, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOAD_USERCONTENTS_SUCCESS:
+        draft.mainContents = [...action.data];
+        break;
       case LOAD_CONTENTS_SUCCESS:
         draft.mainContents = [...action.data];
         break;

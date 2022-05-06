@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar } from 'antd';
-import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../reducer/modal';
+import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { edituserAPI, editpasswordAPI } from '../api/user';
+import { getContentsUserAPI } from '../api/content';
 import Contents from '../components/Contents';
 import Header from '../components/Header';
-import NavBar from '../components/NavBar';
+import LoadingContents from '../components/LoadingContents';
 import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
+import { LOAD_USERCONTENTS_SUCCESS } from '../reducer/content';
 import SignoutModal from '../components/SignoutModal';
 import { uploadFiles } from '../firebase';
 import { SView } from '../config';
@@ -24,7 +25,6 @@ function Mypage() {
       ? userInfo.profile
       : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
   );
-  const [File, setFile] = useState('');
   const [editValue, setValue] = useState({
     userName: '',
     currentPw: '',
@@ -37,7 +37,22 @@ function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
-
+  const { isLoading, data: contentsData } = useQuery(
+    'contents',
+    getContentsUserAPI,
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+    },
+  );
+  useEffect(() => {
+    if (contentsData) {
+      dispatch({
+        type: LOAD_USERCONTENTS_SUCCESS,
+        data: contentsData.data.data,
+      });
+    }
+  }, [contentsData]);
   useEffect(() => {
     if (!userInfo) {
       navigate('/');
@@ -52,7 +67,6 @@ function Mypage() {
     setInfo(!info);
   };
   const editSubmit = e => {
-    console.log('-------', editValue);
     e.preventDefault();
     if (editValue.userName) {
       editMutation.mutate({
@@ -71,7 +85,7 @@ function Mypage() {
     if (editValue.currentPw && editValue.editurePw) {
       editPwMutation.mutate({
         password: editValue.currentPw,
-        newpassword: editValue.editurePw,
+        newPassword: editValue.editurePw,
       });
     }
   };
@@ -83,7 +97,6 @@ function Mypage() {
         data: editMutation.data.data.data,
       });
       setImage(editMutation.data.data.data.profile);
-      // alert('닉네임을 변경했습니다');
     } else if (editMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -105,24 +118,9 @@ function Mypage() {
       });
     }
   }, [editPwMutation.status]);
-  // 이미지
-  // useEffect(() => {
-  //   if (userRef.current) {
-  //     userRef.current.getInstance().removeHook('addImageBlobHook');
-  //     userRef.current
-  //       .getInstance()
-  //       .addHook('addImageBlobHook', (blob, callback) => {
-  //         // 이미지 파이어베이스 업로드
-  //         // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
-  //         uploadFiles(blob).then(imgPath => {
-  //           callback(imgPath, 'imageURL');
-  //         });
-  //       });
-  //   }
-  // }, []);
-  const onChange = e => {
+
+  const onImgChange = e => {
     if (e.target.files[0]) {
-      // setFile(e.target.files[0]);
       uploadFiles(e.target.files[0]).then(imgUrl => {
         editMutation.mutate({
           username: userInfo.username,
@@ -142,18 +140,11 @@ function Mypage() {
     // };
     // reader.readAsDataURL(e.target.files[0]);
   };
-  const imgUploadClick = e => {
-    e.preventDefault();
-    // userImgUpload.current.click();
-  };
-  console.log(userInfo);
   if (userInfo) {
     return (
       <>
         {out ? <SignoutModal setout={setout} /> : <span />}
         <Header />
-        <NavBar />
-
         <MypageWrapper>
           <span className="mypageLogo">MyPage</span>
           <div className="userInfoContaner">
@@ -170,9 +161,9 @@ function Mypage() {
                     className="editText"
                     type="file"
                     style={{ display: 'none' }}
-                    accept="image/jpg,image/png,image/jpeg"
+                    accept="image/*"
                     ref={userRef}
-                    onChange={onChange}
+                    onChange={onImgChange}
                   />
                   프로필 변경
                 </div>
@@ -208,7 +199,6 @@ function Mypage() {
                   <span className="Withdrawal" onClick={() => setout(true)}>
                     계정삭제
                   </span>
-                  {/* {out ? <ConfirmModal/> : <div>} */}
                   {editValue.userName ? (
                     <button type="submit" className="editPush">
                       이름 변경
@@ -233,7 +223,9 @@ function Mypage() {
                 <br />
                 <span className="userinfoId">{userInfo.email}</span>
                 <br />
-                <span className="userText">{`내 게시물 총${3}개`}</span>
+                <span className="userText">{`내 게시물 총${
+                  '.sc-iqcoie kOLKX'.length
+                }개`}</span>
               </div>
             )}
             <button
@@ -249,19 +241,25 @@ function Mypage() {
               <EditOutlined className="icon" />
             </button>
           </div>
-          {/* <div className="userContents" /> */}
+          <div className="leftBlur" />
+          <div className="rightBlur" />
         </MypageWrapper>
-        <Contents mainContents={mainContents} />
+        {isLoading ? (
+          <LoadingContents />
+        ) : (
+          <Contents mainContents={mainContents} />
+        )}
       </>
     );
   }
   return null;
 }
+
 const MypageWrapper = styled.div`
-  background-image: url('https://i.pinimg.com/736x/a5/d8/93/a5d89325265e24e0d3852e622b0739d9.jpg');
+  background-image: url('https://i.imgur.com/bWzeWI4.jpg');
   background-size: cover;
-  width: 100%;
-  height: 100%;
+  width:100% ;
+  height: 490px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,11 +270,27 @@ const MypageWrapper = styled.div`
     position: absolute;
     color: #999999;
     top: 120px;
-    left: 280px;
+    left: 330px;
     width: 70%;
     border-bottom: 1px solid #999999;
     font-size: 28px;
     font-style: sans-serif;
+  }
+  .leftBlur{
+    position: absolute ;
+    height: 490px ;
+    width:16% ;
+    left: 0 ;
+    background-color:white;
+
+  }
+  .rightBlur{
+    position: absolute ;
+    height: 490px ;
+    width:16% ;
+    right: 0 ;
+    background-color:white;
+
   }
   .userInfoContaner {
     border-radius: 30px;
@@ -285,7 +299,7 @@ const MypageWrapper = styled.div`
     box-shadow: 2px 7px 15px 8px rgba(0, 0, 0, 0.3);
     display: flex;
     border-radius: 45px;
-    margin-top: 100px;
+    margin-top: 80px;
     height: 300px;
     width: 800px;
   }
@@ -321,7 +335,6 @@ const MypageWrapper = styled.div`
       height: 240px;
       width: 240px;
       border-radius: 100%;
-      /* left: 10px; */
       top: 30px;
       font-size: 20px;
       position: absolute;
@@ -330,13 +343,6 @@ const MypageWrapper = styled.div`
       align-items: center;
       justify-content: center;
     }
-    /* .userId,
-    .userText,
-    .userProfile,
-    .userProfileEdit,
-    .editText {
-      margin-top: 40%;
-    } */
   }
   .userinfoName,
   .userinfoId,
@@ -505,7 +511,32 @@ const MypageWrapper = styled.div`
     .userProfile {
       transform: scale(85%);
     }
+    .mypageLogo {
+      left: 70px;
+    }
   }
+  @media screen and (max-width: ${SView + 500}px) {
+    .leftBlur{
+      display: none ;
+    }
+    .rightBlur{
+      display:none ;
+    }
+  @media screen and (max-width: ${SView + 300}px) {
+    .mypageLogo {
+      left: 150px;
+    }
+  @media screen and (max-width: ${SView + 200}px) {
+    .mypageLogo {
+      left: 100px;
+    }
+    @media screen and (max-width: ${SView}px) {
+    .mypageLogo {
+      left: 50px;
+      width: 80% ;
+    }
+  }
+
 `;
 
 export default Mypage;
