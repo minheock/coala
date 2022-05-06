@@ -97,6 +97,7 @@ function Post({ isEdit }) {
   const { userInfo } = useSelector(state => state.user);
 
   const postContentMutation = useMutation(postContentAPI);
+  const editContentMutation = useMutation();
 
   // 로그인 안하고 들어오면 메인페이지로 강제로 전환
   if (!userInfo) {

@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import 'prismjs/themes/prism.css';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-clojure';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
@@ -188,7 +193,10 @@ function ContentDetail() {
               ) : null}
             </div>
             <div className="tag">{contentDetail.data.data.stack}</div>
-            <Viewer initialValue={contentDetail.data.data.content} />
+            <Viewer
+              plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+              initialValue={contentDetail.data.data.content}
+            />
             {done ? (
               <>
                 <Comments
