@@ -7,7 +7,10 @@ export const postContentAPI = data => axios.post('/content', data);
 export const getContentsAPI = () => axios.get('/contents');
 export const getfilterContentsAPI = params =>
   axios.get('/contents/filter', { params });
-export const getContentAPI = data => axios.get(`/content/${data}`);
+export const getContentAPI = data => {
+  console.log('여기 호출');
+  return axios.get(`/content/${data}`);
+};
 export const editContentAPI = data => axios.patch(`/content/edit`, data);
 
 export const getMoreContentsAPI = async lastId => {

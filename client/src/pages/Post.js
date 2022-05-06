@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router';
 import { Tag } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
-import { SET_ERROR_MESSAGE } from '../reducer/modal';
+import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import { uploadFiles } from '../firebase';
 import { editContentAPI, postContentAPI } from '../api/content';
@@ -111,7 +111,6 @@ function Post({ isEdit }) {
   useEffect(() => {
     if (editContentMutation.isSuccess) {
       const { contentId } = editContentMutation.data.data.data;
-      console.log(contentId);
       navigate(`/content/${contentId}`);
     } else if (editContentMutation.isError) {
       dispatch({
@@ -166,6 +165,7 @@ function Post({ isEdit }) {
           ...contentInfo,
           postId: isEdit.id,
         };
+        setContent(editorRef.current.getInstance().getMarkdown());
         editContentMutation.mutate(editBody);
       } else {
         postContentMutation.mutate(contentInfo);

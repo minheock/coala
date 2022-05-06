@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import 'prismjs/themes/prism.css';
 import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
@@ -113,6 +113,7 @@ function ContentDetail() {
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
+  const viewerRef = useRef();
   const {
     isError,
     isLoading,
@@ -122,6 +123,7 @@ function ContentDetail() {
   } = useQuery(['content', contentId], () => getContentAPI(contentId), {
     refetchOnWindowFocus: false,
     retry: 0,
+    enabled: !!contentId,
   });
   // console.log(contentDetail.data.data.comments);
   const handleEdit = () => {
@@ -131,6 +133,15 @@ function ContentDetail() {
     });
     navigate('/edit');
   };
+
+  // editerview content 수정할때 필요함.
+  useEffect(() => {
+    if (viewerRef.current) {
+      viewerRef.current
+        .getInstance()
+        .setMarkdown(contentDetail.data.data.content);
+    }
+  }, [contentDetail.data.data.content]);
 
   useEffect(() => {
     if (contentDetail) {
@@ -196,6 +207,7 @@ function ContentDetail() {
             <Viewer
               plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
               initialValue={contentDetail.data.data.content}
+              ref={viewerRef}
             />
             {done ? (
               <>
