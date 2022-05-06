@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 import styled from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
-import { Select } from 'antd';
-import { CoalaGreen, codeEditorLang } from '../config';
+import { useDispatch } from 'react-redux';
+import { CoalaGreen } from '../config';
 
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-c_cpp';
@@ -31,8 +31,7 @@ import 'ace-builds/src-noconflict/mode-graphqlschema';
 
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/ext-language_tools';
-
-const { Option } = Select;
+import { INIT_ZOOM_CHAT_CODE } from '../reducer/chat';
 
 const Container = styled.div`
   position: absolute;
@@ -79,22 +78,13 @@ const Container = styled.div`
     }
   }
 `;
-function CodeEditor({ handleClose, handleSendEditCode }) {
-  const [language, setLanguage] = useState('javascript');
-  const [editorValue, setEditorValue] = useState('');
-  const handleChange = newValue => {
-    setEditorValue(newValue);
-  };
-  const handleSelect = value => {
-    setLanguage(value);
-  };
+function ZoomCode({ codeInfo }) {
+  const dispatch = useDispatch();
+  const [constCode, setConstCode] = useState(codeInfo.editorValue);
   const closeCodeEditor = () => {
-    handleClose(false);
-  };
-
-  const handleSubmit = () => {
-    handleSendEditCode({ language, editorValue });
-    handleClose(false);
+    dispatch({
+      type: INIT_ZOOM_CHAT_CODE,
+    });
   };
 
   return (
@@ -102,27 +92,14 @@ function CodeEditor({ handleClose, handleSendEditCode }) {
       <div className="codeEditor-box">
         <CloseOutlined onClick={closeCodeEditor} className="close-codeEditor" />
         <div className="codeEditor-info">
-          <Select
-            defaultValue={language}
-            className="lang-select"
-            onChange={handleSelect}
-          >
-            {codeEditorLang.map(lang => (
-              <Option key={lang} value={lang}>
-                {lang}
-              </Option>
-            ))}
-          </Select>
-          <button onClick={handleSubmit} className="submit-btn" type="button">
-            전송하기
-          </button>
+          <p>{codeInfo.language}</p>
         </div>
         <AceEditor
+          readOnly
           className="codeEditor"
-          mode={language}
+          mode={codeInfo.language}
           theme="monokai"
-          value={editorValue}
-          onChange={handleChange}
+          value={constCode}
           name="UNIQUE_ID_OF_DIV"
           editorProps={{ $blockScrolling: true }}
         />
@@ -131,4 +108,4 @@ function CodeEditor({ handleClose, handleSendEditCode }) {
   );
 }
 
-export default CodeEditor;
+export default ZoomCode;

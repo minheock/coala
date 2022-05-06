@@ -8,13 +8,11 @@ export const getContentsAPI = () => axios.get('/contents');
 export const getfilterContentsAPI = params =>
   axios.get('/contents/filter', { params });
 export const getContentAPI = data => axios.get(`/content/${data}`);
-export const editContentAPI = (contentId, data) =>
-  axios.patch(`/content/${contentId}`, data);
+
+export const editContentAPI = data => axios.patch(`/content/edit`, data);
 
 export const getMoreContentsAPI = async lastId => {
-  const response = await axios.get(
-    `http://localhost:4000/contents?lastId=${lastId}`,
-  );
+  const response = await axios.get(`/contents?lastId=${lastId}`);
   const items = response.data.data;
   return {
     items,
