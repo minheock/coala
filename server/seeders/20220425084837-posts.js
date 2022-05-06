@@ -461,34 +461,42 @@ module.exports = {
         },
         {
           done: 0,
-          userId: 3,
-          title: '',
-          content: '',
-          thumbnail: '',
-          description: '',
-          stack: '',
+          userId: 9,
+          title:
+            'props를 사용할 때 브라우저 콘솔에 찍으면 잘 나오는데 테스트에서는 undefined라고 에러를 냅니다',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\nim-sprint-react-twittler-state-props 스프린트에서 props를 사용하면 브라우저에서는 정상적으로 출력되지만 테스트에서만 undefined라고 뜹니다.\n\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n\n원래 있던 코드 중 어떤 것이 에러를 일으키는지 알아보기 위해 코드를 부분 주석처리하고 해봤는데 결론적으로 props관련 문제였습니다.\nprops를 안쓰고 해결해봤습니다.\n2번의 방법으로 하면 MyPage.js와 Tweets.js의 트윗목록이 연동이 되지 않아서 아고라 스테이츠에 질문을 합니다.\n어떠한 부분에서 이해가 안 되었나요?\n왜 브라우저에서는 잘 작동하는데 테스트에서만 undefined가 뜨는지 이해가 가지 않습니다.\n\n에러 코드를 붙여넣기 해 주세요.\n\n```js\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n\nconsole.log\n  {}\n    at App (src/App.js:4:11)\n```\n\n에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. (잘 모르겠으면 에러라고 생각하는 곳을 넣어주세요)\nindex.js\n```js\nReactDOM.render(\n  <App dummyTweets={dummyTweets} />,\n  document.getElementById("root")\n);\n```\nApp.js\n```js\nconst App = (props) => {\n  console.log(props);\n  return <div></div>;\n};\n```\n검색했던 링크가 있다면 첨부해 주세요.\n검색을 해보긴 했는데 대부분 이 문제와 관련이 없어서 정리해서 작성해봤습니다.\n위 같이 코드를 작성을 하고 npm run test를 돌려보면 위의 오류와 같이 출력 되지만 브라우저에서 들어가 확인을 해보면 다음과 같이 잘 출력됩니다.\n```js\n- Object { dummyTweets: (2) […] }\n​  - dummyTweets: Array [ {…}, {…} ]\n​  - <prototype>: Object { … }\n```\n\n제 상식선에서는 위에 언급한 부분처럼 props를 안쓰는 방향쪽으로 코드를 작성할 게 아니라면 테스트 부분쪽을 바꿔야 하는 것으로 예상이 갑니다. 제가 따로 해결할 수 있는 해결법이 있을까요? 감사합니다.',
+          thumbnail: null,
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?im-sprint-react-twittler-state-props 스프린트에서 props를 사용하면 브라우저에서는 정상적으로 출력되지만 테스트에서만 undefined라고 뜹니다.안 되는 부분을 해결하기 위해서...',
+          stack: 'JavaScript',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           done: 0,
-          userId: 3,
-          title: '',
-          content: '',
-          thumbnail: '',
-          description: '',
-          stack: '',
+          userId: 1,
+          title: 'aws https로 배포 시 post 요청에만 405 에러가 뜹니다.',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\n\naws 파이프파인과 Cloudfront, route53 등을 이용해 https로 배포 자동화 진행 중에 post요청에서 405에러가 뜹니다.\n엔드포인트에 undefined가 자동으로 추가되어서 들어갑니다.\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n\nclient, server 단 환경변수를 다시 체크했습니다.\n\nclient 환경변수\n\n![image](https://user-images.githubusercontent.com/73627443/137073392-bf37e548-073c-4502-80ab-9849dedf21d4.png)\n\nserver 환경변수\n\n![image](https://user-images.githubusercontent.com/73627443/137073146-6bc0a0ee-b62f-44dd-aec3-a6d1a41dd4d8.png)\n\n관련 키워드로 구글링도 해보았습니다.\n\n블로그 참고해서 client에서 post요청 보낼 때 form태그로 감싸서 보내보았지만 아무 변화가 없었습니다.\n\n```js\n<form onSubmit={userLogin} method="POST">\n        <div className="loginTodolist__inputField">\n          <div className="loginTodolist__inputId">\n            <i class="fas fa-user"></i>\n            <input className="userId" type="text" onChange={handleChange} />\n          </div>\n          <div className="loginTodolist__inputPassword">\n            <i class="fas fa-unlock-alt"></i>\n            <input\n              className="password"\n              type="password"\n              onChange={handleChange}\n            />\n          </div>\n          <Link to="/" style={{ textDecoration: "none" }}>\n            <div className="loginTodolist__BtnContainer">\n              <button type="submit" className="loginBtn" onClick={userLogin}>\n                Login\n              </button>\n            </div>\n          </Link>\n          <Link to="/signup" style={{ textDecoration: "none" }}>\n            <div className="loginTodolist__BtnContainer">\n              <button className="singUpBtn">Sign Up</button>\n            </div>\n          </Link>\n        </div>\n      </form>\n```\n어떠한 부분에서 이해가 안 되었나요?\n\n왜 엔드포인트에 undefined가 추가되는지\n응답 헤더에 x-cache: Error from cloudfront라고 뜨는데 어디를 해결해야 하는지\npost요청이 왜 응답에 허용되지 않는지\n배포 전에 로컬에서는 문제 없이 작동이 되었습니다.\n에러 코드를 붙여넣기 해 주세요.\n\n에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. (잘 모르겠으면 에러라고 생각하는 곳을 넣어주세요)\n![image](https://user-images.githubusercontent.com/73627443/137071942-0aac3bb9-2f9c-471d-9125-7e984395d524.png)\n![image](https://user-images.githubusercontent.com/73627443/137072307-0cfbd247-787f-4959-8e24-7d5941c9fe00.png)\n\n서버 index.js 코드입니다.\n```js\nrequire("dotenv").config();\nconst express = require("express");\n\nconst cors = require("cors");\nconst controllers = require("./controllers");\n\nconst cookieParser = require("cookie-parser");\nconst { sequelize } = require("./models");\n\nconst app = express();\n\nsequelize.sync();\n\napp.use(\n  cors({\n    origin: true,\n    credentials: true,\n    methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"]\n  })\n);\napp.use(cookieParser());\napp.use(express.json());\napp.use(express.urlencoded({ extended: false }));\napp.get("/tokenRequest", controllers.tokenRequest);\n\napp.post("/getTodos", controllers.todo.get);\napp.post("/todos", controllers.todo.post);\napp.delete("/todos", controllers.todo.delete);\napp.put("/todos", controllers.todo.update);\n\napp.post("/signup", controllers.signup);\napp.post("/login", controllers.login);\napp.get("/logout", controllers.logout);\n\nconst HTTPS_PORT = 443;\n\napp.listen(HTTPS_PORT);\n```',
+          thumbnail:
+            'https://user-images.githubusercontent.com/73627443/137073392-bf37e548-073c-4502-80ab-9849dedf21d4.png',
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?aws 파이프파인과 Cloudfront, route53 등을 이용해 https로 배포 자동화 진행 중에 post요청에서 405에러가 뜹니다.엔드포인트에 undefined가 자동으로 추가되어서 들어갑니다.안 되...',
+          stack: 'AWS',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           done: 0,
-          userId: 3,
-          title: '',
-          content: '',
-          thumbnail: '',
-          description: '',
-          stack: '',
+          userId: 2,
+          title: 'useEffect 의 side Effect 에 관련한 질문입니다.',
+          content:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?\n\nim-sprint-statesairline-client\n안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?\n\n어떠한 부분에서 이해가 안 되었나요?\n\n김홍식 크루님 코드\n\n```js\n  useEffect(()=>{ // DidMount DidUpdate\n    setLodingState(false);\n    getFlight(condition).then(src => {\n      setNewFlightList(src);\n      setLodingState(true);\n    })\n  }, [condition])\n```\n\n제가 작성한 코드\n```js\n  useEffect(()=>{ // DidMount DidUpdate\n    getFlight(condition).then(src => {\n      setNewFlightList(src);\n      setLodingState(true);\n    })\n    return setLodingState(false); // componentWillUnmount \n  }, [condition])\n```\n\n김홍식 크루님께서는 Loding 화면을 띄우기 위해서 위의 코드처럼 맨 처음에 초기화값을 주어 작성했습니다.\n그런데 저는 return 을 이용한 (componentWillUnmount) 을 이용한 clean-up 코드를 작성했습니다.\n그런데 이를 이용하여 작성한 코드가 정상적인 코드인지가 궁금합니다.\n또 한가지 의문으로는 이때 clean-up을 이용하는 게 맞는 것 인지가 궁금합니다.\n\n추가 적인 질문으로 side Effect 에 관련해 아직 이해가 가질 않습니다. 참고할 레퍼런스 자료가 있으면 알려주시면 고맙겠습니다.\n\n에러 코드를 붙여넣기 해 주세요.\n\n에러가 출력된 곳에서, 이유라고 생각하는 부분을 열 줄 이내로 붙여넣기 해 주세요. (잘 모르겠으면 에러라고 생각하는 곳을 넣어주세요)',
+          thumbnail: null,
+          description:
+            '현재 어떤 스프린트를 진행 중이고, 어떤 문제에 부딪혔나요?im-sprint-statesairline-client안 되는 부분을 해결하기 위해서 구체적으로 어떤 노력을 했나요?어떠한 부분에서 이해가 안 되었나요?김홍식 크루님 코드  useEffect(()=&gt;{ ...',
+          stack: 'React',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

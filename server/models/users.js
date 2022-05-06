@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       profile: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         defaultValue: null,
       },
       email: {
