@@ -100,10 +100,11 @@ function Login() {
             <LoginBtn type="submit">
               {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
             </LoginBtn>
-            <Link to="/signup">
-              <div className="sighup">회원가입</div>
-            </Link>
           </form>
+          <LoginBtn>Github Login</LoginBtn>
+          <Link to="/signup">
+            <div className="sighup">회원가입</div>
+          </Link>
         </div>
       </div>
     </LoginWrapper>
@@ -254,7 +255,7 @@ const Input = styled.input`
   cursor: pointer;
 `;
 const LoginBtn = styled.button`
-  margin-top: 1vh;
+  margin: 1vh 0vh;
   border-radius: 10px;
   border: none;
   width: 215px;

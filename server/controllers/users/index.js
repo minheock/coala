@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { users, posts, like } = require('../../models');
 const {
   generateAccessToken,
@@ -5,6 +6,7 @@ const {
   isAuthorized,
 } = require('../token');
 const crypto = require('crypto');
+const axios = require('axios');
 
 module.exports = {
   login: async (req, res) => {
@@ -267,5 +269,25 @@ module.exports = {
     } else {
       res.status(401).send({ message: 'Invalid Token' });
     }
+  },
+  logingithub: async (req, res) => {
+    // 클라에서 받아온 깃헙 인가코드를
+    // 서버에서 받아 깃헙으로 토큰 교환 요청후
+    // 클라로 다시 교환한 토큰 보내줌
+    const authCode = req.body.authorizationCode;
+
+    axios({
+      method: 'post',
+      url: `https://github.com/login/oauth/access_token`,
+      headers: { Accept: 'application/json' },
+      data: {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET, // 절대 비공개 서버에서만 써야해
+        code: authCode,
+      },
+    }).then((result) => {
+      console.log(result.data);
+      res.status(200).json({ accessToken: result.data.access_token });
+    });
   },
 };
