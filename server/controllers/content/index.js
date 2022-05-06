@@ -244,7 +244,6 @@ module.exports = {
             postId,
           })
           .then((data) => {
-            console.log(data);
             res.status(200).send({
               message: 'comment is saved',
               data: {

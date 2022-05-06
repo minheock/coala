@@ -49,11 +49,11 @@ const io = socketIO(server, {
     origin: true,
     methods: ['GET', 'POST'],
     credentials: true,
+    transports: ['websocket'],
   },
   // pingInterval: 10000000000,
   // pingTimeout: 5000000000,
 });
-// io.set('transports', [ 'websocket', 'flashsocket', 'polling' ] );
 
 const { chattings } = require('./models');
 
@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
       User with ID: ${socket.id} joined room: ${data}
 -----------------------------------------------------`,
     );
-    // console.log(`11111`, io.sockets);
+    console.log(`유저 체팅방 접속`, socket);
   });
 
   socket.on('send_message', async (data) => {
