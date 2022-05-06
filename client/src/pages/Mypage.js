@@ -11,6 +11,8 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
 import SignoutModal from '../components/SignoutModal';
+import { uploadFiles } from '../firebase';
+import { SView } from '../config';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
@@ -26,6 +28,7 @@ function Mypage() {
   const { mainContents } = useSelector(state => state.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userRef = useRef();
 
   useEffect(() => {
     if (!userInfo) {
@@ -93,6 +96,21 @@ function Mypage() {
       });
     }
   }, [editPwMutation.status]);
+  // 이미지
+  useEffect(() => {
+    if (userRef.current) {
+      userRef.current.getInstance().removeHook('addImageBlobHook');
+      userRef.current
+        .getInstance()
+        .addHook('addImageBlobHook', (blob, callback) => {
+          // 이미지 파이어베이스 업로드
+          // callback(data.location, 'imageURL') 은 업로드에 성공한 이미지의 URL주소를 담아 ![](주소) 형식으로 담아주는 함수를 의미합니다.
+          uploadFiles(blob).then(imgPath => {
+            callback(imgPath, 'imageURL');
+          });
+        });
+    }
+  }, []);
   console.log(userInfo);
   if (userInfo) {
     return (
@@ -217,8 +235,6 @@ const MypageWrapper = styled.div`
     font-style: sans-serif;
   }
   .userInfoContaner {
-    width: 300px;
-    height: 300px;
     border-radius: 30px;
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -421,6 +437,22 @@ const MypageWrapper = styled.div`
     max-width: 300px;
     /* word-wrap: break-word; */
     z-index: 9999;
+  }
+
+  @media screen and (max-width: ${SView + 100}px) {
+    .userInfoContaner {
+      width: 500px;
+    }
+    .userInfoBox {
+      width: 200px;
+    }
+    .profileBox {
+      width: 250px;
+    }
+    .userProfileEdit,
+    .userProfile {
+      transform: scale(85%);
+    }
   }
 `;
 
