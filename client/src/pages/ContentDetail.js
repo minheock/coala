@@ -17,6 +17,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import Comments from '../components/Comments';
 import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
+import CodeEditor from '../components/CodeEditor';
 
 const Container = styled.main`
   width: 85%;
@@ -103,6 +104,7 @@ function ContentDetail() {
   const [isChat, setIsChat] = useState(false);
   const [confirm, setConfirm] = useState('');
   const [commentsList, setCommentsList] = useState([]);
+  const [isEditCode, setIsEditCode] = useState(false);
   const { socket, zoomImg } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
@@ -150,6 +152,7 @@ function ContentDetail() {
             contentData={contentDetail.data.data}
           />
         ) : null}
+        {isEditCode ? <CodeEditor handleClose={setIsEditCode} /> : null}
         <Header />
         <Container>
           <article>
@@ -188,13 +191,13 @@ function ContentDetail() {
             <Viewer initialValue={contentDetail.data.data.content} />
             {done ? (
               <>
-                <CommentList comments={commentsList} />
                 <Comments
                   commentsList={commentsList}
                   userInfo={userInfo}
                   hadleInputComments={setCommentsList}
                   contentId={contentId}
                 />
+                <CommentList comments={commentsList} />
               </>
             ) : null}
           </article>
@@ -205,6 +208,7 @@ function ContentDetail() {
               chattings={contentDetail.data.data.chattings}
               userInfo={userInfo || null}
               room={contentId}
+              handleEditCodePage={setIsEditCode}
               handleClose={setIsChat}
             />
           ) : (

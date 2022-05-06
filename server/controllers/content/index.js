@@ -244,9 +244,16 @@ module.exports = {
             postId,
           })
           .then((data) => {
+            console.log(data);
             res.status(200).send({
               message: 'comment is saved',
-              data: { commentId: data.id },
+              data: {
+                commentId: data.id,
+                comment,
+                createdAt: data.createdAt,
+                postId,
+                userId,
+              },
             });
           });
       }

@@ -1,20 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
-import { getContentsAPI } from '../api/content';
+import { getContentsAPI, getMoreContentsAPI } from '../api/content';
 import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
-
-const getMoreContentsAPI = async lastId => {
-  const response = await axios.get(
-    `http://localhost:4000/contents?lastId=${lastId}`,
-  );
-  return response;
-};
 
 function Home() {
   const { mainContents } = useSelector(state => state.content);
@@ -30,39 +23,43 @@ function Home() {
   });
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['getMoreContents'],
-    ({ lastId = 20 }) => getMoreContentsAPI(lastId),
+    ['mainContents'],
+    ({ pageParam = mainContents[0].id + 1 }) => getMoreContentsAPI(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
-        console.log(lastPage.data);
-        return lastPage.data;
+        // console.log('lastPage', lastPage);
+        if (!lastPage.isLast) return lastPage.nextPage;
+        return undefined;
       },
-      enabled: false,
+      refetchOnWindowFocus: false,
+      enabled: mainContents.length > 0,
     },
   );
-  if (mainContents) {
-    console.log(mainContents[mainContents.length - 1]?.id);
-  }
+  // console.log('data:', data);
+  console.log('hasNextpage:', hasNextPage);
 
   useEffect(() => {
     const handleScroll = async () => {
-      // const lastId = mainContents[mainContents.length - 1]?.id;
-      let fetching = false;
       if (
-        !fetching &&
+        hasNextPage &&
         window.scrollY + document.documentElement.clientHeight >
           document.documentElement.scrollHeight - 100
       ) {
-        fetching = true;
-        // await fetchNextPage();
-        fetching = false;
+        await fetchNextPage();
+        const newData = [];
+        data.pages.forEach(page => newData.push(...page.items));
+        // console.log(newData);
+        dispatch({
+          type: LOAD_MORE_CONTENTS,
+          data: newData,
+        });
       }
     };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [mainContents]);
+  }, [mainContents, hasNextPage, data?.pages.length]);
 
   useEffect(() => {
     if (contentsData) {

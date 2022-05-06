@@ -37,20 +37,26 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
 
   useEffect(() => {
     if (postCommentMutation.isSuccess) {
-      console.log(postCommentMutation.data);
-      console.log(commentsList);
-      const dummyComment = {
-        commentId: 37,
-        comment: '새로운댓글',
-        createdAt: '2022-05-04 13:26:32',
-        postId: 32,
-        userId: 3,
+
+      // 요청 성공시 댓글 바로 보여주는 작업
+      const comments = postCommentMutation.data.data.data;
+      const newComment = {
+        commentId: comments.commentId,
+        comment: comments.comment,
+        // 한국시간 적용..
+        createdAt: `${comments.createdAt.slice(0, 10)}
+        ${
+          Number(comments.createdAt.slice(11, 13)) + 9
+        }${comments.createdAt.slice(13, 19)}`,
+        postId: comments.postId,
+        userId: comments.userId,
         userinfo: {
-          username: 'Zoro',
-          profile: 'https://joeschmoe.io/api/v1/random',
+          username: userInfo.username,
+          profile: userInfo.profile,
         },
       };
-      hadleInputComments([dummyComment, ...commentsList]);
+      hadleInputComments([newComment, ...commentsList]);
+
       setComment('');
     } else if (postCommentMutation.isError) {
       dispatch({

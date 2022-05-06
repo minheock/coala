@@ -138,11 +138,19 @@ const Chatroom = styled.div`
   }
 `;
 
-function Chat({ socket, room, userInfo, chattings, handleClose }) {
+function Chat({
+  socket,
+  room,
+  userInfo,
+  chattings,
+  handleClose,
+  handleEditCodePage,
+}) {
   const dispatch = useDispatch();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
+  // 이미지 영역.
   const [image, setImage] = useState('');
   const [uploading, setUploading] = useState(false);
   const imgUploadRef = useRef();
@@ -196,6 +204,11 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
 
   const handlesubmitImg = () => {
     imgUploadRef.current.click();
+  };
+  // 이미지 영역.
+
+  const handleEditCode = () => {
+    handleEditCodePage(true);
   };
 
   useEffect(() => {
@@ -340,7 +353,10 @@ function Chat({ socket, room, userInfo, chattings, handleClose }) {
                 onClick={handlesubmitImg}
                 className="input-icon img-icon"
               />
-              <CodeOutlined className="input-icon code-icon" />
+              <CodeOutlined
+                onClick={handleEditCode}
+                className="input-icon code-icon"
+              />
             </div>
             <input
               className="input-message"

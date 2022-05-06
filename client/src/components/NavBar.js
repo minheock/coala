@@ -59,58 +59,42 @@ const DividerCustom = styled(Divider)`
 
 function NavBar() {
   const [MenuList, setMenuList] = useState(false);
+  const [done, setDone] = useState(null);
   const dispatch = useDispatch();
-  const { data: contentsData, refetch } = useQuery('contents', getContentsAPI, {
-    enabled: false,
+  const { data: contentsData } = useQuery('contents', getContentsAPI, {
+    enabled: done === null,
     refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
     retry: 0, // 실페시 재실행 여부
   });
 
-  const { data: doneContents, refetch: doneRefetch } = useQuery(
-    ['doneContents'],
-    () => getfilterContentsAPI({ done: 1 }),
+  const { data: filterDoneContents } = useQuery(
+    ['filterDoneContents', done],
+    () => getfilterContentsAPI({ done }),
     {
-      enabled: false,
-      refetchOnWindowFocus: false,
-    },
-  );
-
-  const { data: resolvingContents, refetch: resolvingRefetch } = useQuery(
-    ['resolvingContents'],
-    () => getfilterContentsAPI({ done: 0 }),
-    {
-      enabled: false,
+      enabled: done !== null,
       refetchOnWindowFocus: false,
     },
   );
 
   const handleAll = () => {
-    refetch();
+    setDone(null);
   };
   const handleDone = () => {
-    doneRefetch();
+    setDone(1);
   };
 
   const handleResolving = () => {
-    resolvingRefetch();
+    setDone(0);
   };
-  useEffect(() => {
-    if (doneContents) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: doneContents.data.data,
-      });
-    }
-  }, [doneContents]);
 
   useEffect(() => {
-    if (resolvingContents) {
+    if (filterDoneContents) {
       dispatch({
         type: LOAD_CONTENTS_SUCCESS,
-        data: resolvingContents.data.data,
+        data: filterDoneContents.data.data,
       });
     }
-  }, [resolvingContents]);
+  }, [filterDoneContents]);
 
   useEffect(() => {
     if (contentsData) {

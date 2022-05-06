@@ -1,4 +1,9 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
+import 'prismjs/themes/prism.css';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-clojure';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import { Editor } from '@toast-ui/react-editor';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -79,7 +84,6 @@ const Container = styled.div`
 `;
 
 function Post({ isEdit }) {
-  console.log(isEdit);
   const [tagsInfo, setTagsInfo] = useState([]);
   const [title, setTitle] = useState(isEdit ? isEdit.title : '');
   const [tag, setTag] = useState(
@@ -139,7 +143,7 @@ function Post({ isEdit }) {
         userId: userInfo.id,
         title,
         stack: tag.stack,
-        content: editorRef.current.getInstance().getHTML(),
+        content: editorRef.current.getInstance().getMarkdown(),
         thumbnail: tumb,
         description,
       };
@@ -236,6 +240,7 @@ function Post({ isEdit }) {
         )}
 
         <Editor
+          plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
           height="100%"
           initialValue={content}
           previewStyle={innerWidth < SView ? 'tab' : 'vertical'}
