@@ -1,5 +1,5 @@
 const express = require('express');
-const { allPost, filterPost } = require('../controllers/contents');
+const { allPost, filterPost, myPost } = require('../controllers/contents');
 
 /**
  * @swagger
@@ -11,6 +11,7 @@ const { allPost, filterPost } = require('../controllers/contents');
 const router = express.Router();
 
 router.get('/', allPost); // 모든컨텐츠 가져오기
+router.get('/mypost', myPost); // 로그인한 유저 본인 작성 게시물 가져오기
 router.get('/filter', filterPost); // 스택, 키워드검색 등 필터링해서 컨텐츠 가져오기.
 /**
  * @swagger
