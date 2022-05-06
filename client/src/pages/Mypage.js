@@ -18,8 +18,11 @@ import { SView } from '../config';
 function Mypage() {
   const [info, setInfo] = useState(false);
   const [out, setout] = useState(false);
+  const { userInfo } = useSelector(state => state.user);
   const [Image, setImage] = useState(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+    userInfo
+      ? userInfo.profile
+      : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
   );
   const [File, setFile] = useState('');
   const [editValue, setValue] = useState({
@@ -27,7 +30,7 @@ function Mypage() {
     currentPw: '',
     editurePw: '',
   });
-  const { userInfo } = useSelector(state => state.user);
+
   const editMutation = useMutation(edituserAPI);
   const editPwMutation = useMutation(editpasswordAPI);
   const { mainContents } = useSelector(state => state.content);
@@ -54,7 +57,7 @@ function Mypage() {
     if (editValue.userName) {
       editMutation.mutate({
         username: editValue.userName,
-        profile: 'https://joeschmoe.io/api/v1/random',
+        profile: Image,
       });
     } else {
       dispatch({
@@ -79,7 +82,8 @@ function Mypage() {
         type: EDIT_USERINFO_SUCCESS,
         data: editMutation.data.data.data,
       });
-      alert('닉네임을 변경했습니다');
+      setImage(editMutation.data.data.data.profile);
+      // alert('닉네임을 변경했습니다');
     } else if (editMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -118,20 +122,25 @@ function Mypage() {
   // }, []);
   const onChange = e => {
     if (e.target.files[0]) {
-      setFile(e.target.files[0]);
+      // setFile(e.target.files[0]);
+      uploadFiles(e.target.files[0]).then(imgUrl => {
+        editMutation.mutate({
+          username: userInfo.username,
+          profile: imgUrl,
+        });
+      });
     } else {
       // 업로드 취소할 시
       setImage(userInfo.profile);
-      return;
     }
     // 화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //     setImage(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
   };
   const imgUploadClick = e => {
     e.preventDefault();
@@ -141,7 +150,7 @@ function Mypage() {
   if (userInfo) {
     return (
       <>
-        {out ? <SignoutModal /> : <span />}
+        {out ? <SignoutModal setout={setout} /> : <span />}
         <Header />
         <NavBar />
 
@@ -161,7 +170,7 @@ function Mypage() {
                     className="editText"
                     type="file"
                     style={{ display: 'none' }}
-                    accept="image/jpg,impge/png,image/jpeg"
+                    accept="image/jpg,image/png,image/jpeg"
                     ref={userRef}
                     onChange={onChange}
                   />
@@ -196,7 +205,7 @@ function Mypage() {
                     />
                     <span className="user-password">변경할 비밀번호</span>
                   </div>
-                  <span className="Withdrawal" onClick={() => setout(!out)}>
+                  <span className="Withdrawal" onClick={() => setout(true)}>
                     계정삭제
                   </span>
                   {/* {out ? <ConfirmModal/> : <div>} */}

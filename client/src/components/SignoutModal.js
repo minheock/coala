@@ -6,10 +6,9 @@ import { useDispatch } from 'react-redux';
 import { signoutAPI } from '../api/user';
 import { LOG_OUT_SUCCESS } from '../reducer/user';
 
-function SignoutModal() {
+function SignoutModal({ setout }) {
   const signoutMutation = useMutation(signoutAPI);
   const dispatch = useDispatch();
-  const [isout, setout] = useState(false);
   const navigate = useNavigate();
   const signoutSubmit = e => {
     e.preventDefault();
@@ -28,30 +27,27 @@ function SignoutModal() {
   }, [signoutMutation.status]);
   return (
     <div>
-      {!isout ? (
-        <Container>
-          <form onSubmit={signoutSubmit}>
-            <div className="signout-box">
-              <h2>계정삭제</h2>
-              <h3>정말 계정을 삭제하시겠습니까?</h3>
-              <div className="btn-box">
-                <button
-                  id="cancel-btn"
-                  type="button"
-                  onClick={() => setout(!isout)}
-                >
-                  취소
-                </button>
-                <button id="Withdrawal-btn" type="submit">
-                  삭제
-                </button>
-              </div>
+      <Container>
+        <form onSubmit={signoutSubmit}>
+          <div className="signout-box">
+            <h2>계정삭제</h2>
+            <h3>정말 계정을 삭제하시겠습니까?</h3>
+            <div className="btn-box">
+              <button
+                id="cancel-btn"
+                type="button"
+                onClick={() => setout(false)}
+              >
+                취소
+              </button>
+              <button id="Withdrawal-btn" type="submit">
+                삭제
+              </button>
             </div>
-          </form>
-        </Container>
-      ) : (
-        <span />
-      )}
+          </div>
+        </form>
+      </Container>
+      )
     </div>
   );
 }
