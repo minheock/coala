@@ -11,9 +11,7 @@ export const getContentAPI = data => axios.get(`/content/${data}`);
 export const editContentAPI = data => axios.patch(`/content/edit`, data);
 
 export const getMoreContentsAPI = async lastId => {
-  const response = await axios.get(
-    `http://localhost:4000/contents?lastId=${lastId}`,
-  );
+  const response = await axios.get(`/contents?lastId=${lastId}`);
   const items = response.data.data;
   return {
     items,
