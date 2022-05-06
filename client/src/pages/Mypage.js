@@ -241,7 +241,7 @@ function Mypage() {
                 <br />
                 <span className="userinfoId">{userInfo.email}</span>
                 <br />
-                <span className="userText">{`내 게시물 총${mainContents.length}개`}</span>
+                <span className="userText">{`내 게시물 총 ${mainContents.length}개`}</span>
               </div>
             )}
             <button
