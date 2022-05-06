@@ -37,6 +37,8 @@ function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
+  // const userfocus = useRef(null);
+
   const { isLoading, data: contentsData } = useQuery(
     'contents',
     getContentsUserAPI,
@@ -62,6 +64,9 @@ function Mypage() {
   function edithandler(e, key) {
     setValue({ ...editValue, [key]: e.target.value });
   }
+  function Reset(e, key, key2) {
+    setValue({ ...editValue, [key]: '', [key2]: '' });
+  }
 
   const InfoHandeler = () => {
     setInfo(!info);
@@ -73,6 +78,7 @@ function Mypage() {
         username: editValue.userName,
         profile: Image,
       });
+      Reset(e, 'userName');
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -87,6 +93,9 @@ function Mypage() {
         password: editValue.currentPw,
         newPassword: editValue.editurePw,
       });
+      if (!editPwMutation.isSuccess) {
+        Reset(e, 'editurePw', 'currentPw');
+      }
     }
   };
 
@@ -176,25 +185,34 @@ function Mypage() {
                     <input
                       className="editInput"
                       onChange={e => edithandler(e, 'userName')}
+                      value={editValue.userName}
                       type="text"
                     />
-                    <span className="user-name">닉네임</span>
+                    <span className="user-name" placeholder="닉네임" />
                   </div>
                   <div className="form">
                     <input
                       className="editInput-pw"
                       type="password"
+                      value={editValue.currentPw}
                       onChange={e => edithandler(e, 'currentPw')}
                     />
-                    <span className="user-email">현재 비밀번호</span>
+                    <span
+                      className="user-password"
+                      placeholder="현재 비밀번호"
+                    />
                   </div>
                   <div className="form">
                     <input
                       className="editInput-succes"
                       type="password"
+                      value={editValue.editurePw}
                       onChange={e => edithandler(e, 'editurePw')}
                     />
-                    <span className="user-password">변경할 비밀번호</span>
+                    <span
+                      className="user-PasswordCheck"
+                      placeholder="변경할 비밀번호"
+                    />
                   </div>
                   <span className="Withdrawal" onClick={() => setout(true)}>
                     계정삭제
@@ -223,18 +241,14 @@ function Mypage() {
                 <br />
                 <span className="userinfoId">{userInfo.email}</span>
                 <br />
-                <span className="userText">{`내 게시물 총${
-                  '.sc-iqcoie kOLKX'.length
-                }개`}</span>
+                <span className="userText">{`내 게시물 총${mainContents.length}개`}</span>
               </div>
             )}
             <button
               type="button"
               className="editInfo"
               data-tooltip-text={
-                !info
-                  ? '유저정보를 바꿀수 있습니다'
-                  : '클릭하면 유저정보가 나옵니다'
+                !info ? '유저정보 변경' : '클릭 시 유저정보로 이동합니다'
               }
               onClick={InfoHandeler}
             >
@@ -268,6 +282,7 @@ const MypageWrapper = styled.div`
   margin-bottom: 100px;
   .mypageLogo {
     position: absolute;
+    pointer-events:none ;
     color: #999999;
     top: 120px;
     left: 330px;
@@ -382,31 +397,44 @@ const MypageWrapper = styled.div`
       background-color: rgba(255, 255, 255, 0);
     }
     .user-name,
-    .user-email,
-    .user-password {
+    .user-password,
+    .user-PasswordCheck {
       position: absolute;
+      pointer-events:none ;
       font-weight: 500;
       font-size: 15px;
       font-family: sans-serif;
       left: 0.7rem;
       top: 0.8rem;
       padding: 0, 0.5rem;
-      cursor: text;
+      cursor: none;
       color: grey;
       transition: 0.3s ease-in-out;
       z-index: -1;
       border-radius: 100%;
     }
-
-    .editInput:focus ~ .user-name,
-    .editInput-pw:focus ~ .user-email,
-    .editInput-succes:focus ~ .user-password {
+    .editInput + .user-name::before,
+    .editInput-pw + .user-password::before,
+    .editInput-succes + .user-PasswordCheck::before{
+      content:attr(placeholder) ;
+      display:inline-block ;
+      transition:.3s ease-in-out ;
+    }
+    .editInput:focus,
+    .editInput-pw:focus,
+    .editInput-succes:focus{
+      border-color:#287ae6 ;
+    }
+    .editInput:focus ~ .user-name::before,
+    .editInput-pw:focus ~ .user-password::before,
+    .editInput-succes:focus ~ .user-PasswordCheck::before {
       /* border: dotted 1px blue; */
       /* background-color: gray; */
       /* color: #555555; */
-      top: -0.2rem;
+      /* top: -0.2rem; */
       font-size: 0.7rem;
-      left: 0.6rem;
+      transform:translate(0, -1.5em) ;
+      /* left: 0.6rem; */
     }
   }
   .editPush,
