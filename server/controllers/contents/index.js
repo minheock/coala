@@ -1,4 +1,5 @@
 const { posts, like, users, Sequelize } = require('../../models');
+const { isAuthorized } = require('../token');
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -383,6 +384,57 @@ module.exports = {
             res.status(500);
           });
       }
+    }
+  },
+  myPost: async (req, res) => {
+    const verify = isAuthorized(req);
+    console.log(verify);
+    const { id } = verify;
+    if (verify) {
+      await posts
+        .findAll({
+          where: { userId: id },
+          include: [
+            {
+              model: users,
+              required: true,
+              as: 'userInfo',
+              attributes: ['id', 'username', 'profile'],
+            },
+            {
+              model: like,
+              as: 'likers',
+              attributes: ['userId'],
+            },
+          ],
+          attributes: [
+            'id',
+            'title',
+            'description',
+            'updatedAt',
+            'stack',
+            'thumbnail',
+            'done',
+          ],
+          order: [['id', 'DESC']],
+        })
+        .then((data) => {
+          const post = data.map((el) => el.get({ plain: true }));
+          for (let i = 0; i < post.length; i++) {
+            if (post[i].likers) {
+              for (let q = 0; q < post[i].likers.length; q++) {
+                post[i].likers[q] = post[i].likers[q].userId;
+              }
+            }
+          }
+          res.status(200).send({ message: '요청 성공', data: post });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500);
+        });
+    } else {
+      res.ststus(400).send({ message: 'Invalid Token' });
     }
   },
 };
