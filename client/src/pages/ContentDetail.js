@@ -23,6 +23,7 @@ import Comments from '../components/Comments';
 import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 import CodeEditor from '../components/CodeEditor';
+import ZoomCode from '../components/ZoomCode';
 
 const Container = styled.main`
   width: 85%;
@@ -110,7 +111,8 @@ function ContentDetail() {
   const [confirm, setConfirm] = useState('');
   const [commentsList, setCommentsList] = useState([]);
   const [isEditCode, setIsEditCode] = useState(false);
-  const { socket, zoomImg } = useSelector(state => state.chat);
+  const [sendEditCode, setSendEditCode] = useState('');
+  const { socket, zoomImg, zoomCode } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
   const viewerRef = useRef();
@@ -125,6 +127,7 @@ function ContentDetail() {
     retry: 0,
     enabled: !!contentId,
   });
+
   // console.log(contentDetail.data.data.comments);
   const handleEdit = () => {
     dispatch({
@@ -141,7 +144,7 @@ function ContentDetail() {
         .getInstance()
         .setMarkdown(contentDetail.data.data.content);
     }
-  }, [contentDetail.data.data.content]);
+  }, [contentDetail?.data.data.content]);
 
   useEffect(() => {
     if (contentDetail) {
@@ -158,6 +161,7 @@ function ContentDetail() {
     const { done } = contentDetail.data.data;
     return (
       <>
+        {zoomCode ? <ZoomCode codeInfo={zoomCode} /> : null}
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
         {confirm ? (
           <ConfirmModal
@@ -168,7 +172,12 @@ function ContentDetail() {
             contentData={contentDetail.data.data}
           />
         ) : null}
-        {isEditCode ? <CodeEditor handleClose={setIsEditCode} /> : null}
+        {isEditCode ? (
+          <CodeEditor
+            handleSendEditCode={setSendEditCode}
+            handleClose={setIsEditCode}
+          />
+        ) : null}
         <Header />
         <Container>
           <article>
@@ -224,6 +233,8 @@ function ContentDetail() {
 
           {isChat ? (
             <Chat
+              handleSendEditCode={setSendEditCode}
+              sendEditCode={sendEditCode}
               socket={socket}
               chattings={contentDetail.data.data.chattings}
               userInfo={userInfo || null}

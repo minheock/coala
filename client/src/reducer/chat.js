@@ -3,11 +3,14 @@ import produce from 'immer';
 const initialized = {
   socket: null,
   zoomImg: null,
+  zoomCode: null,
 };
 
 export const INIT_SOCKETIO = 'INIT_SOCKETIO';
 export const ZOOM_CHAT_IMAGE = 'ZOOM_CHAT_IMAGE';
 export const INIT_ZOOM_CHAT_IMAGE = 'INIT_ZOOM_CHAT_IMAGE';
+export const ZOOM_CHAT_CODE = 'ZOOM_CHAT_CODE';
+export const INIT_ZOOM_CHAT_CODE = 'INIT_ZOOM_CHAT_CODE';
 
 const reducer = (state = initialized, action) =>
   produce(state, draft => {
@@ -20,6 +23,12 @@ const reducer = (state = initialized, action) =>
         break;
       case INIT_ZOOM_CHAT_IMAGE:
         draft.zoomImg = null;
+        break;
+      case ZOOM_CHAT_CODE:
+        draft.zoomCode = action.data;
+        break;
+      case INIT_ZOOM_CHAT_CODE:
+        draft.zoomCode = null;
         break;
       default:
         break;
