@@ -48,8 +48,9 @@ module.exports = {
     // 컨텐츠 수정
     const verify = isAuthorized(req);
     if (verify) {
-      const { title, content, stack, thumbnail, description } = req.body;
-      if (req.params.postId) {
+      const { postId, title, content, stack, thumbnail, description } =
+        req.body;
+      if (postId) {
         // 파라미터가 없으면 400 있으면 200
         if (!title || !content || !stack) {
           res.status(400).send({ message: 'Invalid request' });
@@ -64,7 +65,7 @@ module.exports = {
                 description,
               },
               {
-                where: { id: req.params.postId },
+                where: { id: postId },
               },
             )
             .then((data) => {
