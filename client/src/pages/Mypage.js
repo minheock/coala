@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import styled from 'styled-components';
 import { EditOutlined } from '@ant-design/icons';
@@ -10,9 +10,11 @@ import Contents from '../components/Contents';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
+import SignoutModal from '../components/SignoutModal';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
+  const [out, setout] = useState(false);
   const [editValue, setValue] = useState({
     userName: '',
     currentPw: '',
@@ -21,7 +23,6 @@ function Mypage() {
   const { userInfo } = useSelector(state => state.user);
   const editMutation = useMutation(edituserAPI);
   const editPwMutation = useMutation(editpasswordAPI);
-  const signoutMutation = useMutation(signoutAPI);
   const { mainContents } = useSelector(state => state.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,39 +54,53 @@ function Mypage() {
         data: '입력된 값이 없습니다.',
       });
     }
-    // if (editValue.currentPw && editValue.editurePw) {
-    //   editPwMutation.mutate({
-    //     password: editValue.currentPw,
-    //     newpassword: editValue.editurePw,
-    //   });
-    // }
   };
-
-  const signoutSubmit = e => {
-    console.log('-------', editValue);
+  const editPwSubmit = e => {
     e.preventDefault();
-    signoutMutation.mutate({});
+    if (editValue.currentPw && editValue.editurePw) {
+      editPwMutation.mutate({
+        password: editValue.currentPw,
+        newpassword: editValue.editurePw,
+      });
+    }
   };
 
   useEffect(() => {
-    if (editMutation.isSuccess || editPwMutation.isSuccess) {
-      console.log(editMutation.data.data.data);
+    if (editMutation.isSuccess) {
       dispatch({
         type: EDIT_USERINFO_SUCCESS,
         data: editMutation.data.data.data,
       });
-    } else if (editMutation.isError || editPwMutation.isError) {
+      alert('닉네임을 변경했습니다');
+    } else if (editMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
         data: editMutation.error.response.data.message,
       });
     }
-  }, [editMutation.status, editPwMutation.status]);
+  }, [editMutation.status]);
+  useEffect(() => {
+    if (editPwMutation.isSuccess) {
+      dispatch({
+        type: EDIT_USERINFO_SUCCESS,
+        data: editPwMutation.data.data.data,
+      });
+      alert('비밀번호를 변경했습니다');
+    } else if (editPwMutation.isError) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: editPwMutation.error.response.data.message,
+      });
+    }
+  }, [editPwMutation.status]);
+  console.log(userInfo);
   if (userInfo) {
     return (
       <>
+        {out ? <SignoutModal /> : <span />}
         <Header />
         <NavBar />
+
         <MypageWrapper>
           <span className="mypageLogo">MyPage</span>
           <div className="userInfoContaner">
@@ -128,12 +143,24 @@ function Mypage() {
                     />
                     <span className="user-password">변경할 비밀번호</span>
                   </div>
-                  <button type="button" className="Withdrawal">
-                    회원탈퇴
-                  </button>
-                  <button type="submit" className="editPush">
-                    저장
-                  </button>
+                  <span className="Withdrawal" onClick={() => setout(!out)}>
+                    계정삭제
+                  </span>
+                  {/* {out ? <ConfirmModal/> : <div>} */}
+                  {editValue.userName ? (
+                    <button type="submit" className="editPush">
+                      이름 변경
+                    </button>
+                  ) : null}
+                  {editValue.currentPw && editValue.editurePw ? (
+                    <button
+                      type="button"
+                      className="edit-pw-submit"
+                      onClick={editPwSubmit}
+                    >
+                      비밀번호 변경
+                    </button>
+                  ) : null}
                 </div>
               </form>
             ) : (
@@ -147,7 +174,16 @@ function Mypage() {
                 <span className="userText">{`내 게시물 총${3}개`}</span>
               </div>
             )}
-            <button type="button" className="editInfo" onClick={InfoHandeler}>
+            <button
+              type="button"
+              className="editInfo"
+              data-tooltip-text={
+                !info
+                  ? '유저정보를 바꿀수 있습니다'
+                  : '클릭하면 유저정보가 나옵니다'
+              }
+              onClick={InfoHandeler}
+            >
               <EditOutlined className="icon" />
             </button>
           </div>
@@ -304,11 +340,13 @@ const MypageWrapper = styled.div`
       left: 0.6rem;
     }
   }
-  .editPush {
+  .editPush,
+  .edit-pw-submit {
     position: relative;
-    color: white;
+    color: grey;
     border-radius: 4px;
-    background: #a5e5cf;
+    /* background: #a5e5cf; */
+    background-color: rgba(255, 255, 255, 0.1);
     left: 185px;
     margin-top: 10px;
     border: 1px solid #999999;
@@ -319,19 +357,17 @@ const MypageWrapper = styled.div`
     }
   }
   .Withdrawal {
-    position: relative;
-    border-radius: 4px;
-    color: white;
-    background: #f44711;
-    margin-right: 10px;
-    left: 180px;
-    margin-top: 10px;
-    border: 1px solid #999999;
-    box-shadow: 1px 1px 2px black;
-    &:active {
-      bottom: -1px;
-      box-shadow: none;
-    }
+    /* top: 3px; */
+    bottom: 30px;
+    right: 30px;
+    position: absolute;
+    font-size: 10px;
+    color: red;
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  .Withdrawal:hover {
+    font-size: 11px;
   }
   .editInfo {
     background-color: rgba(255, 255, 255, 0.1);
@@ -359,6 +395,32 @@ const MypageWrapper = styled.div`
     height: 300px;
     width: 500px;
     border: 1px solid;
+  }
+  [data-tooltip-text]:hover:after {
+    background-color: #000000;
+    background-color: rgba(50, 50, 50, 0.9);
+
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+    box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    color: #ffffff;
+    font-size: 12px;
+    content: attr(data-tooltip-text);
+    margin-bottom: 10px;
+    top: 130%;
+    left: 0;
+    padding: 7px 12px;
+    position: absolute;
+    width: auto;
+    min-width: 150px;
+    max-width: 300px;
+    /* word-wrap: break-word; */
+    z-index: 9999;
   }
 `;
 
