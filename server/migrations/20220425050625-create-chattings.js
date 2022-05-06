@@ -17,6 +17,9 @@ module.exports = {
       content: {
         type: Sequelize.TEXT,
       },
+      code: {
+        type: Sequelize.TEXT,
+      },
       image: {
         type: Sequelize.TEXT,
       },

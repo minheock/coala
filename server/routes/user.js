@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   login,
+  logingithub,
   logout,
   signup,
   signout,
@@ -19,6 +20,7 @@ const {
 const router = express.Router();
 
 router.post('/login', login); // 로그인 요청
+router.post('/logingithub', logingithub);
 router.post('/logout', logout); // 로그아웃 요청
 router.post('/signup', signup); // 회원가입 요청
 router.delete('/signout', signout); // 회원탈퇴 요청
