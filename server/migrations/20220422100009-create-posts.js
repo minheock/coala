@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       thumbnail: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       description: {
         type: Sequelize.STRING,

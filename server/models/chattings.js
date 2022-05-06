@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       chatroomId: DataTypes.INTEGER,
-      content: DataTypes.STRING,
-      image: DataTypes.STRING,
+      content: DataTypes.TEXT,
+      image: DataTypes.TEXT,
       time: DataTypes.STRING,
     },
     {
