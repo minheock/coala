@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import 'prismjs/themes/prism.css';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-clojure';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import { Viewer } from '@toast-ui/react-editor';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
@@ -18,6 +23,7 @@ import Comments from '../components/Comments';
 import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 import CodeEditor from '../components/CodeEditor';
+import ZoomCode from '../components/ZoomCode';
 
 const Container = styled.main`
   width: 85%;
@@ -105,9 +111,11 @@ function ContentDetail() {
   const [confirm, setConfirm] = useState('');
   const [commentsList, setCommentsList] = useState([]);
   const [isEditCode, setIsEditCode] = useState(false);
-  const { socket, zoomImg } = useSelector(state => state.chat);
+  const [sendEditCode, setSendEditCode] = useState('');
+  const { socket, zoomImg, zoomCode } = useSelector(state => state.chat);
   const { userInfo } = useSelector(state => state.user);
   const { contentId } = useParams();
+  const viewerRef = useRef();
   const {
     isError,
     isLoading,
@@ -117,7 +125,9 @@ function ContentDetail() {
   } = useQuery(['content', contentId], () => getContentAPI(contentId), {
     refetchOnWindowFocus: false,
     retry: 0,
+    enabled: !!contentId,
   });
+
   // console.log(contentDetail.data.data.comments);
   const handleEdit = () => {
     dispatch({
@@ -126,6 +136,15 @@ function ContentDetail() {
     });
     navigate('/edit');
   };
+
+  // editerview content 수정할때 필요함.
+  useEffect(() => {
+    if (viewerRef.current) {
+      viewerRef.current
+        .getInstance()
+        .setMarkdown(contentDetail.data.data.content);
+    }
+  }, [contentDetail?.data.data.content]);
 
   useEffect(() => {
     if (contentDetail) {
@@ -142,6 +161,7 @@ function ContentDetail() {
     const { done } = contentDetail.data.data;
     return (
       <>
+        {zoomCode ? <ZoomCode codeInfo={zoomCode} /> : null}
         {zoomImg ? <ZoomImage imgUrl={zoomImg} /> : null}
         {confirm ? (
           <ConfirmModal
@@ -152,7 +172,12 @@ function ContentDetail() {
             contentData={contentDetail.data.data}
           />
         ) : null}
-        {isEditCode ? <CodeEditor handleClose={setIsEditCode} /> : null}
+        {isEditCode ? (
+          <CodeEditor
+            handleSendEditCode={setSendEditCode}
+            handleClose={setIsEditCode}
+          />
+        ) : null}
         <Header />
         <Container>
           <article>
@@ -188,7 +213,11 @@ function ContentDetail() {
               ) : null}
             </div>
             <div className="tag">{contentDetail.data.data.stack}</div>
-            <Viewer initialValue={contentDetail.data.data.content} />
+            <Viewer
+              plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+              initialValue={contentDetail.data.data.content}
+              ref={viewerRef}
+            />
             {done ? (
               <>
                 <Comments
@@ -204,6 +233,8 @@ function ContentDetail() {
 
           {isChat ? (
             <Chat
+              handleSendEditCode={setSendEditCode}
+              sendEditCode={sendEditCode}
               socket={socket}
               chattings={contentDetail.data.data.chattings}
               userInfo={userInfo || null}

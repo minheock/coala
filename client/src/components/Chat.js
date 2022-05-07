@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useDispatch } from 'react-redux';
-import { ZOOM_CHAT_IMAGE } from '../reducer/chat';
+import { ZOOM_CHAT_CODE, ZOOM_CHAT_IMAGE } from '../reducer/chat';
 import { uploadChatFiles } from '../firebase';
 
 const Chatroom = styled.div`
@@ -84,6 +84,13 @@ const Chatroom = styled.div`
       }
     }
   }
+  .code-block {
+    background-color: gray;
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   #you {
     .message-info {
       flex-direction: row-reverse;
@@ -145,11 +152,13 @@ function Chat({
   chattings,
   handleClose,
   handleEditCodePage,
+  sendEditCode,
+  handleSendEditCode,
 }) {
   const dispatch = useDispatch();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
-
+  console.log(messageList);
   // 이미지 영역.
   const [image, setImage] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -193,6 +202,7 @@ function Chat({
         userId: userInfo.id,
         message: null,
         image: dataurl,
+        code: null,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
       await socket.emit('send_message', imgData);
@@ -207,8 +217,41 @@ function Chat({
   };
   // 이미지 영역.
 
+  // 코드 블럭 영역
+  useEffect(() => {
+    if (sendEditCode) {
+      // code Editor에서 code 작성해서 보내줬을 경우.
+      console.log(sendEditCode);
+      if (sendEditCode.editorValue !== '') {
+        let minutes = new Date(Date.now()).getMinutes();
+        if (minutes < 10) {
+          minutes = `0${minutes}`;
+        }
+        const codeMessageData = {
+          room,
+          author: userInfo.username,
+          profile: userInfo.profile,
+          userId: userInfo.id,
+          message: null,
+          image: null,
+          code: JSON.stringify(sendEditCode),
+          time: `${new Date(Date.now()).getHours()}:${minutes}`,
+        };
+        setMessageList([...messageList, codeMessageData]);
+        handleSendEditCode('');
+      }
+    }
+  }, [sendEditCode]);
+
   const handleEditCode = () => {
     handleEditCodePage(true);
+  };
+
+  const handleZoomCode = codeInfo => {
+    dispatch({
+      type: ZOOM_CHAT_CODE,
+      data: codeInfo,
+    });
   };
 
   useEffect(() => {
@@ -220,6 +263,7 @@ function Chat({
       userId: chatting.userId,
       message: chatting.content,
       image: chatting.image,
+      code: null,
       time: chatting.time,
     }));
     setMessageList([...messages]);
@@ -249,6 +293,7 @@ function Chat({
         userId: userInfo.id,
         message: customMessage,
         image: null,
+        code: null,
         time: `${new Date(Date.now()).getHours()}:${minutes}`,
       };
       await socket.emit('send_message', messageData);
@@ -300,9 +345,21 @@ function Chat({
                         src={messageContent.image}
                       />
                     </div>
-                  ) : (
+                  ) : null}
+                  {messageContent.message ? (
                     <span>{messageContent.message}</span>
-                  )}
+                  ) : null}
+                  {messageContent.code ? (
+                    <div
+                      onClick={() =>
+                        handleZoomCode(JSON.parse(messageContent.code))
+                      }
+                      className="code-block"
+                    >
+                      <p>Code:</p>
+                      <p>{JSON.parse(messageContent.code).language}</p>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="message-meta">
                   <span id="time">{messageContent.time}</span>
