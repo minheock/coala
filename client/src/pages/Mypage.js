@@ -175,7 +175,7 @@ function Mypage() {
                     ref={userRef}
                     onChange={onImgChange}
                   />
-                  프로필 변경
+                  <span className="profileWord">프로필 변경</span>
                 </div>
               </div>
             </div>
@@ -345,7 +345,7 @@ const MypageWrapper = styled.div`
       text-align: center;
     }
     .imgBox .userProfileEdit {
-      padding-top: 13%;
+      padding-top: 100px;
       transition: opacity 0.35s ease-in-out;
     }
     .imgBox:hover .userProfileEdit {
@@ -377,11 +377,9 @@ const MypageWrapper = styled.div`
   }
   .userInfoBox {
     font-family: 'Convergence', sans-serif;
-    /* position: relative; */
     padding-top: 40px;
     height: 100%;
     width: 300px;
-    /* border: 1px solid black; */
     .form {
       position: relative;
       margin-top: 10px;
@@ -389,13 +387,11 @@ const MypageWrapper = styled.div`
     .editInput,
     .editInput-pw,
     .editInput-succes {
-      /* margin-top: 3px; */
       position: relative;
       top: 0;
       left: 0;
       height: 80%;
       width: 100%;
-      /* border-radius: 9px; */
       border: 2px solid #999999;
       border-top: none;
       border-left: none;
@@ -439,13 +435,8 @@ const MypageWrapper = styled.div`
     .editInput:focus ~ .user-name::before,
     .editInput-pw:focus ~ .user-password::before,
     .editInput-succes:focus ~ .user-PasswordCheck::before {
-      /* border: dotted 1px blue; */
-      /* background-color: gray; */
-      /* color: #555555; */
-      /* top: -0.2rem; */
       font-size: 0.7rem;
       transform: translate(0, -1.5em);
-      /* left: 0.6rem; */
     }
   }
   .editPush,
@@ -453,7 +444,6 @@ const MypageWrapper = styled.div`
     position: relative;
     color: grey;
     border-radius: 4px;
-    /* background: #a5e5cf; */
     background-color: rgba(255, 255, 255, 0.1);
     left: 15px;
     margin-top: 10px;
@@ -470,7 +460,6 @@ const MypageWrapper = styled.div`
     }
   }
   .Withdrawal {
-    /* top: 3px; */
     bottom: 30px;
     right: 30px;
     position: absolute;
@@ -532,7 +521,6 @@ const MypageWrapper = styled.div`
     width: auto;
     min-width: 150px;
     max-width: 300px;
-    /* word-wrap: break-word; */
     z-index: 9999;
   }
 
