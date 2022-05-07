@@ -189,7 +189,7 @@ function ContentDetail() {
                   src={
                     contentDetail.data.data.userInfo.profile
                       ? contentDetail.data.data.userInfo.profile
-                      : 'https://joeschmoe.io/api/v1/random'
+                      : 'https://joeschmoe.io/api/v1/2'
                   }
                 />
                 <span>{contentDetail.data.data.userInfo.username}</span>
