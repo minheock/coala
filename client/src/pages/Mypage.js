@@ -37,8 +37,9 @@ function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
-  // const userfocus = useRef(null);
+  const inputRef = useRef();
 
+  // 유저의 컨텐츠
   const { isLoading, data: contentsData } = useQuery(
     'contents',
     getContentsUserAPI,
@@ -61,16 +62,18 @@ function Mypage() {
     }
   }, [userInfo]);
 
+  // 정보수정 핸들러
   function edithandler(e, key) {
     setValue({ ...editValue, [key]: e.target.value });
   }
-  function Reset(e, key, key2) {
+  function EditInputReset(e, key, key2) {
     setValue({ ...editValue, [key]: '', [key2]: '' });
   }
 
   const InfoHandeler = () => {
     setInfo(!info);
   };
+  // 이름변경
   const editSubmit = e => {
     e.preventDefault();
     if (editValue.userName) {
@@ -78,7 +81,7 @@ function Mypage() {
         username: editValue.userName,
         profile: Image,
       });
-      Reset(e, 'userName');
+      EditInputReset(e, 'userName');
     } else {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -86,6 +89,7 @@ function Mypage() {
       });
     }
   };
+  // 비밀번호 변경
   const editPwSubmit = e => {
     e.preventDefault();
     if (editValue.currentPw && editValue.editurePw) {
@@ -94,7 +98,7 @@ function Mypage() {
         newPassword: editValue.editurePw,
       });
       if (!editPwMutation.isSuccess) {
-        Reset(e, 'editurePw', 'currentPw');
+        EditInputReset(e, 'editurePw', 'currentPw');
       }
     }
   };
@@ -128,6 +132,7 @@ function Mypage() {
     }
   }, [editPwMutation.status]);
 
+  // 이미지 업로드
   const onImgChange = e => {
     if (e.target.files[0]) {
       uploadFiles(e.target.files[0]).then(imgUrl => {
@@ -137,18 +142,14 @@ function Mypage() {
         });
       });
     } else {
-      // 업로드 취소할 시
       setImage(userInfo.profile);
     }
-    // 화면에 프로필 사진 표시
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     setImage(reader.result);
-    //   }
-    // };
-    // reader.readAsDataURL(e.target.files[0]);
   };
+  // html focus hook
+  // useEffect(() => {
+  //   console.log('----', inputRef.current, userRef.current);
+  // }, []);
+
   if (userInfo) {
     return (
       <>
@@ -188,7 +189,11 @@ function Mypage() {
                       value={editValue.userName}
                       type="text"
                     />
-                    <span className="user-name" placeholder="닉네임" />
+                    {editValue.userName ? (
+                      <span />
+                    ) : (
+                      <span className="user-name" placeholder="닉네임" />
+                    )}
                   </div>
                   <div className="form">
                     <input
@@ -197,10 +202,14 @@ function Mypage() {
                       value={editValue.currentPw}
                       onChange={e => edithandler(e, 'currentPw')}
                     />
-                    <span
-                      className="user-password"
-                      placeholder="현재 비밀번호"
-                    />
+                    {editValue.currentPw ? (
+                      <span />
+                    ) : (
+                      <span
+                        className="user-password"
+                        placeholder="현재 비밀번호"
+                      />
+                    )}
                   </div>
                   <div className="form">
                     <input
@@ -209,10 +218,14 @@ function Mypage() {
                       value={editValue.editurePw}
                       onChange={e => edithandler(e, 'editurePw')}
                     />
-                    <span
-                      className="user-PasswordCheck"
-                      placeholder="변경할 비밀번호"
-                    />
+                    {editValue.editurePw ? (
+                      <span />
+                    ) : (
+                      <span
+                        className="user-PasswordCheck"
+                        placeholder="변경할 비밀번호"
+                      />
+                    )}
                   </div>
                   <span className="Withdrawal" onClick={() => setout(true)}>
                     계정삭제
