@@ -285,7 +285,7 @@ function Mypage() {
 const MypageWrapper = styled.div`
   background-image: url('https://i.imgur.com/bWzeWI4.jpg');
   background-size: cover;
-  width:100% ;
+  width: 100%;
   height: 490px;
   display: flex;
   justify-content: center;
@@ -295,7 +295,7 @@ const MypageWrapper = styled.div`
   margin-bottom: 100px;
   .mypageLogo {
     position: absolute;
-    pointer-events:none ;
+    pointer-events: none;
     color: #999999;
     top: 120px;
     left: 330px;
@@ -304,21 +304,19 @@ const MypageWrapper = styled.div`
     font-size: 28px;
     font-style: sans-serif;
   }
-  .leftBlur{
-    position: absolute ;
-    height: 490px ;
-    width:16% ;
-    left: 0 ;
-    background-color:white;
-
+  .leftBlur {
+    position: absolute;
+    height: 490px;
+    width: 16%;
+    left: 0;
+    background-color: white;
   }
-  .rightBlur{
-    position: absolute ;
-    height: 490px ;
-    width:16% ;
-    right: 0 ;
-    background-color:white;
-
+  .rightBlur {
+    position: absolute;
+    height: 490px;
+    width: 16%;
+    right: 0;
+    background-color: white;
   }
   .userInfoContaner {
     border-radius: 30px;
@@ -413,7 +411,7 @@ const MypageWrapper = styled.div`
     .user-password,
     .user-PasswordCheck {
       position: absolute;
-      pointer-events:none ;
+      pointer-events: none;
       font-weight: 500;
       font-size: 15px;
       font-family: sans-serif;
@@ -428,15 +426,15 @@ const MypageWrapper = styled.div`
     }
     .editInput + .user-name::before,
     .editInput-pw + .user-password::before,
-    .editInput-succes + .user-PasswordCheck::before{
-      content:attr(placeholder) ;
-      display:inline-block ;
-      transition:.3s ease-in-out ;
+    .editInput-succes + .user-PasswordCheck::before {
+      content: attr(placeholder);
+      display: inline-block;
+      transition: 0.3s ease-in-out;
     }
     .editInput:focus,
     .editInput-pw:focus,
-    .editInput-succes:focus{
-      border-color:#287ae6 ;
+    .editInput-succes:focus {
+      border-color: #287ae6;
     }
     .editInput:focus ~ .user-name::before,
     .editInput-pw:focus ~ .user-password::before,
@@ -446,7 +444,7 @@ const MypageWrapper = styled.div`
       /* color: #555555; */
       /* top: -0.2rem; */
       font-size: 0.7rem;
-      transform:translate(0, -1.5em) ;
+      transform: translate(0, -1.5em);
       /* left: 0.6rem; */
     }
   }
@@ -557,27 +555,29 @@ const MypageWrapper = styled.div`
     }
   }
   @media screen and (max-width: ${SView + 500}px) {
-    .leftBlur{
-      display: none ;
+    .leftBlur {
+      display: none;
     }
-    .rightBlur{
-      display:none ;
+    .rightBlur {
+      display: none;
     }
+  }
   @media screen and (max-width: ${SView + 300}px) {
     .mypageLogo {
       left: 150px;
     }
+  }
   @media screen and (max-width: ${SView + 200}px) {
     .mypageLogo {
       left: 100px;
     }
-    @media screen and (max-width: ${SView}px) {
+  }
+  @media screen and (max-width: ${SView}px) {
     .mypageLogo {
       left: 50px;
-      width: 80% ;
+      width: 80%;
     }
   }
-
 `;
 
 export default Mypage;
