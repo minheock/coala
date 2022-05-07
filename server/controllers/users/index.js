@@ -183,7 +183,7 @@ module.exports = {
     if (!verify) {
       res.status(401).send({ message: 'Invalid Token' });
     } else {
-      const { email } = verify;
+      const { id, email } = verify;
       const { username, profile } = req.body;
       await users
         .findOne({
@@ -202,9 +202,17 @@ module.exports = {
                 },
               )
               .then(() => {
-                res.status(200).send({
-                  message: 'user information changed',
-                  data: { username, profile },
+                const accessToken = generateAccessToken({
+                  id,
+                  username,
+                  profile,
+                  email,
+                });
+                sendAccessToken(res, accessToken, {
+                  id,
+                  username,
+                  profile,
+                  email,
                 });
               });
           } else {
