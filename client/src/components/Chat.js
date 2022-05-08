@@ -10,6 +10,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import { useDispatch } from 'react-redux';
 import { ZOOM_CHAT_CODE, ZOOM_CHAT_IMAGE } from '../reducer/chat';
 import { uploadChatFiles } from '../firebase';
+import { SView } from '../config';
 
 const Chatroom = styled.div`
   background-color: white;
@@ -18,7 +19,7 @@ const Chatroom = styled.div`
   box-shadow: 2px 1px 17px -3px rgba(0, 0, 0, 0.42);
   right: 0.2rem;
   width: 530px;
-  height: 650px;
+  height: 600px;
   /* border-radius: 10px 10px 0px 0px; */
   margin-left: 0.5rem;
   .close-btn {
@@ -32,7 +33,9 @@ const Chatroom = styled.div`
     margin-bottom: 3px !important;
   }
   .message-container {
-    height: 560px;
+    padding-left: 3px;
+    padding-right: 3px;
+    height: 510px;
     overflow-y: auto;
   }
   .input-box {
@@ -143,6 +146,16 @@ const Chatroom = styled.div`
   #image-upload {
     display: none;
   }
+
+  @media screen and (max-width: ${SView}px) {
+    & {
+      width: 400px;
+      height: 550px;
+    }
+    .message-container {
+      height: 460px;
+    }
+  }
 `;
 
 function Chat({
@@ -218,7 +231,7 @@ function Chat({
   // 이미지 영역.
 
   // 코드 블럭 영역
-  useEffect(() => {
+  useEffect(async () => {
     if (sendEditCode) {
       // code Editor에서 code 작성해서 보내줬을 경우.
       console.log(sendEditCode);
@@ -237,6 +250,7 @@ function Chat({
           code: JSON.stringify(sendEditCode),
           time: `${new Date(Date.now()).getHours()}:${minutes}`,
         };
+        await socket.emit('send_message', codeMessageData);
         setMessageList([...messageList, codeMessageData]);
         handleSendEditCode('');
       }
