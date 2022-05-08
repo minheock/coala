@@ -19,6 +19,10 @@ const HeaderWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  #logo {
+    width: 130px;
+    height: 42px;
+  }
   .left-container {
     margin-left: 1rem;
     .logo {
@@ -136,7 +140,7 @@ function Header({ page }) {
       {isUserMore ? <UserMore /> : null}
       <div className="left-container">
         <div onClick={() => navigator('/')} className="logo">
-          Coala
+          <img id="logo" src="/Coala_logo.png" alt="coala_logo" />
         </div>
       </div>
       <div className="right-container">
