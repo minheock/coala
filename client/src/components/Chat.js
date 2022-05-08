@@ -218,7 +218,7 @@ function Chat({
   // 이미지 영역.
 
   // 코드 블럭 영역
-  useEffect(() => {
+  useEffect(async() => {
     if (sendEditCode) {
       // code Editor에서 code 작성해서 보내줬을 경우.
       console.log(sendEditCode);
@@ -237,6 +237,7 @@ function Chat({
           code: JSON.stringify(sendEditCode),
           time: `${new Date(Date.now()).getHours()}:${minutes}`,
         };
+        await socket.emit('send_message', codeMessageData);
         setMessageList([...messageList, codeMessageData]);
         handleSendEditCode('');
       }
