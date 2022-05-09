@@ -55,7 +55,7 @@ const io = socketIO(server, {
   // pingTimeout: 5000000000,
 });
 
-const { chattings } = require('./models');
+const { chattings, posts } = require('./models');
 
 io.on('connection', (socket) => {
   console.log(
@@ -65,20 +65,35 @@ io.on('connection', (socket) => {
   );
 
   socket.on('join_room', (data) => {
-    socket.join(data);
-    io.to(data.roomId).emit('send_connect', {
-      message: `${data.username}님이 입장했습니다`,
+    console.log(data);
+    socket.join(data.room);
+    io.to(data.room).emit('send_connect', {
+      message: `${data.author}님이 입장했습니다`,
     });
     console.log(
       `-----------------------------------------------------
-      User with ID: ${socket.id} joined room: ${data}
+      User with ID: ${socket.id} joined room: ${data.room}
 -----------------------------------------------------`,
     );
-    // console.log(`유저 체팅방 접속`, socket);
+    // 글작성한 유저가 채팅방에 접속했을때 변경
+    posts.update(
+      { in: true },
+      {
+        where: { id: data.room, userId: data.userId },
+      },
+    );
+  });
+
+  socket.on('left_room', (data) => {
+    socket.leave(data.room);
+    console.log(
+      `-----------------------------------------------------
+      User with ID: ${socket.id} left room: ${data.room}
+-----------------------------------------------------`,
+    );
   });
 
   socket.on('send_message', async (data) => {
-    console.log(data);
     socket.to(data.room).emit('receive_message', data);
     await chattings.create({
       userId: data.userId,
@@ -90,8 +105,15 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', (reason) => {
+    // console.log(socket);
     console.log(`User Disconnected: ${socket.id}`);
     console.log('disconnect reason: ', reason);
+    posts.update(
+      { in: false },
+      {
+        where: { userId: 1 },
+      },
+    );
   });
 });
 

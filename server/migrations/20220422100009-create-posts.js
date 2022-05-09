@@ -30,6 +30,9 @@ module.exports = {
       done: {
         type: Sequelize.BOOLEAN,
       },
+      in: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

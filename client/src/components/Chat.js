@@ -281,7 +281,10 @@ function Chat({
       time: chatting.time,
     }));
     setMessageList([...messages]);
-    socket.emit('join_room', room);
+    socket.emit('join_room', { room, author: userInfo.username });
+    socket.on('send_connect', data => {
+      setMessageList(list => [...list, data]);
+    });
   }, []);
   // 메시지 전송 메서드
   const sendMessage = async () => {

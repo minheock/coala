@@ -13,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         sourceKey: 'id',
       });
-      this.belongsTo(models.chatrooms, {
-        foreignKey: 'chatroomId',
-        sourceKey: 'id',
-      });
       this.belongsTo(models.posts, {
         foreignKey: 'chatroomId',
         sourceKey: 'id',
