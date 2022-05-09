@@ -7,6 +7,7 @@ import { useMutation } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { SView, MView } from '../config';
 import { likeAPI, unLikeAPI } from '../api/content';
+import { CONTENT_LIKE_REQUEST } from '../reducer/content';
 
 const CardContainer = styled(Card)`
   width: 270px;
@@ -55,9 +56,11 @@ const CardContainer = styled(Card)`
   .filled-icon {
     color: red;
     cursor: pointer;
+    /* pointer-events: none; */
   }
   .outline-icon {
     cursor: pointer;
+    /* pointer-events: none; */
   }
   @media screen and (max-width: ${MView}px) {
     & {
@@ -83,18 +86,22 @@ function Content({ contentInfo }) {
   const customUpdate = updatedAt.split(' ')[0];
   const navigate = useNavigate();
   const { userInfo } = useSelector(state => state.user);
-  const likeMutation = useMutation(likeAPI);
-  const unLikeMutation = useMutation(unLikeAPI);
+  const likeMutation = useMutation(() => likeAPI(contentInfo.id));
+  const unLikeMutation = useMutation(() => unLikeAPI(contentInfo.id));
+  console.log('contentinfo입니다', userInfo);
   const handleLike = () => {
-    likeMutation.mutate({ userid: userInfo.id });
+    likeMutation.mutate({
+      userId: userInfo.id,
+    });
   };
   const handleUnLike = () => {
-    unLikeMutation.mutate({ userid: userInfo.id });
+    unLikeMutation.mutate({
+      userId: userInfo.id,
+    });
   };
   // const handleDetail = () => {
-  //   navigate(`/content/${contentInfo.id}`);
+  // navigate(`/content/${contentInfo.id}`);
   // };
-  console.log(userInfo);
   return (
     <CardContainer
       // onClick={handleDetail}
@@ -128,7 +135,6 @@ function Content({ contentInfo }) {
             ) : (
               <HeartFilled className="filled-icon" onClick={handleUnLike} />
             )}
-
             {likers.length}
           </div>
         </div>
