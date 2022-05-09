@@ -25,3 +25,5 @@ export const getMoreContentsAPI = async lastId => {
 export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);
 export const commentContentAPI = data => axios.post('/content/comment', data);
+export const likeAPI = data => axios.post(`/content/${data}/like`);
+export const unLikeAPI = data => axios.post(`/content/${data}/unlike`);
