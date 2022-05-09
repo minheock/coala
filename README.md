@@ -38,7 +38,7 @@
 </details>
 
 <details>
-<summary> </summary>
+<summary> Admin Page</summary>
 
 <div markdown="1">
   
@@ -65,6 +65,7 @@
 </div>
 </details>
 <details>
+  
 <summary> Login / Signup</summary>
 
 <div markdown="1">
