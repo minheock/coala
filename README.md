@@ -117,4 +117,4 @@
 |Member|최성민|Front-end|[sungmin-choi](https://github.com/sungmin-choi)|
 
 ## 👍Coala 더 알아보기
-> [Wiki](https://github.com/codestates/coala/wiki)
+> [Wiki ](https://github.com/codestates/coala/wiki)
