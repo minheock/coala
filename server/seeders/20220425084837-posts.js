@@ -7,6 +7,7 @@ module.exports = {
       [
         {
           done: 0,
+          in: 0,
           userId: 1,
           title:
             '로컬node.js서버에서 RDS 연결 문제로 서버가 실행 되지 않습니다',
@@ -22,6 +23,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 2,
           title:
             'https 배포 환경에서 쿠키 옵션을 samesite = none, secure=true 로 설정한 이후에도 쿠키 전송이 이루어지지 않는 문제',
@@ -53,6 +55,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 3,
           title: 'EC2 파이프라인 Deploy단계 실패 - S3 이미지 업로드 관련',
           content: `<p>S3업로드 코드로 인한 EC2 파이프라인 Deploy단계 실패입니다.</p><div data-language="text" class="toastui-editor-ww-code-block"><pre><code>LifecycleEvent - AfterInstall
@@ -140,6 +143,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 4,
           title: 'Typescript, 자동배포 적용시 CORS 적용',
           content:
@@ -154,6 +158,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 5,
           title: 'React에서 getElementsByClassName과 같은 기능이 필요합니다',
           content:
@@ -168,6 +173,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 6,
           title: 'EC2 https 연결 시 502 bad gateway',
           content:
@@ -181,6 +187,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 7,
           title: 'styled-component로 만든 요소의 id로 위치 찾는 방법',
           content:
@@ -195,6 +202,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 8,
           title: 'useCallback 디펜던시 없을 경우 사용법 질문',
           content:
@@ -208,6 +216,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 9,
           title: 'sequelize에 foreign key 추가시 에러가 발생합니다',
           content:
@@ -221,6 +230,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 1,
           title:
             'Sequelize의 Create 명령으로 foreign key 를 갖는 칼럼에 데이터가 추가되지 않습니다.',
@@ -236,6 +246,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 2,
           title:
             'useState를 이용한 상태관리중 상태변경이 의도대로 되지 않는 문제가 있습니다',
@@ -250,6 +261,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 3,
           title: 'axios으로 전송한 요청이 withCredentials 문제로 차단됩니다',
           content:
@@ -263,6 +275,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 4,
           title:
             'useState에 여러 값을 저장한 상태에서 업데이트 시 초기값이 반환됩니다.',
@@ -277,6 +290,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 5,
           title:
             'Controlled Components 부분에서 event.target.checked의 사용법에 대해',
@@ -291,6 +305,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 6,
           title: 'AWS을 통한 클라이언트 배포, 빌드 중 module 관련 에러',
           content:
@@ -304,6 +319,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 7,
           title:
             '스프린트 취지에 맞지 않는 request.method가 출력됩니다. 서버, 클라이언트는 전부 정상 작동됩니다.',
@@ -318,6 +334,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 8,
           title: 'cmarket database 라우팅질문',
           content:
@@ -332,6 +349,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 9,
           title: '로그인 Post 요청시 501 에러 / mysql findOrCreate 오류',
           content:
@@ -346,6 +364,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 1,
           title:
             'clearCookie 명령이 로컬에서만 작동되고 배포 환경에서는 작동되지 않습니다.',
@@ -361,6 +380,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 2,
           title: 'stringifyJSON sprint 객체 부분에서 질문입니다.',
           content:
@@ -374,6 +394,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 3,
           title: 'axios get 배열 파라미터 디코딩한 결과를 url에 넣고 싶습니다',
           content:
@@ -388,6 +409,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 4,
           title: 'DOM cloneNode위치에 따라 결과가 다른 이유를 모르겠습니다.',
           content:
@@ -402,6 +424,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 5,
           title:
             '로컬node.js서버에서 RDS 연결 문제로 서버가 실행 되지 않습니다',
@@ -417,6 +440,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 6,
           title:
             'sort 메소드를 쓰기 전에 slice()로 원본 배열 복사를 하는 이유가 궁금합니다.',
@@ -431,6 +455,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 7,
           title:
             'AWS cloudfront, ELB 활용 Https 배포 시 응답 Content-Type 이 text/html 인 문제',
@@ -446,6 +471,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 8,
           title:
             '배포 url https 설정 시 Mixed Content: ... the content must be served over HTTPS. 에러가 발생합니다. nginx를 설치해야하나요?ㅠㅠ',
@@ -461,6 +487,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 9,
           title:
             'props를 사용할 때 브라우저 콘솔에 찍으면 잘 나오는데 테스트에서는 undefined라고 에러를 냅니다',
@@ -475,6 +502,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 1,
           title: 'aws https로 배포 시 post 요청에만 405 에러가 뜹니다.',
           content:
@@ -489,6 +517,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 2,
           title: 'useEffect 의 side Effect 에 관련한 질문입니다.',
           content:
@@ -502,6 +531,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 3,
           title: '클로저의 리턴값',
           content:
@@ -515,6 +545,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 4,
           title: 'mvc 스프린트 sequelize 테스트 실행 오류',
           content:
@@ -529,6 +560,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 5,
           title: '리엑트 usestate를 이용한 렌더링 오류',
           content:
@@ -543,6 +575,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 6,
           title: 'Error: Element type is invalid',
           content:
@@ -556,6 +589,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 7,
           title: 'HTTP 트랜잭션 해부에서 Buffer부분',
           content:
@@ -569,6 +603,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 8,
           title: 'TypeError: Date is not a constructor 오류에 대하여',
           content:
@@ -582,6 +617,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 9,
           title: 'OAuth 스프린트중 네이버api를 이용했을때 cors에러가 납니다...',
           content:
@@ -596,6 +632,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 1,
           title: 'react-twittler-intro advanced FontAwesomeIcon 태그 CSS적용',
           content:
@@ -609,6 +646,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 1,
           title: 'axios 요청시 알 수 없는 에러가 납니다.',
           content:
@@ -622,6 +660,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 3,
           title: '재귀함수로 DFS탐색하는 방법에 대해 질문있습니다',
           content:
@@ -635,6 +674,7 @@ module.exports = {
         },
         {
           done: 0,
+          in: 0,
           userId: 4,
           title: 'MongDB Shall 설치에 관련해서 질문 드립니다.',
           content:

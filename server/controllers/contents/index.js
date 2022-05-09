@@ -6,7 +6,6 @@ module.exports = {
   allPost: async (req, res) => {
     // 모든 컨텐츠 정보 불러오기
     const { lastId } = req.query;
-    console.log(lastId);
     if (!lastId) {
       await posts
         .findAll({
@@ -31,6 +30,7 @@ module.exports = {
             'stack',
             'thumbnail',
             'done',
+            'in',
           ],
           order: [['id', 'DESC']],
           limit: 8,
@@ -75,6 +75,7 @@ module.exports = {
             'stack',
             'thumbnail',
             'done',
+            'in',
           ],
           order: [['id', 'DESC']],
           limit: 8,

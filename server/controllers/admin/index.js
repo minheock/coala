@@ -21,7 +21,7 @@ module.exports = {
     // 특정 유저 검색
     // 이메일, 유저 네임으로 검색
     const { user } = req.params;
-    console.log(user);
+    // console.log(user);
     await users
       .findAll({
         where: {
