@@ -336,7 +336,6 @@ function Chat({
         onClick={() => {
           socket.emit('left_room', {
             room,
-            author: userInfo.username,
             userId: userInfo.id,
           });
         }}

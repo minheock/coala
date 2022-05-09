@@ -24,6 +24,7 @@ import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 import CodeEditor from '../components/CodeEditor';
 import ZoomCode from '../components/ZoomCode';
+import { SET_SUCCESS_MESSAGE } from '../reducer/modal';
 
 const Container = styled.main`
   width: 85%;
@@ -152,6 +153,19 @@ function ContentDetail() {
     }
     //
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (userInfo) {
+      console.log('입장');
+
+      // 퇴장
+      return () =>
+        socket.emit('left_room', {
+          room: contentId,
+          userId: userInfo.id,
+        });
+    }
+  }, [userInfo]);
 
   if (isLoading) {
     return <h1>Loading....</h1>;
