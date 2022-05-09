@@ -181,6 +181,12 @@ function Mypage() {
             </div>
             {info ? (
               <form onSubmit={editSubmit}>
+                <input className="autoComplete" aria-hidden="true" />
+                <input
+                  className="autoComplete"
+                  type="password"
+                  aria-hidden="true"
+                />
                 <div className="userInfoBox change">
                   <div className="form">
                     <input
@@ -188,6 +194,7 @@ function Mypage() {
                       onChange={e => edithandler(e, 'userName')}
                       value={editValue.userName}
                       type="text"
+                      autoComplete="false"
                     />
                     {editValue.userName ? (
                       <span />
@@ -201,6 +208,7 @@ function Mypage() {
                       type="password"
                       value={editValue.currentPw}
                       onChange={e => edithandler(e, 'currentPw')}
+                      autoComplete="new-password"
                     />
                     {editValue.currentPw ? (
                       <span />
@@ -248,10 +256,9 @@ function Mypage() {
               </form>
             ) : (
               <div className="userInfoBox">
-                <span className="userinfoName">
+                <div className="userinfoName">
                   {userInfo.username}님 반갑습니다.
-                </span>
-                <br />
+                </div>
                 <span className="userinfoId">{userInfo.email}</span>
                 <br />
                 <span className="userText">{`내 게시물 총 ${mainContents.length}개`}</span>
@@ -370,6 +377,10 @@ const MypageWrapper = styled.div`
       justify-content: center;
     }
   }
+  .userinfoName {
+    margin-top: 70px;
+    margin-bottom: 0;
+  }
   .userinfoName,
   .userinfoId,
   .userText {
@@ -377,7 +388,7 @@ const MypageWrapper = styled.div`
   }
   .userInfoBox {
     font-family: 'Convergence', sans-serif;
-    padding-top: 40px;
+    padding-top: 20px;
     height: 100%;
     width: 300px;
     .form {
@@ -498,6 +509,12 @@ const MypageWrapper = styled.div`
     width: 500px;
     border: 1px solid;
   }
+  .autoComplete {
+    height: 0px;
+    width: 0px;
+    border: none;
+  }
+
   [data-tooltip-text]:hover:after {
     background-color: #000000;
     background-color: rgba(50, 50, 50, 0.9);
