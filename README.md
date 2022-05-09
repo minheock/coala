@@ -38,7 +38,7 @@
 </details>
 
 <details>
-<summary> Home</summary>
+<summary> </summary>
 
 <div markdown="1">
   
@@ -64,6 +64,20 @@
 
 </div>
 </details>
+<details>
+<summary> Login / Signup</summary>
+
+<div markdown="1">
+  
+- Coala Signup
+  
+- Coala Login
+  
+- Github Login
+
+</div>
+</details>
+
 
 <details>
 <summary> Post</summary>
