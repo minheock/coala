@@ -98,6 +98,7 @@ io.on('connection', (socket) => {
     await chattings.create({
       userId: data.userId,
       chatroomId: data.room,
+      code: data.code,
       content: data.message,
       image: data.image,
       time: data.time,
