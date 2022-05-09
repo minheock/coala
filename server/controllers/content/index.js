@@ -1,4 +1,3 @@
-const { verify } = require('jsonwebtoken');
 const {
   users,
   posts,
@@ -28,6 +27,7 @@ module.exports = {
             stack,
             thumbnail,
             description,
+            in: true,
           })
           .then((data) => {
             res.status(200).send({
@@ -63,6 +63,7 @@ module.exports = {
                 stack,
                 thumbnail,
                 description,
+                in: true,
               },
               {
                 where: { id: postId },
@@ -197,7 +198,7 @@ module.exports = {
             },
             {
               model: chattings,
-              attributes: ['id', 'userId', 'content', 'image', 'time'],
+              attributes: ['id', 'userId', 'content', 'image', 'time', 'code'],
               include: [
                 {
                   model: users,

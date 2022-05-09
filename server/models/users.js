@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         sourceKey: 'id',
       });
-      this.hasMany(models.user_chatrooms, {
-        foreignKey: 'userId',
-        sourceKey: 'id',
-      });
       this.hasMany(models.post_comment, {
         foreignKey: 'userId',
         sourceKey: 'id',
