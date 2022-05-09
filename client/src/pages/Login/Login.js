@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import { faCircleXmark as close } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation } from 'react-query';
@@ -52,6 +53,13 @@ function Login() {
     }
   }, [loginMutation.status]);
 
+  // 소셜 로그인 인가코드 받아오기
+  const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=3f7844546fc44978080c`;
+
+  function socialLoginHandler() {
+    window.location.assign(GITHUB_LOGIN_URL);
+  }
+
   return (
     <LoginWrapper>
       <div className="login-container">
@@ -101,7 +109,7 @@ function Login() {
               {loginMutation.isLoading ? <LoadingOutlined /> : '로그인'}
             </LoginBtn>
           </form>
-          <LoginBtn>Github Login</LoginBtn>
+          <LoginBtn onClick={socialLoginHandler}>Github Login</LoginBtn>
           <Link to="/signup">
             <div className="sighup">회원가입</div>
           </Link>
