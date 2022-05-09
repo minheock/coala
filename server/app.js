@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
       User with ID: ${socket.id} joined room: ${data}
 -----------------------------------------------------`,
     );
-    console.log(`유저 체팅방 접속`, socket);
+    // console.log(`유저 체팅방 접속`, socket);
   });
 
   socket.on('send_message', async (data) => {
