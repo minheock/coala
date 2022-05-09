@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
-import { HeartFilled } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
+import { useMutation } from 'react-query';
+import { useSelector, useDispatch } from 'react-redux';
 import { SView, MView } from '../config';
+import { likeAPI, unLikeAPI } from '../api/content';
 
 const CardContainer = styled(Card)`
   width: 270px;
@@ -49,6 +52,13 @@ const CardContainer = styled(Card)`
     right: -0.5rem;
     top: 0.3rem;
   }
+  .filled-icon {
+    color: red;
+    cursor: pointer;
+  }
+  .outline-icon {
+    cursor: pointer;
+  }
   @media screen and (max-width: ${MView}px) {
     & {
       width: 320px;
@@ -67,17 +77,27 @@ const { Meta } = Card;
 
 function Content({ contentInfo }) {
   const { profile, username } = contentInfo.userInfo;
+  const [like, setlike] = useState(false);
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
   const customUpdate = updatedAt.split(' ')[0];
   const navigate = useNavigate();
-
-  const handleDetail = () => {
-    navigate(`/content/${contentInfo.id}`);
+  const { userInfo } = useSelector(state => state.user);
+  const likeMutation = useMutation(likeAPI);
+  const unLikeMutation = useMutation(unLikeAPI);
+  const handleLike = () => {
+    likeMutation.mutate({ userid: userInfo.id });
   };
+  const handleUnLike = () => {
+    unLikeMutation.mutate({ userid: userInfo.id });
+  };
+  // const handleDetail = () => {
+  //   navigate(`/content/${contentInfo.id}`);
+  // };
+  console.log(userInfo);
   return (
     <CardContainer
-      onClick={handleDetail}
+      // onClick={handleDetail}
       cover={
         thumbnail ? (
           <img className="thumbnail" alt="example" src={thumbnail} />
@@ -102,8 +122,14 @@ function Content({ contentInfo }) {
           <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
             {done ? 'solved' : 'resolving'}
           </Tag>
-          <div className="heart-icon">
-            <HeartFilled /> {likers.length}
+          <div className="heart-icon" onClick={() => setlike(!like)}>
+            {!like ? (
+              <HeartOutlined className="outline-icon" onClick={handleLike} />
+            ) : (
+              <HeartFilled className="filled-icon" onClick={handleUnLike} />
+            )}
+
+            {likers.length}
           </div>
         </div>
       </div>

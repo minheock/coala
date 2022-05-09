@@ -208,7 +208,7 @@ function Mypage() {
                       type="password"
                       value={editValue.currentPw}
                       onChange={e => edithandler(e, 'currentPw')}
-                      autoComplete="new-password"
+                      autoComplete="false"
                     />
                     {editValue.currentPw ? (
                       <span />
