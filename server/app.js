@@ -94,6 +94,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send_message', async (data) => {
+    console.log('send_message:', data);
     socket.to(data.room).emit('receive_message', data);
     await chattings.create({
       userId: data.userId,

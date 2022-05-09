@@ -277,11 +277,16 @@ function Chat({
       userId: chatting.userId,
       message: chatting.content,
       image: chatting.image,
-      code: null,
+      code: chatting.code ? JSON.parse(chatting.code) : null,
       time: chatting.time,
     }));
     setMessageList([...messages]);
-    socket.emit('join_room', { room, author: userInfo.username });
+    socket.emit('join_room', {
+      room,
+      author: userInfo.username,
+      userId: userInfo.id,
+    });
+    // 유저 입장알림.
     socket.on('send_connect', data => {
       setMessageList(list => [...list, data]);
     });
@@ -327,6 +332,17 @@ function Chat({
 
   return (
     <Chatroom>
+      <button
+        onClick={() => {
+          socket.emit('left_room', {
+            room,
+            userId: userInfo.id,
+          });
+        }}
+        type="button"
+      >
+        룸나가기
+      </button>
       <div className="chat-header">
         <h3>Coala Chat</h3>
         <Divider id="divider" />
@@ -368,13 +384,11 @@ function Chat({
                   ) : null}
                   {messageContent.code ? (
                     <div
-                      onClick={() =>
-                        handleZoomCode(JSON.parse(messageContent.code))
-                      }
+                      onClick={() => handleZoomCode(messageContent.code)}
                       className="code-block"
                     >
                       <p>Code:</p>
-                      <p>{JSON.parse(messageContent.code).language}</p>
+                      <p>{messageContent.code.language}</p>
                     </div>
                   ) : null}
                 </div>

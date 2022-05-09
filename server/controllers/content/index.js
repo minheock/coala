@@ -198,7 +198,7 @@ module.exports = {
             },
             {
               model: chattings,
-              attributes: ['id', 'userId', 'content', 'image', 'time'],
+              attributes: ['id', 'userId', 'content', 'image', 'time', 'code'],
               include: [
                 {
                   model: users,
