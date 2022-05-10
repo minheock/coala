@@ -58,6 +58,7 @@ function ConfirmModal({
   refetch,
   contentData,
 }) {
+  console.log(contentId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const solvedMutation = useMutation(() => solvedContentAPI(contentId));

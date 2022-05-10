@@ -31,8 +31,8 @@ export const LOAD_CONTENTS_SUCCESS = 'LOAD_CONTENTS_SUCCESS';
 export const LOAD_USERCONTENTS_SUCCESS = 'LOAD_USERCONTENTS_SUCCESS';
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
-// export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
-
+export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
+export const CONTENT_UNLIKE_REQUEST = 'CONTENT_UNLIKE_REQUEST';
 const reducer = (state = initialized, action) =>
   produce(state, draft => {
     switch (action.type) {
@@ -47,6 +47,19 @@ const reducer = (state = initialized, action) =>
         break;
       case LOAD_MORE_CONTENTS:
         draft.mainContents = [...action.data];
+        break;
+      case CONTENT_LIKE_REQUEST:
+        {
+          const isLike = draft.mainContents.find(
+            el => el.id === action.data.contentId,
+          );
+          isLike.likers.push(action.data.userId);
+        }
+        break;
+      case CONTENT_UNLIKE_REQUEST:
+        {
+          const isLike = draft;
+        }
         break;
       default:
         break;
