@@ -67,8 +67,12 @@ io.on('connection', (socket) => {
   socket.on('join_room', (data) => {
     console.log(data);
     socket.join(data.room);
-    io.to(data.room).emit('send_connect', {
-      message: `${data.author}님이 입장했습니다`,
+    // io.to(data.room).emit('send_connect', {
+    //   message: `${data.author}님이 입장했습니다`,
+    // });
+    // done = 1 일때 접속 및 접속해제 안되게 생각
+    socket.broadcast.to(data.room).emit('send_connect', {
+      message: `${data.author}님이 입장했습니다.`,
     });
     console.log(
       `-----------------------------------------------------
@@ -85,11 +89,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('left_room', (data) => {
+    console.log(data);
     socket.leave(data.room);
     console.log(
       `-----------------------------------------------------
       User with ID: ${socket.id} left room: ${data.room}
 -----------------------------------------------------`,
+    );
+    posts.update(
+      { in: false },
+      {
+        where: { id: data.room, userId: data.userId },
+      },
     );
   });
 
@@ -110,12 +121,6 @@ io.on('connection', (socket) => {
     // console.log(socket);
     console.log(`User Disconnected: ${socket.id}`);
     console.log('disconnect reason: ', reason);
-    posts.update(
-      { in: false },
-      {
-        where: { userId: 1 },
-      },
-    );
   });
 });
 
