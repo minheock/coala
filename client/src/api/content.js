@@ -19,7 +19,7 @@ export const getMoreContentsAPI = async lastId => {
   const items = response.data.data;
   return {
     items,
-    nextPage: items.length < 8 ? undefined : items[items.length - 1].id,
+    nextPage: items.length === 0 ? undefined : items[items.length - 1].id,
     isLast: items.length < 8,
   };
 };
@@ -29,8 +29,8 @@ export const getMoreSolvingContentsAPI = async lastId => {
   const items = response.data.data;
   return {
     items,
-    nextPage: items.length < 8 ? undefined : items[items.length - 1].id,
-    isLast: items.length < 8,
+    nextPage: items.length === 0 ? undefined : items[items.length - 1].id,
+    isLast: items.length === 0,
   };
 };
 
@@ -39,8 +39,8 @@ export const getMoreSolvedContentsAPI = async lastId => {
   const items = response.data.data;
   return {
     items,
-    nextPage: items.length < 8 ? undefined : items[items.length - 1].id,
-    isLast: items.length < 8,
+    nextPage: items.length === 0 ? undefined : items[items.length - 1].id,
+    isLast: items.length === 0,
   };
 };
 

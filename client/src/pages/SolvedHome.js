@@ -37,7 +37,7 @@ function SolvedHome() {
   }, [contentsData, isloadSolvedContents]);
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['solvingContents'],
+    ['solvedMoreContents'],
     ({ pageParam = solvedContents[0].id + 1 }) =>
       getMoreSolvedContentsAPI(pageParam),
     {
@@ -73,7 +73,7 @@ function SolvedHome() {
   if (isLoading) {
     return (
       <div>
-        <Header page="solving" />
+        <Header />
         <NavBar />
         <LoadingContents />
       </div>
@@ -81,7 +81,7 @@ function SolvedHome() {
   }
   return (
     <div>
-      <Header page="solving" />
+      <Header />
       <NavBar />
       <Contents mainContents={solvedContents} />
     </div>

@@ -104,7 +104,7 @@ const HeaderWrapper = styled.header`
   }
 `;
 
-function Header({ page }) {
+function Header() {
   const [isUserMore, setIsUserMore] = useState(false);
   const [search, setSearch] = useState('');
   const { userInfo } = useSelector(state => state.user);
@@ -144,14 +144,12 @@ function Header({ page }) {
         </div>
       </div>
       <div className="right-container">
-        {page === 'Home' ? (
-          <Search
-            placeholder="search..."
-            onChange={e => setSearch(e.target.value)}
-            onSearch={handleSearch}
-            className="search-input"
-          />
-        ) : null}
+        <Search
+          placeholder="search..."
+          onChange={e => setSearch(e.target.value)}
+          onSearch={handleSearch}
+          className="search-input"
+        />
 
         {userInfo ? (
           <div className="user-container">

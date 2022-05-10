@@ -71,7 +71,7 @@ function Home() {
   if (isLoading) {
     return (
       <div>
-        <Header page="Home" />
+        <Header />
         <NavBar />
         <LoadingContents />
       </div>
@@ -79,7 +79,7 @@ function Home() {
   }
   return (
     <div>
-      <Header page="Home" />
+      <Header />
       <NavBar />
       <Contents mainContents={mainContents} />
     </div>

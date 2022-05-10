@@ -40,11 +40,14 @@ function SolvingHome() {
   }, [contentsData, isloadSolvingContents]);
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['solvingContents'],
+    ['solvingMoreContents'],
     ({ pageParam = solvingContents[0].id + 1 }) =>
       getMoreSolvingContentsAPI(pageParam),
     {
-      getNextPageParam: (lastPage, allPages) => lastPage.nextPage,
+      getNextPageParam: (lastPage, allPages) => {
+        if (!lastPage.isLast) return lastPage.nextPage;
+        return undefined;
+      },
       refetchOnWindowFocus: false,
       enabled: solvingContents.length > 0,
     },
@@ -67,16 +70,19 @@ function SolvingHome() {
         });
       }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [solvingContents, hasNextPage, data]);
 
+  // 마지막 나머지 컨텐츠 불러오기
+
   if (isLoading) {
     return (
       <div>
-        <Header page="solving" />
+        <Header />
         <NavBar />
         <LoadingContents />
       </div>
@@ -84,7 +90,7 @@ function SolvingHome() {
   }
   return (
     <div>
-      <Header page="solving" />
+      <Header />
       <NavBar />
       <Contents mainContents={solvingContents} />
     </div>

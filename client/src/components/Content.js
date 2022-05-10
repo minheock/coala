@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
-import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import {
+  HeartFilled,
+  HeartOutlined,
+  MessageOutlined,
+  MessageFilled,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { useMutation } from 'react-query';
@@ -62,6 +67,17 @@ const CardContainer = styled(Card)`
     cursor: pointer;
     /* pointer-events: none; */
   }
+  .user-in {
+    color: green;
+    position: absolute;
+    right: 2.2rem;
+    bottom: 0.3rem;
+  }
+  .user-out {
+    position: absolute;
+    right: 2.2rem;
+    bottom: 0.3rem;
+  }
   @media screen and (max-width: ${MView}px) {
     & {
       width: 320px;
@@ -72,6 +88,35 @@ const CardContainer = styled(Card)`
     & {
       width: 380px;
       height: 450px;
+    }
+  }
+  .blinking {
+    -webkit-animation: blink 0.5s ease-in-out infinite alternate;
+    -moz-animation: blink 0.5s ease-in-out infinite alternate;
+    animation: blink 0.5s ease-in-out infinite alternate;
+  }
+  @-webkit-keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @-moz-keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
   }
 `;
@@ -88,7 +133,9 @@ function Content({ contentInfo }) {
   const { userInfo } = useSelector(state => state.user);
   const likeMutation = useMutation(() => likeAPI(contentInfo.id));
   const unLikeMutation = useMutation(() => unLikeAPI(contentInfo.id));
-  // console.log('contentinfo입니다', userInfo);
+
+  // console.log('contentinfo입니다', contentInfo.in);
+
   const handleLike = () => {
     console.log(userInfo.id);
     // likeMutation.mutate({
@@ -103,12 +150,13 @@ function Content({ contentInfo }) {
     // });
   };
 
-  // const handleDetail = () => {
-  // navigate(`/content/${contentInfo.id}`);
-  // };
+  const handleDetail = () => {
+    navigate(`/content/${contentInfo.id}`);
+  };
+  useEffect(() => {}, [contentInfo.in]);
   return (
     <CardContainer
-      // onClick={handleDetail}
+      onClick={handleDetail}
       cover={
         thumbnail ? (
           <img className="thumbnail" alt="example" src={thumbnail} />
@@ -133,6 +181,11 @@ function Content({ contentInfo }) {
           <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
             {done ? 'solved' : 'resolving'}
           </Tag>
+          {contentInfo.in ? (
+            <MessageFilled className="user-in blinking" />
+          ) : (
+            <MessageOutlined className="user-out" />
+          )}
           <div className="heart-icon" onClick={() => setlike(!like)}>
             {!like ? (
               <HeartOutlined className="outline-icon" onClick={handleLike} />
