@@ -44,6 +44,18 @@ export const getMoreSolvedContentsAPI = async lastId => {
   };
 };
 
+export const getMoreStackContentsAPI = async (stack, lastId) => {
+  const response = await axios.get(
+    `/contents/filter?stack=${stack}&lastId=${lastId}`,
+  );
+  const items = response.data.data;
+  return {
+    items,
+    nextPage: items.length === 0 ? undefined : items[items.length - 1].id,
+    isLast: items.length === 0,
+  };
+};
+
 export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);

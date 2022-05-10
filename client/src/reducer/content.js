@@ -7,6 +7,7 @@ const initialized = {
   isloadSolvedContents: false,
   solvingContents: [],
   isloadSolvingContents: false,
+  stackContents: [],
   editContent: null,
 };
 
@@ -18,6 +19,11 @@ export const LOAD_MORE_SOLVING_CONTENTS = 'LOAD_MORE_SOLVING_CONTENTS';
 
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const LOAD_MORE_SOLVED_CONTENTS = 'LOAD_MORE_SOLVED_CONTENTS';
+
+export const SET_CURRENT_STACK = 'SET_CURRENT_STACK';
+export const STACK_CONTENTS_SUCCESS = 'STACK_CONTENTS_SUCCESS';
+export const LOAD_MORE_STACK_SUCCESS = 'LOAD_MORE_STACK_SUCCESS';
+export const INIT_STACK_CONTENTS = 'INIT_STACK_CONTENTS';
 
 export const LOAD_USERCONTENTS_SUCCESS = 'LOAD_USERCONTENTS_SUCCESS';
 
@@ -67,6 +73,15 @@ const reducer = (state = initialized, action) =>
         break;
       case LOAD_MORE_SOLVED_CONTENTS:
         draft.solvedContents = [...action.data];
+        break;
+      case STACK_CONTENTS_SUCCESS:
+        draft.stackContents = [...action.data];
+        break;
+      case LOAD_MORE_STACK_SUCCESS:
+        draft.stackContents = [...action.data];
+        break;
+      case INIT_STACK_CONTENTS:
+        draft.stackContents = [];
         break;
       default:
         break;

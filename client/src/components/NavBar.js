@@ -87,7 +87,7 @@ function NavBar() {
         </li>
         <li onClick={() => setMenuList(prev => !prev)}>
           <p>스택별 문제</p>
-          {MenuList ? <StackMore closeMenuList={setMenuList} /> : null}
+          {MenuList ? <StackMore /> : null}
         </li>
       </ul>
       <DividerCustom />

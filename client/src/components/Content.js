@@ -153,7 +153,7 @@ function Content({ contentInfo }) {
   const handleDetail = () => {
     navigate(`/content/${contentInfo.id}`);
   };
-  useEffect(() => {}, [contentInfo.in]);
+
   return (
     <CardContainer
       onClick={handleDetail}
