@@ -88,17 +88,21 @@ function Content({ contentInfo }) {
   const { userInfo } = useSelector(state => state.user);
   const likeMutation = useMutation(() => likeAPI(contentInfo.id));
   const unLikeMutation = useMutation(() => unLikeAPI(contentInfo.id));
-  console.log('contentinfo입니다', userInfo);
+  // console.log('contentinfo입니다', userInfo);
   const handleLike = () => {
-    likeMutation.mutate({
-      userId: userInfo.id,
-    });
+    console.log(userInfo.id);
+    // likeMutation.mutate({
+    //   userId: userInfo.id,
+    // });
   };
+
   const handleUnLike = () => {
-    unLikeMutation.mutate({
-      userId: userInfo.id,
-    });
+    console.log(userInfo.id);
+    // unLikeMutation.mutate({
+    //   userId: userInfo.id,
+    // });
   };
+
   // const handleDetail = () => {
   // navigate(`/content/${contentInfo.id}`);
   // };

@@ -8,6 +8,7 @@ import { getfilterContentsAPI, getContentsAPI } from '../api/content';
 import { useQuery } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
+import { useNavigate } from 'react-router';
 
 const Menu = styled.div`
   margin: auto;
@@ -58,6 +59,7 @@ const DividerCustom = styled(Divider)`
 `;
 
 function NavBar() {
+  const navigator = useNavigate();
   const [MenuList, setMenuList] = useState(false);
   const [done, setDone] = useState(null);
   const dispatch = useDispatch();
@@ -77,33 +79,15 @@ function NavBar() {
   );
 
   const handleAll = () => {
-    setDone(null);
+    navigator('/');
   };
   const handleDone = () => {
     setDone(1);
   };
 
   const handleResolving = () => {
-    setDone(0);
+    navigator('/solving');
   };
-
-  useEffect(() => {
-    if (filterDoneContents) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: filterDoneContents.data.data,
-      });
-    }
-  }, [filterDoneContents]);
-
-  useEffect(() => {
-    if (contentsData) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: contentsData.data.data,
-      });
-    }
-  }, [contentsData]);
 
   return (
     <Menu>

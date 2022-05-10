@@ -17,6 +17,7 @@ import { INIT_SOCKETIO } from './reducer/chat';
 import { getuserAPI, githubLoginAPI } from './api/user';
 import { LOG_IN_SUCCESS } from './reducer/user';
 import { SET_ERROR_MESSAGE } from './reducer/modal';
+import SolvingHome from './pages/SolvingHome';
 
 const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL, {
   transports: ['websocket'],
@@ -95,6 +96,7 @@ function App() {
       {success ? <AlertModal message={success} state="success" /> : null}
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route path="/solving" element={<SolvingHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/mypage" element={<Mypage />} />
