@@ -1,11 +1,4 @@
-const {
-  users,
-  posts,
-  like,
-  chatrooms,
-  post_comment,
-  chattings,
-} = require('../../models');
+const { users, posts, like, post_comment, chattings } = require('../../models');
 const { isAuthorized } = require('../token');
 
 module.exports = {
@@ -18,7 +11,6 @@ module.exports = {
       if (!title || !content || !stack || !description || !userId) {
         res.status(400).send({ message: 'Invalid request' });
       } else {
-        await chatrooms.create({ userId });
         await posts
           .create({
             userId,
@@ -133,8 +125,8 @@ module.exports = {
     const verify = isAuthorized(req);
 
     if (verify) {
-      const { postId } = req.params;
-      const { userId } = req.body;
+      // const { postId } = req.params;
+      const { userId, postId } = req.body;
 
       if (!postId || !userId) {
         await like.create({ postId: postId, userId: userId });
@@ -150,8 +142,8 @@ module.exports = {
     // 컨텐츠 좋아요 취소
     const verify = isAuthorized(req);
     if (verify) {
-      const { postId } = req.params;
-      const { userId } = req.body;
+      // const { postId } = req.params;
+      const { userId, postId } = req.body;
 
       if (!postId || !userId) {
         await like.destroy({ where: { postId: postId, userId: userId } });
