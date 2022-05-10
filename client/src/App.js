@@ -18,6 +18,7 @@ import { getuserAPI, githubLoginAPI } from './api/user';
 import { LOG_IN_SUCCESS } from './reducer/user';
 import { SET_ERROR_MESSAGE } from './reducer/modal';
 import SolvingHome from './pages/SolvingHome';
+import SolvedHome from './pages/SolvedHome';
 
 const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL, {
   transports: ['websocket'],
@@ -97,6 +98,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/solving" element={<SolvingHome />} />
+        <Route path="/solved" element={<SolvedHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/mypage" element={<Mypage />} />
