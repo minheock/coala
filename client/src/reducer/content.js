@@ -50,14 +50,19 @@ const reducer = (state = initialized, action) =>
       case CONTENT_LIKE_REQUEST:
         {
           const isLike = draft.mainContents.find(
-            el => el.id === action.data.contentId,
+            el => el.id === action.data.postId,
           );
           isLike.likers.push(action.data.userId);
         }
         break;
       case CONTENT_UNLIKE_REQUEST:
         {
-          const isLike = draft;
+          const isLike = draft.mainContents.find(
+            el => el.id === action.data.postId,
+          );
+          isLike.likers = isLike.likers.filter(
+            el => el.id !== action.data.userId,
+          );
         }
         break;
       case SOLVING_CONTENTS_SUCCESS:

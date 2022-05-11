@@ -124,32 +124,53 @@ const CardContainer = styled(Card)`
 const { Meta } = Card;
 
 function Content({ contentInfo }) {
-  const { profile, username } = contentInfo.userInfo;
-  const [like, setlike] = useState(false);
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
+  const { profile, username } = contentInfo.userInfo;
+  // const [like, setlike] = useState(LocalStorageHook('unlike', false));
+  const [totalLike, setTotalLike] = useState(likers.length);
+  const [like, setlike] = useState(false);
   const customUpdate = updatedAt.split(' ')[0];
   const navigate = useNavigate();
   const { userInfo } = useSelector(state => state.user);
-  const likeMutation = useMutation(() => likeAPI(contentInfo.id));
-  const unLikeMutation = useMutation(() => unLikeAPI(contentInfo.id));
-
-  // console.log('contentinfo입니다', contentInfo.in);
-
-  const handleLike = () => {
-    console.log(userInfo.id);
-    // likeMutation.mutate({
-    //   userId: userInfo.id,
-    // });
+  const likeMutation = useMutation(likeAPI);
+  const unLikeMutation = useMutation(unLikeAPI);
+  const dispatch = useDispatch();
+  // console.log('contentinfo입니다', contentInfo);
+  const handleLike = e => {
+    e.stopPropagation();
+    if (!like) {
+      likeMutation.mutate({
+        postId: contentInfo.id,
+        userId: userInfo.id,
+      });
+      console.log(likeMutation);
+      // dispatch({
+      //   type: CONTENT_LIKE_REQUEST,
+      //   data: likeMutation.data,
+      // });
+      setlike(true);
+      setTotalLike(totalLike + 1);
+    } else if (like) {
+      unLikeMutation.mutate({
+        postId: contentInfo.id,
+        userId: userInfo.id,
+      });
+      setlike(false);
+      setTotalLike(totalLike - 1);
+    }
   };
-
-  const handleUnLike = () => {
-    console.log(userInfo.id);
-    // unLikeMutation.mutate({
-    //   userId: userInfo.id,
-    // });
-  };
-
+  // idle이 뜨는 에러
+  // useEffect(() => {
+  //   if (likeMutation.isSuccess) {
+  //     const likeInfo = likeMutation;
+  //     console.log('likeinfo', likeInfo);
+  //     // dispatch({
+  //     //   type: CONTENT_LIKE_REQUEST,
+  //     //   data: contentInfo.data,
+  //     // });
+  //   }
+  // }, likeMutation.status);
   const handleDetail = () => {
     navigate(`/content/${contentInfo.id}`);
   };
@@ -186,13 +207,13 @@ function Content({ contentInfo }) {
           ) : (
             <MessageOutlined className="user-out" />
           )}
-          <div className="heart-icon" onClick={() => setlike(!like)}>
+          <div className="heart-icon" onClick={handleLike}>
             {!like ? (
-              <HeartOutlined className="outline-icon" onClick={handleLike} />
+              <HeartOutlined className="outline-icon" />
             ) : (
-              <HeartFilled className="filled-icon" onClick={handleUnLike} />
+              <HeartFilled className="filled-icon" />
             )}
-            {likers.length}
+            {totalLike}
           </div>
         </div>
       </div>

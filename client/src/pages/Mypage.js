@@ -37,7 +37,6 @@ function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
-  const inputRef = useRef();
 
   // 유저의 컨텐츠
   const { isLoading, data: contentsData } = useQuery(

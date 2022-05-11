@@ -61,5 +61,5 @@ export const solvedContentAPI = data => axios.patch(`/content/${data}/done`);
 export const deleteContentAPI = data => axios.delete(`/content/${data}`);
 
 export const commentContentAPI = data => axios.post('/content/comment', data);
-export const likeAPI = data => axios.patch(`/content/like`, data); // data: {contentId }
-export const unLikeAPI = data => axios.patch(`/content/unlike`, data); // data: {contentId }
+export const likeAPI = data => axios.patch(`/content/like`, data);
+export const unLikeAPI = data => axios.patch(`/content/unlike`, data);
