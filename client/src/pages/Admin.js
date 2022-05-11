@@ -16,6 +16,7 @@ function Admin() {
     refetchOnWindowFocus: false,
     retry: 0,
   });
+
   useEffect(() => {
     if (userData) {
       dispatch({
@@ -25,13 +26,18 @@ function Admin() {
     }
   }, [userData]);
 
-  return (
-    <div>
-      <Header />
-      <AdminNavBar />
-      <AdminUserInfo allUserInfo={allUserInfo} />
-    </div>
-  );
+  if (isLoading) {
+    return <h1>Loading....</h1>;
+  }
+  if (userData) {
+    return (
+      <div>
+        <Header />
+        <AdminNavBar />
+        <AdminUserInfo allUserInfo={allUserInfo} />
+      </div>
+    );
+  }
 }
 
 export default Admin;

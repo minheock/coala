@@ -25,7 +25,13 @@ const Container = styled.div`
 function AdminUserInfo({ allUserInfo }) {
   const delUserMutation = useMutation(deleteAdminUserAPI);
   const [userId, setUserId] = useState();
-  const [userList, setUserList] = useState(allUserInfo);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    if (allUserInfo) {
+      setUserList(allUserInfo);
+    }
+  }, [userList]);
 
   const dispatch = useDispatch();
   console.log(allUserInfo);
@@ -35,20 +41,21 @@ function AdminUserInfo({ allUserInfo }) {
     delUserMutation.mutate(e.currentTarget.id);
   };
 
-  // useEffect(() => {
-  //   if (delUserMutation.isSuccess) {
-  //     // const filterList = userList.filter(el => {
-  //     //   el.id === userId;
-  //     // });
-  //     // console.log(allUserInfo);
-  //     // setUserList(filterList);
-  //   } else if (delUserMutation.isError) {
-  //     dispatch({
-  //       type: SET_ERROR_MESSAGE,
-  //       data: delUserMutation.error.response.data.message,
-  //     });
-  //   }
-  // }, [delUserMutation.status]);
+  console.log('userList', userList);
+
+  useEffect(() => {
+    if (delUserMutation.isSuccess) {
+      const filterList = userList.filter(el => {
+        el.id !== userId;
+      });
+      setUserList(filterList);
+    } else if (delUserMutation.isError) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: delUserMutation.error.response.data.message,
+      });
+    }
+  }, [delUserMutation.status]);
 
   return (
     <div>
