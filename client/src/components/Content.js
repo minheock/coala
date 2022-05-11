@@ -136,7 +136,13 @@ function Content({ contentInfo }) {
   const likeMutation = useMutation(likeAPI);
   const unLikeMutation = useMutation(unLikeAPI);
   const dispatch = useDispatch();
-  // console.log('contentinfo입니다', contentInfo);
+
+  useEffect(() => {
+    if (userInfo) {
+      if (contentInfo.likers.includes(userInfo.id)) setlike(true);
+    }
+  }, []);
+
   const handleLike = e => {
     e.stopPropagation();
     if (!like) {
@@ -144,33 +150,28 @@ function Content({ contentInfo }) {
         postId: contentInfo.id,
         userId: userInfo.id,
       });
-      console.log(likeMutation);
-      // dispatch({
-      //   type: CONTENT_LIKE_REQUEST,
-      //   data: likeMutation.data,
-      // });
-      setlike(true);
-      setTotalLike(totalLike + 1);
     } else if (like) {
       unLikeMutation.mutate({
         postId: contentInfo.id,
         userId: userInfo.id,
       });
-      setlike(false);
-      setTotalLike(totalLike - 1);
     }
   };
   // idle이 뜨는 에러
-  // useEffect(() => {
-  //   if (likeMutation.isSuccess) {
-  //     const likeInfo = likeMutation;
-  //     console.log('likeinfo', likeInfo);
-  //     // dispatch({
-  //     //   type: CONTENT_LIKE_REQUEST,
-  //     //   data: contentInfo.data,
-  //     // });
-  //   }
-  // }, likeMutation.status);
+  useEffect(() => {
+    if (likeMutation.isSuccess) {
+      setlike(true);
+      setTotalLike(totalLike + 1);
+    }
+  }, [likeMutation.status]);
+
+  useEffect(() => {
+    if (unLikeMutation.isSuccess) {
+      setlike(false);
+      setTotalLike(totalLike - 1);
+    }
+  }, [unLikeMutation.status]);
+
   const handleDetail = () => {
     navigate(`/content/${contentInfo.id}`);
   };
