@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
-import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import {
+  HeartFilled,
+  HeartOutlined,
+  MessageOutlined,
+  MessageFilled,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { useMutation } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { SView, MView } from '../config';
 import { likeAPI, unLikeAPI } from '../api/content';
-import LocalStorageHook from './LocalCustum';
 import { CONTENT_LIKE_REQUEST } from '../reducer/content';
 
 const CardContainer = styled(Card)`
@@ -63,6 +67,17 @@ const CardContainer = styled(Card)`
     cursor: pointer;
     /* pointer-events: none; */
   }
+  .user-in {
+    color: green;
+    position: absolute;
+    right: 2.2rem;
+    bottom: 0.3rem;
+  }
+  .user-out {
+    position: absolute;
+    right: 2.2rem;
+    bottom: 0.3rem;
+  }
   @media screen and (max-width: ${MView}px) {
     & {
       width: 320px;
@@ -75,6 +90,35 @@ const CardContainer = styled(Card)`
       height: 450px;
     }
   }
+  .blinking {
+    -webkit-animation: blink 0.5s ease-in-out infinite alternate;
+    -moz-animation: blink 0.5s ease-in-out infinite alternate;
+    animation: blink 0.5s ease-in-out infinite alternate;
+  }
+  @-webkit-keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @-moz-keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 const { Meta } = Card;
@@ -83,9 +127,9 @@ function Content({ contentInfo }) {
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
   const { profile, username } = contentInfo.userInfo;
-  const [like, setlike] = useState(LocalStorageHook('unlike', false));
+  // const [like, setlike] = useState(LocalStorageHook('unlike', false));
   const [totalLike, setTotalLike] = useState(likers.length);
-  // const [like, setlike] = useState(false);
+  const [like, setlike] = useState(false);
   const customUpdate = updatedAt.split(' ')[0];
   const navigate = useNavigate();
   const { userInfo } = useSelector(state => state.user);
@@ -100,34 +144,37 @@ function Content({ contentInfo }) {
         postId: contentInfo.id,
         userId: userInfo.id,
       });
-      console.log(likeMutation.data.data.data);
+      console.log(likeMutation);
       // dispatch({
       //   type: CONTENT_LIKE_REQUEST,
-      //   data: contentInfo.data,
+      //   data: likeMutation.data,
       // });
-      setlike(LocalStorageHook('like', true));
+      setlike(true);
+      setTotalLike(totalLike + 1);
     } else if (like) {
       unLikeMutation.mutate({
         postId: contentInfo.id,
         userId: userInfo.id,
       });
-      setlike(LocalStorageHook('unlike', false));
+      setlike(false);
+      setTotalLike(totalLike - 1);
     }
   };
   // idle이 뜨는 에러
-  useEffect(() => {
-    if (likeMutation.isSuccess) {
-      const likeInfo = likeMutation.data;
-      console.log(likeInfo);
-      // dispatch({
-      //   type: CONTENT_LIKE_REQUEST,
-      //   data: contentInfo.data,
-      // });
-    }
-  }, likeMutation.status);
+  // useEffect(() => {
+  //   if (likeMutation.isSuccess) {
+  //     const likeInfo = likeMutation;
+  //     console.log('likeinfo', likeInfo);
+  //     // dispatch({
+  //     //   type: CONTENT_LIKE_REQUEST,
+  //     //   data: contentInfo.data,
+  //     // });
+  //   }
+  // }, likeMutation.status);
   const handleDetail = () => {
     navigate(`/content/${contentInfo.id}`);
   };
+
   return (
     <CardContainer
       onClick={handleDetail}
@@ -155,6 +202,11 @@ function Content({ contentInfo }) {
           <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
             {done ? 'solved' : 'resolving'}
           </Tag>
+          {contentInfo.in ? (
+            <MessageFilled className="user-in blinking" />
+          ) : (
+            <MessageOutlined className="user-out" />
+          )}
           <div className="heart-icon" onClick={handleLike}>
             {!like ? (
               <HeartOutlined className="outline-icon" />
