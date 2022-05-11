@@ -114,9 +114,10 @@ function Content({ contentInfo }) {
       setlike(LocalStorageHook('unlike', false));
     }
   };
+  // idle이 뜨는 에러
   useEffect(() => {
     if (likeMutation.isSuccess) {
-      const likeInfo = likeMutation(contentInfo.id);
+      const likeInfo = likeMutation.data;
       console.log(likeInfo);
       // dispatch({
       //   type: CONTENT_LIKE_REQUEST,
