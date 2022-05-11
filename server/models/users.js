@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      admin: { type: DataTypes.BOOLEAN, defaultValue: 0 },
       salt: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import { useQuery, useMutation } from 'react-query';
 import { useEffect, useState } from 'react';
 import { ConsoleSqlOutlined } from '@ant-design/icons';
+import Admin from './pages/Admin';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
 import Home from './pages/Home';
@@ -103,6 +104,7 @@ function App() {
         <Route path="/stack/:stack" element={<StackHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/write" element={<Post />} />
         <Route path="/edit" element={<Post isEdit={editContent} />} />

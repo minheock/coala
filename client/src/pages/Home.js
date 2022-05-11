@@ -34,7 +34,8 @@ function Home() {
       enabled: mainContents.length > 0,
     },
   );
-  console.log('throttle:', throttle);
+
+  console.log('data:', data);
   console.log('hasNextpage:', hasNextPage);
 
   useEffect(() => {
