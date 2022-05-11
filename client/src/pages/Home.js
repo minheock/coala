@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header';
@@ -9,6 +9,7 @@ import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
 
 function Home() {
+  let throttle = false;
   const { mainContents, isloadMainContents } = useSelector(
     state => state.content,
   );
@@ -33,24 +34,27 @@ function Home() {
       enabled: mainContents.length > 0,
     },
   );
-  console.log('data:', data);
+  console.log('throttle:', throttle);
   console.log('hasNextpage:', hasNextPage);
 
   useEffect(() => {
     const handleScroll = async () => {
-      if (
-        hasNextPage &&
-        window.scrollY + document.documentElement.clientHeight >
-          document.documentElement.scrollHeight - 100
-      ) {
-        await fetchNextPage();
-        const newData = [];
-        data.pages.forEach(page => newData.push(...page.items));
-        // console.log(newData);
-        dispatch({
-          type: LOAD_MORE_CONTENTS,
-          data: newData,
-        });
+      if (!throttle) {
+        if (
+          hasNextPage &&
+          window.scrollY + document.documentElement.clientHeight >
+            document.documentElement.scrollHeight - 100
+        ) {
+          throttle = true;
+          const answer = await fetchNextPage();
+          const newData = [];
+          answer.data.pages.forEach(page => newData.push(...page.items));
+          dispatch({
+            type: LOAD_MORE_CONTENTS,
+            data: newData,
+          });
+          throttle = false;
+        }
       }
     };
     window.addEventListener('scroll', handleScroll);
