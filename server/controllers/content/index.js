@@ -128,7 +128,7 @@ module.exports = {
       // const { postId } = req.params;
       const { userId, postId } = req.body;
 
-      if (!postId || !userId) {
+      if (postId && userId) {
         await like.create({ postId: postId, userId: userId });
         res.status(200).send({ message: 'post like' });
       } else {
@@ -145,7 +145,7 @@ module.exports = {
       // const { postId } = req.params;
       const { userId, postId } = req.body;
 
-      if (!postId || !userId) {
+      if (postId && userId) {
         await like.destroy({ where: { postId: postId, userId: userId } });
         res.status(200).send({ message: 'post unlike' });
       } else {
