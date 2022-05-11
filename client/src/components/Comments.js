@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Form, Button, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
+import { useParams } from 'react-router';
 import { commentContentAPI } from '../api/content';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 
@@ -25,7 +26,13 @@ const CommentContainer = styled.div`
   }
 `;
 
-function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
+function Comments({
+  postUserId,
+  userInfo,
+  contentId,
+  hadleInputComments,
+  commentsList,
+}) {
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
   const postCommentMutation = useMutation(commentContentAPI);
@@ -37,7 +44,6 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
 
   useEffect(() => {
     if (postCommentMutation.isSuccess) {
-
       // 요청 성공시 댓글 바로 보여주는 작업
       const comments = postCommentMutation.data.data.data;
       const newComment = {
@@ -73,6 +79,7 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
         userId: userInfo.id,
         postId: contentId,
         comment,
+        postUserId,
       };
       postCommentMutation.mutate(commentInfo);
     } else {
