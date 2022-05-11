@@ -33,8 +33,10 @@ function Home() {
       enabled: mainContents.length > 0,
     },
   );
+
   console.log('data:', data);
   console.log('hasNextpage:', hasNextPage);
+
 
   useEffect(() => {
     const handleScroll = async () => {

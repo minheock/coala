@@ -62,6 +62,9 @@ function UserMore() {
   return (
     <Container className={userInfo ? null : 'hidden'}>
       <ul>
+        <Link className="link" to="/admin">
+          <li>관리자</li>
+        </Link>
         <Link className="link" to="/write">
           <li>질문작성</li>
         </Link>
