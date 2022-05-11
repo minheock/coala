@@ -4,12 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
-import { getContentsAPI, getMoreContentsAPI } from '../api/content';
-import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
+import { getfilterContentsAPI, getMoreSolvedContentsAPI } from '../api/content';
+import {
+  SOLVED_CONTENTS_SUCCESS,
+  LOAD_MORE_SOLVED_CONTENTS,
+} from '../reducer/content';
 
-function Home() {
-  const { mainContents, isloadMainContents } = useSelector(
+function SolvedHome() {
+  const { solvedContents, isloadSolvedContents } = useSelector(
     state => state.content,
   );
   const dispatch = useDispatch();
@@ -18,25 +21,31 @@ function Home() {
     isError,
     data: contentsData,
     error,
-  } = useQuery('maincontents', getContentsAPI, {
+  } = useQuery('solvedContents', () => getfilterContentsAPI({ done: 1 }), {
     refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
     retry: 0, // 실페시 재실행 여부
-    enabled: !isloadMainContents,
+    enabled: !isloadSolvedContents,
   });
 
+  useEffect(() => {
+    if (contentsData && !isloadSolvedContents) {
+      dispatch({
+        type: SOLVED_CONTENTS_SUCCESS,
+        data: contentsData.data.data,
+      });
+    }
+  }, [contentsData, isloadSolvedContents]);
+
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['mainContents'],
-    ({ pageParam = mainContents[0].id + 1 }) => getMoreContentsAPI(pageParam),
+    ['solvedMoreContents'],
+    ({ pageParam = solvedContents[0].id + 1 }) =>
+      getMoreSolvedContentsAPI(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => lastPage.nextPage,
       refetchOnWindowFocus: false,
-      enabled: mainContents.length > 0,
+      enabled: solvedContents.length > 0,
     },
   );
-
-  console.log('data:', data);
-  console.log('hasNextpage:', hasNextPage);
-
 
   useEffect(() => {
     const handleScroll = async () => {
@@ -50,7 +59,7 @@ function Home() {
         data.pages.forEach(page => newData.push(...page.items));
         // console.log(newData);
         dispatch({
-          type: LOAD_MORE_CONTENTS,
+          type: LOAD_MORE_SOLVED_CONTENTS,
           data: newData,
         });
       }
@@ -59,16 +68,7 @@ function Home() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [mainContents, hasNextPage]);
-
-  useEffect(() => {
-    if (contentsData && !isloadMainContents) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: contentsData.data.data,
-      });
-    }
-  }, [contentsData, isloadMainContents]);
+  }, [solvedContents, hasNextPage, data]);
 
   if (isLoading) {
     return (
@@ -83,9 +83,9 @@ function Home() {
     <div>
       <Header />
       <NavBar />
-      <Contents mainContents={mainContents} />
+      <Contents mainContents={solvedContents} />
     </div>
   );
 }
 
-export default Home;
+export default SolvedHome;

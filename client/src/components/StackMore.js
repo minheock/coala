@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useQuery } from 'react-query';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { CoalaGreen, CoalaGrey, language } from '../config';
-import { getfilterContentsAPI } from '../api/content';
-import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
 
 const Container = styled.div`
   position: absolute;
@@ -38,17 +35,11 @@ const Container = styled.div`
     }
   }
 `;
-function StackMore({ closeMenuList }) {
-  const dispatch = useDispatch();
+function StackMore() {
+  const navigator = useNavigate();
   const handleStackContents = (e, stack) => {
     e.stopPropagation(); // 버블링 방지.
-    getfilterContentsAPI({ stack }).then(contents => {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: contents.data.data,
-      });
-      closeMenuList(false);
-    });
+    navigator(`/stack/${stack}`);
   };
 
   return (
