@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Avatar, Divider, Tag } from 'antd';
 import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import { useMutation } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { SView, MView } from '../config';
 import { likeAPI, unLikeAPI } from '../api/content';
+import LocalStorageHook from './LocalCustum';
 import { CONTENT_LIKE_REQUEST } from '../reducer/content';
 
 const CardContainer = styled(Card)`
@@ -79,32 +80,56 @@ const CardContainer = styled(Card)`
 const { Meta } = Card;
 
 function Content({ contentInfo }) {
-  const { profile, username } = contentInfo.userInfo;
-  const [like, setlike] = useState(false);
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
+  const { profile, username } = contentInfo.userInfo;
+  const [like, setlike] = useState(LocalStorageHook('unlike', false));
+  const [totalLike, setTotalLike] = useState(likers.length);
+  // const [like, setlike] = useState(false);
   const customUpdate = updatedAt.split(' ')[0];
   const navigate = useNavigate();
   const { userInfo } = useSelector(state => state.user);
-  const likeMutation = useMutation(() => likeAPI(contentInfo.id));
-  const unLikeMutation = useMutation(() => unLikeAPI(contentInfo.id));
-  console.log('contentinfo입니다', userInfo);
-  const handleLike = () => {
-    likeMutation.mutate({
-      userId: userInfo.id,
-    });
+  const likeMutation = useMutation(likeAPI);
+  const unLikeMutation = useMutation(unLikeAPI);
+  const dispatch = useDispatch();
+  // console.log('contentinfo입니다', contentInfo);
+  const handleLike = e => {
+    e.stopPropagation();
+    if (!like) {
+      likeMutation.mutate({
+        postId: contentInfo.id,
+        userId: userInfo.id,
+      });
+      console.log(likeMutation.data.data.data);
+      // dispatch({
+      //   type: CONTENT_LIKE_REQUEST,
+      //   data: contentInfo.data,
+      // });
+      setlike(LocalStorageHook('like', true));
+    } else if (like) {
+      unLikeMutation.mutate({
+        postId: contentInfo.id,
+        userId: userInfo.id,
+      });
+      setlike(LocalStorageHook('unlike', false));
+    }
   };
-  const handleUnLike = () => {
-    unLikeMutation.mutate({
-      userId: userInfo.id,
-    });
+  useEffect(() => {
+    if (likeMutation.isSuccess) {
+      const likeInfo = likeMutation(contentInfo.id);
+      console.log(likeInfo);
+      // dispatch({
+      //   type: CONTENT_LIKE_REQUEST,
+      //   data: contentInfo.data,
+      // });
+    }
+  }, likeMutation.status);
+  const handleDetail = () => {
+    navigate(`/content/${contentInfo.id}`);
   };
-  // const handleDetail = () => {
-  // navigate(`/content/${contentInfo.id}`);
-  // };
   return (
     <CardContainer
-      // onClick={handleDetail}
+      onClick={handleDetail}
       cover={
         thumbnail ? (
           <img className="thumbnail" alt="example" src={thumbnail} />
@@ -129,13 +154,13 @@ function Content({ contentInfo }) {
           <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
             {done ? 'solved' : 'resolving'}
           </Tag>
-          <div className="heart-icon" onClick={() => setlike(!like)}>
+          <div className="heart-icon" onClick={handleLike}>
             {!like ? (
-              <HeartOutlined className="outline-icon" onClick={handleLike} />
+              <HeartOutlined className="outline-icon" />
             ) : (
-              <HeartFilled className="filled-icon" onClick={handleUnLike} />
+              <HeartFilled className="filled-icon" />
             )}
-            {likers.length}
+            {totalLike}
           </div>
         </div>
       </div>
