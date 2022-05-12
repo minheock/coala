@@ -31,6 +31,8 @@ export const STACK_CONTENTS_SUCCESS = 'STACK_CONTENTS_SUCCESS';
 export const LOAD_MORE_STACK_SUCCESS = 'LOAD_MORE_STACK_SUCCESS';
 export const INIT_STACK_CONTENTS = 'INIT_STACK_CONTENTS';
 
+export const POST_CONTENT_SUCCESS = 'POST_CONTENT_SUCCESS';
+
 export const LOAD_USERCONTENTS_SUCCESS = 'LOAD_USERCONTENTS_SUCCESS';
 
 export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
@@ -103,6 +105,9 @@ const reducer = (state = initialized, action) =>
         break;
       case INIT_SEARCH_CONTENTS:
         draft.searchContents = [];
+        break;
+      case POST_CONTENT_SUCCESS:
+        draft.mainContents = [action.data, ...draft.mainContents];
         break;
       default:
         break;

@@ -123,7 +123,8 @@ function Post({ isEdit }) {
   useEffect(() => {
     if (postContentMutation.isSuccess) {
       const { contentId } = postContentMutation.data.data.data;
-      navigate(`/content/${contentId}`);
+      console.log(postContentMutation.data.data.data);
+      // navigate(`/content/${contentId}`);
     } else if (postContentMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -131,6 +132,7 @@ function Post({ isEdit }) {
       });
     }
   }, [postContentMutation.status]);
+
   const handleSubmit = e => {
     e.preventDefault();
     if (title && tag && editorRef.current) {
