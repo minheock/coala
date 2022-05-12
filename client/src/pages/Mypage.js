@@ -15,6 +15,7 @@ import { LOAD_USERCONTENTS_SUCCESS } from '../reducer/content';
 import SignoutModal from '../components/SignoutModal';
 import { uploadFiles } from '../firebase';
 import { SView } from '../config';
+import { editUserThunk } from '../reducer';
 
 function Mypage() {
   const [info, setInfo] = useState(false);
@@ -37,7 +38,7 @@ function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
-
+  console.log(myContent);
   // 유저의 컨텐츠
   const { isLoading, data: contentsData } = useQuery(
     'contents',
@@ -101,11 +102,18 @@ function Mypage() {
 
   useEffect(() => {
     if (editMutation.isSuccess) {
-      dispatch({
-        type: EDIT_USERINFO_SUCCESS,
-        data: editMutation.data.data.data,
-      });
+      dispatch(editUserThunk(editMutation.data.data.data));
       setImage(editMutation.data.data.data.profile);
+
+      setMycontent(
+        myContent.map(content => {
+          if (content.userInfo.id === editMutation.data.data.data.id) {
+            content.userInfo.username = editMutation.data.data.data.username;
+            content.userInfo.profile = editMutation.data.data.data.profile;
+          }
+          return content;
+        }),
+      );
     } else if (editMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
