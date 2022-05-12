@@ -13,10 +13,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { SView, MView } from '../config';
 import { likeAPI, unLikeAPI } from '../api/content';
-import {
-  CONTENT_LIKE_REQUEST,
-  CONTENT_UNLIKE_REQUEST,
-} from '../reducer/content';
 
 const CardContainer = styled(Card)`
   width: 270px;
@@ -26,11 +22,6 @@ const CardContainer = styled(Card)`
   margin: 1rem 2rem 1rem 2rem;
   &:hover {
     transform: scale(1.03, 1.03);
-  }
-  .heart-icon {
-    position: absolute;
-    right: 0.5rem;
-    bottom: 0;
   }
   .ant-card-body {
     padding: 0 !important;
@@ -65,22 +56,33 @@ const CardContainer = styled(Card)`
   .filled-icon {
     color: red;
     cursor: pointer;
-    /* pointer-events: none; */
   }
   .outline-icon {
     cursor: pointer;
-    /* pointer-events: none; */
   }
   .user-in {
     color: green;
-    position: absolute;
-    right: 2.2rem;
-    bottom: 0.3rem;
+    position: relative;
+    margin-right: 5px;
   }
   .user-out {
+    position: relative;
+    margin-right: 5px;
+  }
+  .heart-icon {
+    position: relative;
+    margin-right: 1px;
+    right: 0.1rem;
+  }
+  .small-icon-box {
+    display: flex;
     position: absolute;
-    right: 2.2rem;
+    height: 20px;
+    right: 1px;
     bottom: 0.3rem;
+  }
+  .total {
+    color: grey;
   }
   @media screen and (max-width: ${MView}px) {
     & {
@@ -144,11 +146,18 @@ function Content({ contentInfo }) {
     if (userInfo) {
       if (likers.includes(userInfo.id)) setlike(true);
     }
-  }, []);
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (totalLike > 999) {
+      setTotalLike(`${`${totalLike / 1000}`.slice(0, 3)}k`);
+    }
+  }, [totalLike]);
+
   const handleLike = e => {
     e.stopPropagation();
     if (userInfo) {
-      if (!like && !likers.includes(userInfo.id)) {
+      if (!like) {
         likeMutation.mutate({
           postId: contentInfo.id,
           userId: userInfo.id,
@@ -158,16 +167,11 @@ function Content({ contentInfo }) {
           postId: contentInfo.id,
           userId: userInfo.id,
         });
-        // for (let i = 0; i < likers.length; i++) {
-        //   if (likers[i] === userInfo.id) {
-        //     likers.splice(i, 1);
-        //   }
-        // }
       }
     } else if (!userInfo) {
       dispatch({
         type: SET_ERROR_MESSAGE,
-        data: '사용자를 알 수 없습니다',
+        data: '로그인 정보가 필요합니다',
       });
     }
   };
@@ -213,18 +217,22 @@ function Content({ contentInfo }) {
           <Tag className="solved-tag" color={done ? 'gold' : 'blue'}>
             {done ? 'solved' : 'resolving'}
           </Tag>
-          {contentInfo.in ? (
-            <MessageFilled className="user-in blinking" />
-          ) : (
-            <MessageOutlined className="user-out" />
-          )}
-          <div className="heart-icon" onClick={handleLike}>
-            {!like ? (
-              <HeartOutlined className="outline-icon" />
-            ) : (
-              <HeartFilled className="filled-icon" />
-            )}
-            {totalLike}
+          <div className="small-icon-box">
+            <div className="user-inout-box">
+              {contentInfo.in ? (
+                <MessageFilled className="user-in blinking" />
+              ) : (
+                <MessageOutlined className="user-out" />
+              )}
+            </div>
+            <div className="heart-icon" onClick={handleLike}>
+              {!like ? (
+                <HeartOutlined className="outline-icon" />
+              ) : (
+                <HeartFilled className="filled-icon" />
+              )}
+              <span className="total">{totalLike}</span>
+            </div>
           </div>
         </div>
       </div>
