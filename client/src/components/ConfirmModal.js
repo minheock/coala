@@ -6,7 +6,10 @@ import { useDispatch } from 'react-redux';
 import { CoalaGreen } from '../config';
 import { solvedContentAPI, deleteContentAPI } from '../api/content';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
-import { EDIT_CONTENT_REQUEST } from '../reducer/content';
+import {
+  DELETE_CONTENT_SUCCESS,
+  EDIT_CONTENT_REQUEST,
+} from '../reducer/content';
 
 const Container = styled.div`
   position: absolute;
@@ -58,7 +61,6 @@ function ConfirmModal({
   refetch,
   contentData,
 }) {
-  console.log(contentId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const solvedMutation = useMutation(() => solvedContentAPI(contentId));
@@ -93,7 +95,10 @@ function ConfirmModal({
 
   useEffect(() => {
     if (deleteMutation.isSuccess) {
-      console.log(deleteMutation.data);
+      dispatch({
+        type: DELETE_CONTENT_SUCCESS,
+        data: +contentId,
+      });
       closeConfirm('');
       navigate('/');
     } else if (deleteMutation.isError) {

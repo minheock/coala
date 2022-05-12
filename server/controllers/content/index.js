@@ -40,7 +40,6 @@ module.exports = {
                   profile: verify.profile,
                 },
                 title: data.dataValues.title,
-                content: data.dataValues.content,
                 stack: data.dataValues.stack,
                 thumbnail: data.dataValues.thumbnail,
                 description: data.dataValues.description,

@@ -111,6 +111,11 @@ const reducer = (state = initialized, action) =>
       case POST_CONTENT_SUCCESS:
         draft.mainContents = [action.data, ...draft.mainContents];
         break;
+      case DELETE_CONTENT_SUCCESS:
+        draft.mainContents = draft.mainContents.filter(
+          v => v.id !== action.data,
+        );
+        break;
       default:
         break;
     }
