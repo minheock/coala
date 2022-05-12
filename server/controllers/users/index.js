@@ -323,7 +323,7 @@ module.exports = {
           },
         ],
         type: 'comment',
-        readAt: false,
+        readAt: null,
       },
       attributes: ['id', 'title', 'postId'],
       raw: true,

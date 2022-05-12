@@ -31,7 +31,23 @@ module.exports = {
           .then((data) => {
             res.status(200).send({
               message: 'post is saved',
-              data: { contentId: data.dataValues.id },
+              data: {
+                done: data.dataValues.done,
+                contentId: data.dataValues.id,
+                userInfo: {
+                  id: verify.id,
+                  username: verify.username,
+                  profile: verify.profile,
+                },
+                title: data.dataValues.title,
+                content: data.dataValues.content,
+                stack: data.dataValues.stack,
+                thumbnail: data.dataValues.thumbnail,
+                description: data.dataValues.description,
+                updatedAt: data.dataValues.updatedAt,
+                in: data.dataValues.in,
+                likers: [],
+              },
             });
           })
           .catch((err) => {

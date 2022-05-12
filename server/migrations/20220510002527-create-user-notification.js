@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       readAt: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

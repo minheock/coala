@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      readAt: { type: DataTypes.BOOLEAN, defaultValue: 0 },
+      readAt: { type: DataTypes.DATE, defaultValue: null },
     },
     {
       sequelize,
