@@ -55,7 +55,7 @@ const io = socketIO(server, {
   // pingTimeout: 5000000000,
 });
 
-const { chattings, posts } = require('./models');
+const { chattings, posts, user_notification } = require('./models');
 
 io.on('connection', (socket) => {
   console.log(
@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('left_room', (data) => {
-    console.log(data);
+    // console.log(data);
     socket.leave(data.room);
     console.log(
       `-----------------------------------------------------
@@ -112,7 +112,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send_message', async (data) => {
-    console.log('send_message:', data);
+    // console.log('send_message:', data);
     socket.to(data.room).emit('receive_message', data);
     await chattings.create({
       userId: data.userId,
@@ -122,6 +122,23 @@ io.on('connection', (socket) => {
       image: data.image,
       time: data.time,
     });
+    await posts
+      .findOne({
+        where: { id: data.room },
+        attributes: ['in', 'title', 'userId'],
+        raw: true,
+      })
+      .then(async (result) => {
+        if (result.in === 0) {
+          await user_notification.create({
+            userId: data.userId,
+            type: 'chat',
+            title: result.title,
+            postId: data.room,
+            postUserId: result.userId,
+          });
+        }
+      });
   });
 
   socket.on('disconnect', (reason) => {

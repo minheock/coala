@@ -27,6 +27,7 @@ const CommentContainer = styled.div`
 `;
 
 function Comments({
+  postTitle,
   postUserId,
   userInfo,
   contentId,
@@ -80,6 +81,7 @@ function Comments({
         postId: contentId,
         comment,
         postUserId,
+        postTitle,
       };
       postCommentMutation.mutate(commentInfo);
     } else {
