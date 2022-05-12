@@ -153,7 +153,7 @@ function ContentDetail() {
       setCommentsList(contentDetail.data.data.comments);
     }
     //
-  }, [isSuccess]);
+  }, [contentDetail?.data.data.comments]);
 
   useEffect(() => {
     if (userInfo) {
