@@ -37,7 +37,6 @@ function Home() {
   console.log('data:', data);
   console.log('hasNextpage:', hasNextPage);
 
-
   useEffect(() => {
     const handleScroll = async () => {
       if (

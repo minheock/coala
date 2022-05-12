@@ -10,9 +10,13 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { useMutation } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
+import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { SView, MView } from '../config';
 import { likeAPI, unLikeAPI } from '../api/content';
-import { CONTENT_LIKE_REQUEST } from '../reducer/content';
+import {
+  CONTENT_LIKE_REQUEST,
+  CONTENT_UNLIKE_REQUEST,
+} from '../reducer/content';
 
 const CardContainer = styled(Card)`
   width: 270px;
@@ -127,7 +131,6 @@ function Content({ contentInfo }) {
   const { thumbnail, updatedAt, stack, title, description, likers, done } =
     contentInfo;
   const { profile, username } = contentInfo.userInfo;
-  // const [like, setlike] = useState(LocalStorageHook('unlike', false));
   const [totalLike, setTotalLike] = useState(likers.length);
   const [like, setlike] = useState(false);
   const customUpdate = updatedAt.split(' ')[0];
@@ -136,45 +139,53 @@ function Content({ contentInfo }) {
   const likeMutation = useMutation(likeAPI);
   const unLikeMutation = useMutation(unLikeAPI);
   const dispatch = useDispatch();
-  // console.log('contentinfo입니다', contentInfo);
+
+  useEffect(() => {
+    if (userInfo) {
+      if (likers.includes(userInfo.id)) setlike(true);
+    }
+  }, []);
   const handleLike = e => {
     e.stopPropagation();
-    if (!like) {
-      likeMutation.mutate({
-        postId: contentInfo.id,
-        userId: userInfo.id,
+    if (userInfo) {
+      if (!like && !likers.includes(userInfo.id)) {
+        likeMutation.mutate({
+          postId: contentInfo.id,
+          userId: userInfo.id,
+        });
+      } else if (like) {
+        unLikeMutation.mutate({
+          postId: contentInfo.id,
+          userId: userInfo.id,
+        });
+        // for (let i = 0; i < likers.length; i++) {
+        //   if (likers[i] === userInfo.id) {
+        //     likers.splice(i, 1);
+        //   }
+        // }
+      }
+    } else if (!userInfo) {
+      dispatch({
+        type: SET_ERROR_MESSAGE,
+        data: '사용자를 알 수 없습니다',
       });
-      console.log(likeMutation);
-      // dispatch({
-      //   type: CONTENT_LIKE_REQUEST,
-      //   data: likeMutation.data,
-      // });
+    }
+  };
+  useEffect(() => {
+    if (likeMutation.isSuccess) {
       setlike(true);
       setTotalLike(totalLike + 1);
-    } else if (like) {
-      unLikeMutation.mutate({
-        postId: contentInfo.id,
-        userId: userInfo.id,
-      });
+    }
+  }, [likeMutation.status]);
+  useEffect(() => {
+    if (unLikeMutation.isSuccess) {
       setlike(false);
       setTotalLike(totalLike - 1);
     }
-  };
-  // idle이 뜨는 에러
-  // useEffect(() => {
-  //   if (likeMutation.isSuccess) {
-  //     const likeInfo = likeMutation;
-  //     console.log('likeinfo', likeInfo);
-  //     // dispatch({
-  //     //   type: CONTENT_LIKE_REQUEST,
-  //     //   data: contentInfo.data,
-  //     // });
-  //   }
-  // }, likeMutation.status);
+  }, [unLikeMutation.status]);
   const handleDetail = () => {
     navigate(`/content/${contentInfo.id}`);
   };
-
   return (
     <CardContainer
       onClick={handleDetail}
