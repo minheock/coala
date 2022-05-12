@@ -124,10 +124,11 @@ io.on('connection', (socket) => {
       .then(async (result) => {
         if (result.in === 0) {
           await user_notification.create({
-            userId: result.userId,
+            userId: data.userId,
             type: 'chat',
             title: result.title,
             postId: data.room,
+            postUserId: result.userId,
           });
         }
       });
