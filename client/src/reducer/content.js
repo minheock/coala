@@ -31,6 +31,7 @@ export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
 
 export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
 export const CONTENT_UNLIKE_REQUEST = 'CONTENT_UNLIKE_REQUEST';
+
 const reducer = (state = initialized, action) =>
   produce(state, draft => {
     switch (action.type) {

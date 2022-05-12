@@ -240,6 +240,8 @@ function ContentDetail() {
                   userInfo={userInfo}
                   hadleInputComments={setCommentsList}
                   contentId={contentId}
+                  postUserId={id}
+                  postTitle={contentDetail.data.data.title}
                 />
                 <CommentList comments={commentsList} />
               </>
