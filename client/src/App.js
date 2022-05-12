@@ -107,7 +107,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
-        {/* <Route path="/admin/userinfo" element={<AdminUserInfo />} /> */}
         <Route path="/admin/post" element={<AdminPost />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/write" element={<Post />} />
