@@ -15,6 +15,7 @@ import {
 } from '../reducer/content';
 
 function SolvingHome() {
+  let throttle = false;
   const { solvingContents, isloadSolvingContents } = useSelector(
     state => state.content,
   );
@@ -55,19 +56,23 @@ function SolvingHome() {
 
   useEffect(() => {
     const handleScroll = async () => {
-      if (
-        hasNextPage &&
-        window.scrollY + document.documentElement.clientHeight >
-          document.documentElement.scrollHeight - 100
-      ) {
-        await fetchNextPage();
-        const newData = [];
-        data.pages.forEach(page => newData.push(...page.items));
-        // console.log(newData);
-        dispatch({
-          type: LOAD_MORE_SOLVING_CONTENTS,
-          data: newData,
-        });
+      if (!throttle) {
+        if (
+          hasNextPage &&
+          window.scrollY + document.documentElement.clientHeight >
+            document.documentElement.scrollHeight - 100
+        ) {
+          throttle = true;
+          await fetchNextPage();
+          const newData = [];
+          data.pages.forEach(page => newData.push(...page.items));
+          // console.log(newData);
+          dispatch({
+            type: LOAD_MORE_SOLVING_CONTENTS,
+            data: newData,
+          });
+          throttle = false;
+        }
       }
     };
 

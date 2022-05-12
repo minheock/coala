@@ -23,6 +23,15 @@ const CardContainer = styled(Card)`
   &:hover {
     transform: scale(1.03, 1.03);
   }
+<<<<<<< HEAD
+  .heart-icon {
+    width: 40px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+=======
+>>>>>>> c8ed42750f052e70844a14f67daf567e2c4cf240
   .ant-card-body {
     padding: 0 !important;
   }
@@ -140,6 +149,7 @@ function Content({ contentInfo }) {
   const { userInfo } = useSelector(state => state.user);
   const likeMutation = useMutation(likeAPI);
   const unLikeMutation = useMutation(unLikeAPI);
+  const { socket } = useSelector(state => state.chat);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -147,12 +157,15 @@ function Content({ contentInfo }) {
       if (likers.includes(userInfo.id)) setlike(true);
     }
   }, [userInfo]);
+<<<<<<< HEAD
+=======
 
   useEffect(() => {
     if (totalLike > 999) {
       setTotalLike(`${`${totalLike / 1000}`.slice(0, 3)}k`);
     }
   }, [totalLike]);
+>>>>>>> c8ed42750f052e70844a14f67daf567e2c4cf240
 
   const handleLike = e => {
     e.stopPropagation();

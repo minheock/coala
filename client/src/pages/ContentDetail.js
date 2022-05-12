@@ -24,7 +24,6 @@ import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 import CodeEditor from '../components/CodeEditor';
 import ZoomCode from '../components/ZoomCode';
-import { SET_SUCCESS_MESSAGE } from '../reducer/modal';
 import LoadingContents from '../components/LoadingContents';
 
 const Container = styled.main`
@@ -153,7 +152,7 @@ function ContentDetail() {
       setCommentsList(contentDetail.data.data.comments);
     }
     //
-  }, [isSuccess]);
+  }, [contentDetail?.data.data.comments]);
 
   useEffect(() => {
     if (userInfo) {
@@ -258,6 +257,7 @@ function ContentDetail() {
               room={contentId}
               handleEditCodePage={setIsEditCode}
               handleClose={setIsChat}
+              isDone={done}
             />
           ) : (
             <CommentOutlined

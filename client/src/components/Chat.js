@@ -167,6 +167,7 @@ function Chat({
   handleEditCodePage,
   sendEditCode,
   handleSendEditCode,
+  isDone,
 }) {
   const dispatch = useDispatch();
   const [currentMessage, setCurrentMessage] = useState('');
@@ -332,17 +333,6 @@ function Chat({
 
   return (
     <Chatroom>
-      <button
-        onClick={() => {
-          socket.emit('left_room', {
-            room,
-            userId: userInfo.id,
-          });
-        }}
-        type="button"
-      >
-        룸나가기
-      </button>
       <div className="chat-header">
         <h3>Coala Chat</h3>
         <Divider id="divider" />
@@ -434,7 +424,7 @@ function Chat({
           accrpt="img/*"
           onChange={uploadFiles}
         />
-        {userInfo ? (
+        {userInfo && !isDone ? (
           <div className="input-box">
             <div className="icons-box">
               <FileImageOutlined
@@ -463,7 +453,7 @@ function Chat({
             </button>
           </div>
         ) : (
-          <span>로그인후 사용해주세요.</span>
+          <span>{isDone ? '' : '로그인 후 사용해주세요'}</span>
         )}
       </div>
     </Chatroom>

@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { useQuery } from 'react-query';
 import { XLView, LView, MView, SView } from '../config';
 import UserMore from './UserMore';
-import { getfilterContentsAPI } from '../api/content';
-import { LOAD_CONTENTS_SUCCESS } from '../reducer/content';
 
 const { Search } = Input;
 
@@ -108,29 +105,12 @@ function Header() {
   const [isUserMore, setIsUserMore] = useState(false);
   const [search, setSearch] = useState('');
   const { userInfo } = useSelector(state => state.user);
-  const dispatch = useDispatch();
   const navigator = useNavigate();
-  const { data, refetch } = useQuery(
-    ['getKeywordContents'],
-    () => getfilterContentsAPI({ keyword: search }),
-    {
-      refetchOnWindowFocus: false,
-      enabled: false,
-    },
-  );
 
-  const handleSearch = value => {
-    refetch();
+  const handleSearch = () => {
+    navigator(`/search/${search}`);
   };
 
-  useEffect(() => {
-    if (data) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: data.data.data,
-      });
-    }
-  }, [data]);
   const handleLogin = () => {
     navigator('/login');
   };

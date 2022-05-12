@@ -1,42 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
-import { getContentsAPI, getMoreContentsAPI } from '../api/content';
-import { LOAD_CONTENTS_SUCCESS, LOAD_MORE_CONTENTS } from '../reducer/content';
 import LoadingContents from '../components/LoadingContents';
+import { getfilterContentsAPI, getMoreSearchContentsAPI } from '../api/content';
+import {
+  INIT_SEARCH_CONTENTS,
+  SEARCH_CONTENTS_SUCCESS,
+  LOAD_MORE_SEARCH_SUCCESS,
+} from '../reducer/content';
 
-function Home() {
+function SearchHome() {
   let throttle = false;
-  const { mainContents, isloadMainContents } = useSelector(
-    state => state.content,
-  );
   const dispatch = useDispatch();
+  const { keyword } = useParams();
+  const { searchContents } = useSelector(state => state.content);
+  const [curSearch, setCurSearch] = useState();
   const {
     isLoading,
     isError,
     data: contentsData,
+    refetch,
     error,
-  } = useQuery('maincontents', getContentsAPI, {
+  } = useQuery('searchContents', () => getfilterContentsAPI({ keyword }), {
     refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
     retry: 0, // 실페시 재실행 여부
-    enabled: !isloadMainContents,
+    enabled: !!keyword,
   });
 
+  useEffect(() => {
+    refetch();
+    setCurSearch(new Date(Date.now()));
+  }, [keyword]);
+
+  useEffect(() => {
+    if (contentsData && keyword) {
+      dispatch({
+        type: SEARCH_CONTENTS_SUCCESS,
+        data: contentsData.data.data,
+      });
+    }
+  }, [contentsData, keyword]);
+
+  useEffect(() => {
+    console.log('검색');
+    return () =>
+      dispatch({
+        type: INIT_SEARCH_CONTENTS,
+      });
+  }, []);
+
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    ['mainContents'],
-    ({ pageParam = mainContents[0].id + 1 }) => getMoreContentsAPI(pageParam),
+    [`search${keyword}MoreContents${curSearch}`],
+    ({ pageParam = searchContents[0].id + 1 }) =>
+      getMoreSearchContentsAPI(keyword, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => lastPage.nextPage,
       refetchOnWindowFocus: false,
-      enabled: mainContents.length > 0,
+      enabled: searchContents.length > 0,
     },
   );
-
-  // console.log('data:', data);
-  // console.log('hasNextpage:', hasNextPage);
 
   useEffect(() => {
     const handleScroll = async () => {
@@ -47,11 +73,12 @@ function Home() {
             document.documentElement.scrollHeight - 100
         ) {
           throttle = true;
-          const answer = await fetchNextPage();
+          await fetchNextPage();
           const newData = [];
-          answer.data.pages.forEach(page => newData.push(...page.items));
+          data.pages.forEach(page => newData.push(...page.items));
+          // console.log(newData);
           dispatch({
-            type: LOAD_MORE_CONTENTS,
+            type: LOAD_MORE_SEARCH_SUCCESS,
             data: newData,
           });
           throttle = false;
@@ -62,16 +89,7 @@ function Home() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [mainContents, hasNextPage]);
-
-  useEffect(() => {
-    if (contentsData && !isloadMainContents) {
-      dispatch({
-        type: LOAD_CONTENTS_SUCCESS,
-        data: contentsData.data.data,
-      });
-    }
-  }, [contentsData, isloadMainContents]);
+  }, [searchContents, hasNextPage, data]);
 
   if (isLoading) {
     return (
@@ -86,9 +104,9 @@ function Home() {
     <div>
       <Header />
       <NavBar />
-      <Contents mainContents={mainContents} />
+      <Contents mainContents={searchContents} />
     </div>
   );
 }
 
-export default Home;
+export default SearchHome;

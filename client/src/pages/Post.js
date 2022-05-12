@@ -16,6 +16,7 @@ import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import { CoalaGreen, language, colors, MView, SView } from '../config';
 import { uploadFiles } from '../firebase';
 import { editContentAPI, postContentAPI } from '../api/content';
+import { POST_CONTENT_SUCCESS } from '../reducer/content';
 
 const Container = styled.div`
   width: 95%;
@@ -122,8 +123,12 @@ function Post({ isEdit }) {
 
   useEffect(() => {
     if (postContentMutation.isSuccess) {
-      const { contentId } = postContentMutation.data.data.data;
-      navigate(`/content/${contentId}`);
+      const { id } = postContentMutation.data.data.data;
+      dispatch({
+        type: POST_CONTENT_SUCCESS,
+        data: postContentMutation.data.data.data,
+      });
+      navigate(`/content/${id}`);
     } else if (postContentMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
@@ -131,6 +136,7 @@ function Post({ isEdit }) {
       });
     }
   }, [postContentMutation.status]);
+
   const handleSubmit = e => {
     e.preventDefault();
     if (title && tag && editorRef.current) {
