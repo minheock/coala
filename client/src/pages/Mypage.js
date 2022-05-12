@@ -19,6 +19,7 @@ import { SView } from '../config';
 function Mypage() {
   const [info, setInfo] = useState(false);
   const [out, setout] = useState(false);
+  const [myContent, setMycontent] = useState([]);
   const { userInfo } = useSelector(state => state.user);
   const [Image, setImage] = useState(
     userInfo
@@ -33,7 +34,6 @@ function Mypage() {
 
   const editMutation = useMutation(edituserAPI);
   const editPwMutation = useMutation(editpasswordAPI);
-  const { mainContents } = useSelector(state => state.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userRef = useRef();
@@ -49,10 +49,7 @@ function Mypage() {
   );
   useEffect(() => {
     if (contentsData) {
-      dispatch({
-        type: LOAD_USERCONTENTS_SUCCESS,
-        data: contentsData.data.data,
-      });
+      setMycontent(contentsData.data.data);
     }
   }, [contentsData]);
   useEffect(() => {
@@ -260,7 +257,7 @@ function Mypage() {
                 </div>
                 <span className="userinfoId">{userInfo.email}</span>
                 <br />
-                <span className="userText">{`내 게시물 총 ${mainContents.length}개`}</span>
+                <span className="userText">{`내 게시물 총 ${myContent.length}개`}</span>
               </div>
             )}
             <button
@@ -280,7 +277,7 @@ function Mypage() {
         {isLoading ? (
           <LoadingContents />
         ) : (
-          <Contents mainContents={mainContents} />
+          <Contents mainContents={myContent} />
         )}
       </>
     );
