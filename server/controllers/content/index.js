@@ -152,12 +152,6 @@ module.exports = {
       const { userId, postId } = req.body;
 
       if (postId && userId) {
-<<<<<<< HEAD
-        await like.create({ postId: postId, userId: userId });
-        res.status(200).send({ message: 'post like' });
-      } else {
-        res.status(400).send({ message: 'does not exist postId' });
-=======
         await like
           .findOrCreate({
             where: { postId: postId, userId: userId },
@@ -170,7 +164,6 @@ module.exports = {
               res.status(200).send({ message: 'post like' });
             }
           });
->>>>>>> c6c20b3687c84ac9ba464cc31fee6d7f17a67915
       }
     } else {
       res.status(401).send({ message: 'Invalid Token' });
