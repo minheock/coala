@@ -235,6 +235,7 @@ function ContentDetail() {
             />
             {done ? (
               <>
+                <CommentList comments={commentsList} />
                 <Comments
                   commentsList={commentsList}
                   userInfo={userInfo}
@@ -243,7 +244,6 @@ function ContentDetail() {
                   postUserId={id}
                   postTitle={contentDetail.data.data.title}
                 />
-                <CommentList comments={commentsList} />
               </>
             ) : null}
           </article>

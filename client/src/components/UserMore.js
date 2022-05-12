@@ -46,7 +46,7 @@ function UserMore() {
   const navigate = useNavigate();
 
   const logoutMutation = useMutation(logoutAPI);
-
+  const [admin, setAdmin] = useState(true);
   useEffect(() => {
     if (logoutMutation.isSuccess) {
       dispatch({
@@ -59,12 +59,22 @@ function UserMore() {
   function handleLogout() {
     logoutMutation.mutate({});
   }
+  useEffect(() => {
+    if (userInfo) {
+      if (userInfo.admin === false) {
+        setAdmin(false);
+      }
+    }
+  }, [userInfo]);
+
   return (
     <Container className={userInfo ? null : 'hidden'}>
       <ul>
-        <Link className="link" to="/admin">
-          <li>관리자</li>
-        </Link>
+        {!admin ? null : (
+          <Link className="link" to="/admin">
+            <li>관리자</li>
+          </Link>
+        )}
         <Link className="link" to="/write">
           <li>질문작성</li>
         </Link>

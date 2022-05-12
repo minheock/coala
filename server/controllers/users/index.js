@@ -37,7 +37,7 @@ module.exports = {
               .update(password + salt)
               .digest('hex');
             if (dbPassword === hashPassword) {
-              const { id, username, profile, email } = data.dataValues;
+              const { id, username, profile, email, admin } = data.dataValues;
               const accessToken = generateAccessToken({
                 id,
                 username,
@@ -49,6 +49,7 @@ module.exports = {
                 username,
                 profile,
                 email,
+                admin,
               });
             } else {
               res.status(400).send({ message: '비밀번호가 틀립니다' });
@@ -252,7 +253,7 @@ module.exports = {
           authorization: `token ${accessToken}`,
         },
       });
-      console.log('!!!!', gitUser);
+      // console.log('!!!!', gitUser);
       const { login, id, node_id, avatar_url } = gitUser.data;
       const salt = Math.round(new Date().valueOf() * Math.random()) + '';
       const hashPassword = crypto
