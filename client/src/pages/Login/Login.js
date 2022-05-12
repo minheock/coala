@@ -197,15 +197,15 @@ const LoginWrapper = styled.div`
   }
   .sighup {
     color: white;
-    font-size: 11px;
-    margin-top: 35px;
+    font-size: 12px;
+    margin-top: 30px;
     font-weight: 400;
     font-family: 'montserrat', sans-serif;
     border: none;
     cursor: pointer;
     transition: 0.3s;
     :hover {
-      font-size: 11.4px;
+      font-size: 12.6px;
       font-weight: 500;
     }
   }
@@ -234,7 +234,7 @@ const LoginWrapper = styled.div`
         padding-left: 5%;
       }
       .sighup {
-        margin-top: 15px;
+        margin-top: 0;
       }
     }
   }
