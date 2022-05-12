@@ -5,4 +5,5 @@ axios.defaults.withCredentials = true;
 
 export const getAdminUserAPI = () => axios.get('/admin/user'); // 전체 유저 조회
 export const deleteAdminUserAPI = data => axios.delete(`/admin/userId/${data}`); // 특정 유저 삭제
-export const deleteAdminContentAPI = () => axios.delete('/admin/contentId'); // 특정 컨텐츠 삭제
+export const deleteAdminContentAPI = data =>
+  axios.delete(`/admin/contentId/${data}`); // 특정 컨텐츠 삭제

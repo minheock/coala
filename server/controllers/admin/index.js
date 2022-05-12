@@ -55,7 +55,7 @@ module.exports = {
       .destroy({
         where: { id: id },
       })
-      .then((data) => {
+      .then(() => {
         res.status(200).send({ message: '요청성공' });
       })
       .catch((err) => {
@@ -65,7 +65,7 @@ module.exports = {
   },
   delPost: async (req, res) => {
     // 특정 컨텐츠 삭제
-    const { id } = req.body;
+    const { id } = req.params;
     await posts
       .destroy({
         where: { id },

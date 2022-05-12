@@ -24,7 +24,6 @@ import CommentList from '../components/CommentList';
 import { EDIT_CONTENT_REQUEST } from '../reducer/content';
 import CodeEditor from '../components/CodeEditor';
 import ZoomCode from '../components/ZoomCode';
-import { SET_SUCCESS_MESSAGE } from '../reducer/modal';
 import LoadingContents from '../components/LoadingContents';
 
 const Container = styled.main`
@@ -235,6 +234,7 @@ function ContentDetail() {
             />
             {done ? (
               <>
+                <CommentList comments={commentsList} />
                 <Comments
                   commentsList={commentsList}
                   userInfo={userInfo}
@@ -243,7 +243,6 @@ function ContentDetail() {
                   postUserId={id}
                   postTitle={contentDetail.data.data.title}
                 />
-                <CommentList comments={commentsList} />
               </>
             ) : null}
           </article>

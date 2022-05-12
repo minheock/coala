@@ -6,7 +6,11 @@ module.exports = {
   generateAccessToken: (data) => {
     return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
   },
-  sendAccessToken: (res, accessToken, { id, username, profile, email }) => {
+  sendAccessToken: (
+    res,
+    accessToken,
+    { id, username, profile, email, admin },
+  ) => {
     // console.log(accessToken);
     res
       .cookie('jwt', accessToken, {
@@ -16,7 +20,7 @@ module.exports = {
       })
       .send({
         message: 'token return',
-        data: { id, username, profile, email },
+        data: { id, username, profile, email, admin },
       });
   },
   isAuthorized: (req) => {
@@ -24,7 +28,7 @@ module.exports = {
     if (!authorized) return null; // 이부분 고민
     else {
       return verify(authorized, process.env.ACCESS_SECRET, (error, decoded) => {
-        // console.log('decoded', decoded);
+        console.log('decoded', decoded);
         if (decoded) {
           const { id, email, username, profile } = decoded;
           return { id, email, username, profile };
