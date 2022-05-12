@@ -144,7 +144,17 @@ function Mypage() {
       setImage(userInfo.profile);
     }
   };
-
+  if (isLoading) {
+    return (
+      <div className="loadingbox">
+        <Header />
+        <div className="loadinglogo">
+          <img className="logo-spin" src="/Coala_logo.png" alt="coala_logo" />
+          ...
+        </div>
+      </div>
+    );
+  }
   if (userInfo) {
     return (
       <>
@@ -283,7 +293,6 @@ function Mypage() {
   }
   return null;
 }
-
 const MypageWrapper = styled.div`
   background-image: url('https://i.imgur.com/bWzeWI4.jpg');
   background-size: cover;
