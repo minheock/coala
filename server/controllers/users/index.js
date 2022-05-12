@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { users, user_notification } = require('../../models');
+const { users, user_notification, posts } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -64,6 +64,15 @@ module.exports = {
   logout: (req, res) => {
     // 로그아웃
     // 쿠키 정보 삭제
+    const verify = isAuthorized(req);
+    if (verify) {
+      posts.update(
+        { in: false },
+        {
+          where: { userId: verify.id },
+        },
+      );
+    }
     res.status(200).clearCookie('jwt').send({ message: 'logout suceess' });
   },
   signup: async (req, res) => {
