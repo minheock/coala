@@ -24,8 +24,9 @@ const CardContainer = styled(Card)`
     transform: scale(1.03, 1.03);
   }
   .heart-icon {
+    width: 40px;
     position: absolute;
-    right: 0.5rem;
+    right: 0;
     bottom: 0;
   }
   .ant-card-body {
@@ -135,13 +136,14 @@ function Content({ contentInfo }) {
   const { userInfo } = useSelector(state => state.user);
   const likeMutation = useMutation(likeAPI);
   const unLikeMutation = useMutation(unLikeAPI);
+  const { socket } = useSelector(state => state.chat);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (userInfo) {
       if (contentInfo.likers.includes(userInfo.id)) setlike(true);
     }
-  }, []);
+  }, [userInfo]);
 
   const handleLike = e => {
     e.stopPropagation();

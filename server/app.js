@@ -80,12 +80,19 @@ io.on('connection', (socket) => {
 -----------------------------------------------------`,
     );
     // 글작성한 유저가 채팅방에 접속했을때 변경
-    posts.update(
-      { in: true },
-      {
-        where: { id: data.room, userId: data.userId },
-      },
-    );
+    posts
+      .update(
+        { in: true },
+        {
+          where: { id: data.room, userId: data.userId },
+        },
+      )
+      .then(async () => {
+        console.log(`-----------------------------------------------------
+        send_join${data.room}
+  -----------------------------------------------------`);
+        await socket.emit(`send_join`, data.room);
+      });
   });
 
   socket.on('left_room', (data) => {

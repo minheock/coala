@@ -257,6 +257,7 @@ function ContentDetail() {
               room={contentId}
               handleEditCodePage={setIsEditCode}
               handleClose={setIsChat}
+              isDone={done}
             />
           ) : (
             <CommentOutlined

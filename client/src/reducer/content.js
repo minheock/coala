@@ -8,6 +8,7 @@ const initialized = {
   solvingContents: [],
   isloadSolvingContents: false,
   stackContents: [],
+  searchContents: [],
   editContent: null,
 };
 
@@ -19,6 +20,11 @@ export const LOAD_MORE_SOLVING_CONTENTS = 'LOAD_MORE_SOLVING_CONTENTS';
 
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const LOAD_MORE_SOLVED_CONTENTS = 'LOAD_MORE_SOLVED_CONTENTS';
+
+export const SET_CURRENT_SEARCH = 'SET_CURRENT_SEARCH';
+export const SEARCH_CONTENTS_SUCCESS = 'SEARCH_CONTENTS_SUCCESS';
+export const LOAD_MORE_SEARCH_SUCCESS = 'LOAD_MORE_SEARCH_SUCCESS';
+export const INIT_SEARCH_CONTENTS = 'INIT_SEARCH_CONTENTS';
 
 export const SET_CURRENT_STACK = 'SET_CURRENT_STACK';
 export const STACK_CONTENTS_SUCCESS = 'STACK_CONTENTS_SUCCESS';
@@ -88,6 +94,15 @@ const reducer = (state = initialized, action) =>
         break;
       case INIT_STACK_CONTENTS:
         draft.stackContents = [];
+        break;
+      case SEARCH_CONTENTS_SUCCESS:
+        draft.searchContents = [...action.data];
+        break;
+      case LOAD_MORE_SEARCH_SUCCESS:
+        draft.searchContents = [...action.data];
+        break;
+      case INIT_SEARCH_CONTENTS:
+        draft.searchContents = [];
         break;
       default:
         break;
