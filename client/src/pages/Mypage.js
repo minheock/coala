@@ -144,10 +144,6 @@ function Mypage() {
       setImage(userInfo.profile);
     }
   };
-  // html focus hook
-  // useEffect(() => {
-  //   console.log('----', inputRef.current, userRef.current);
-  // }, []);
 
   if (userInfo) {
     return (
@@ -452,7 +448,8 @@ const MypageWrapper = styled.div`
   .editPush,
   .edit-pw-submit {
     position: relative;
-    color: grey;
+    font-weight: 500;
+    color: #222222;
     border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.1);
     left: 15px;
@@ -473,13 +470,13 @@ const MypageWrapper = styled.div`
     bottom: 30px;
     right: 30px;
     position: absolute;
-    font-size: 10px;
+    font-size: 11.5px;
     color: red;
     cursor: pointer;
     transition: 0.1s;
   }
   .Withdrawal:hover {
-    font-size: 11px;
+    font-size: 12px;
   }
   .editInfo {
     background-color: rgba(255, 255, 255, 0.1);
