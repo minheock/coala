@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       readAt: { type: DataTypes.BOOLEAN, defaultValue: false },
+      check: { type: DataTypes.DATE, defaultValue: null },
     },
     {
       sequelize,

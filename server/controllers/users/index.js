@@ -309,51 +309,118 @@ module.exports = {
     });
   },
   alarm: async (req, res) => {
-    // const verify = isAuthorized(req);
-    // if (verify) {
-    // const { id } = verify;
-    const chat = await user_notification.findAll({
-      where: {
-        postUserId: 2,
-        [Op.not]: [
-          {
-            userId: 2,
+    const verify = isAuthorized(req);
+    if (verify) {
+      const { id } = verify;
+      const comment = [];
+      const chat = [];
+      const date = [];
+      await user_notification
+        .findAll({
+          where: {
+            postUserId: id,
+            [Op.not]: [
+              {
+                userId: id,
+              },
+            ],
+            type: 'chat',
+            readAt: 0,
           },
-        ],
-        type: 'chat',
-        readAt: 0,
-      },
-      attributes: [
-        [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
-        'title',
-        'postId',
-      ],
-      group: ['title', 'postId'],
-      raw: true,
-    });
-    const commnet = await user_notification.findAll({
-      where: {
-        postUserId: 2,
-        [Op.not]: [
-          {
-            userId: 2,
+          attributes: [
+            [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
+            'title',
+            'postId',
+          ],
+          group: ['title', 'postId'],
+          raw: true,
+        })
+        .then(async (data) => {
+          chat.push(data);
+          await user_notification.update(
+            { check: new Date(Date.now()) },
+            {
+              where: {
+                postUserId: id,
+                [Op.not]: [
+                  {
+                    userId: id,
+                  },
+                ],
+                type: 'chat',
+                readAt: 0,
+              },
+            },
+          );
+        });
+      await user_notification
+        .findAll({
+          where: {
+            postUserId: id,
+            [Op.not]: [
+              {
+                userId: id,
+              },
+            ],
+            type: 'comment',
+            readAt: 0,
           },
-        ],
-        type: 'comment',
-        readAt: 0,
-      },
-      attributes: [
-        [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
-        'title',
-        'postId',
-      ],
-      group: ['title', 'postId'],
-      raw: true,
-    });
-    console.log(commnet);
-    console.log(chat);
-    res.status(200).send({ commnet, chat });
-    // }
+          attributes: [
+            [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
+            'title',
+            'postId',
+          ],
+          group: ['title', 'postId'],
+          raw: true,
+        })
+        .then(async (data) => {
+          comment.push(data);
+          await user_notification
+            .update(
+              { check: new Date(Date.now()) },
+              {
+                where: {
+                  postUserId: id,
+                  [Op.not]: [
+                    {
+                      userId: id,
+                    },
+                  ],
+                  type: 'comment',
+                  readAt: 0,
+                },
+              },
+            )
+            .then((data) => date.push(new Date(Date.now())));
+        });
+      // console.log(date);
+      // console.log(comment);
+      // console.log(chat);
+      res.status(200).send({ comment, chat, date });
+    } else {
+      res.status(401).send({ message: 'Invalid Token' });
+    }
   },
-  readAlarm: async (req, res) => {},
+  readAlarm: async (req, res) => {
+    const verify = isAuthorized(req);
+    if (verify) {
+      const { postId, check, type } = req.body;
+      await user_notification
+        .update(
+          { readAt: true },
+          {
+            where: {
+              postId: postId,
+              check: check,
+              type: type,
+            },
+            raw: true,
+          },
+        )
+        .then((data) => console.log(data));
+      res.status(200).send({ message: 'read ok' });
+    } else {
+      res.status(401).send({ message: 'Invalid Token' });
+    }
+  },
 };

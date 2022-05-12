@@ -130,7 +130,8 @@ io.on('connection', (socket) => {
         raw: true,
       })
       .then(async (result) => {
-        if (result.in === 0) {
+        // console.log(result);
+        if (result && result.in === 0) {
           await user_notification.create({
             userId: data.userId,
             type: 'chat',
@@ -159,13 +160,14 @@ io.on('connection', (socket) => {
           console.log('error', error);
         }
       });
-      console.log(user);
-      posts.update(
-        { in: false },
-        {
-          where: { userId: user.id },
-        },
-      );
+      if (user) {
+        posts.update(
+          { in: false },
+          {
+            where: { userId: user.id },
+          },
+        );
+      }
     }
     console.log(`User Disconnected: ${socket.id}`);
     console.log('disconnect reason: ', reason);

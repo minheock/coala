@@ -26,6 +26,9 @@ module.exports = {
       readAt: {
         type: Sequelize.BOOLEAN,
       },
+      check: {
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
