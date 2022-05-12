@@ -23,6 +23,7 @@ import { SET_ERROR_MESSAGE } from './reducer/modal';
 import SolvingHome from './pages/SolvingHome';
 import SolvedHome from './pages/SolvedHome';
 import StackHome from './pages/StackHome';
+import SearchHome from './pages/SearchHome';
 
 const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL, {
   transports: ['websocket'],
@@ -51,6 +52,13 @@ function App() {
       data: socket,
     });
   }, [socket]);
+
+  useEffect(() => {
+    socket.on(`send_join`, data => {
+      console.log(`send_join${data}`);
+    });
+  }, [socket]);
+
   useEffect(() => {
     if (isSuccess) {
       dispatch({
@@ -104,6 +112,7 @@ function App() {
         <Route path="/solving" element={<SolvingHome />} />
         <Route path="/solved" element={<SolvedHome />} />
         <Route path="/stack/:stack" element={<StackHome />} />
+        <Route path="/search/:keyword" element={<SearchHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />

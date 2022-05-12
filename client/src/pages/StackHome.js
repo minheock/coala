@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { NotificationTwoTone } from '@ant-design/icons';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Contents from '../components/Contents';
@@ -15,6 +14,7 @@ import {
 } from '../reducer/content';
 
 function StackHome() {
+  let throttle = false;
   const dispatch = useDispatch();
   const { stack } = useParams();
   const { stackContents } = useSelector(state => state.content);
@@ -66,19 +66,23 @@ function StackHome() {
 
   useEffect(() => {
     const handleScroll = async () => {
-      if (
-        hasNextPage &&
-        window.scrollY + document.documentElement.clientHeight >
-          document.documentElement.scrollHeight - 100
-      ) {
-        await fetchNextPage();
-        const newData = [];
-        data.pages.forEach(page => newData.push(...page.items));
-        // console.log(newData);
-        dispatch({
-          type: LOAD_MORE_STACK_SUCCESS,
-          data: newData,
-        });
+      if (!throttle) {
+        if (
+          hasNextPage &&
+          window.scrollY + document.documentElement.clientHeight >
+            document.documentElement.scrollHeight - 100
+        ) {
+          throttle = true;
+          await fetchNextPage();
+          const newData = [];
+          data.pages.forEach(page => newData.push(...page.items));
+          // console.log(newData);
+          dispatch({
+            type: LOAD_MORE_STACK_SUCCESS,
+            data: newData,
+          });
+          throttle = false;
+        }
       }
     };
     window.addEventListener('scroll', handleScroll);
