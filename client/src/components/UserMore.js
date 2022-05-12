@@ -52,7 +52,7 @@ function UserMore() {
       dispatch({
         type: LOG_OUT_SUCCESS,
       });
-      navigate('/');
+      window.location.replace('/');
     }
   }, [logoutMutation.status]);
 

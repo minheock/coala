@@ -28,7 +28,6 @@ function Signup() {
   const [errPassword, setErrPassword] = useState('');
   const [errPasswordChecked, setErrPasswordChecked] = useState('');
   const dispatch = useDispatch();
-
   const isValidEmail = emailVal =>
     emailVal.includes('@') && emailVal.includes('.');
 
