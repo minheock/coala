@@ -13,6 +13,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -23,6 +24,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -34,6 +36,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -45,6 +48,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -56,6 +60,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -67,6 +72,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -78,6 +84,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -89,6 +96,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -100,6 +108,7 @@ module.exports = {
           password:
             '488be416b4b3667a933d4be75ce97cf7bf2dbc6721d9aa2a20e311417be67e8747952f80b5d6e6e85a9a54e216b24369e2e5b0120d6302f91ade3b3fbd4a5cf4',
           salt: '1576213157112',
+          admin: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
