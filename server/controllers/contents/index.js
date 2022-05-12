@@ -2,8 +2,6 @@ const { posts, like, users, Sequelize } = require('../../models');
 const { isAuthorized } = require('../token');
 const Op = Sequelize.Op;
 
-// 필터시 수정 필요함~~~ in 표시
-// 어차피 완료가 되면 그냥 in은 false로 표시하게 하면..?
 module.exports = {
   allPost: async (req, res) => {
     // 모든 컨텐츠 정보 불러오기
@@ -226,6 +224,7 @@ module.exports = {
               'stack',
               'thumbnail',
               'done',
+              'in',
             ],
             order: [['id', 'DESC']],
             limit: 9,
@@ -371,6 +370,7 @@ module.exports = {
               'stack',
               'thumbnail',
               'done',
+              'in',
             ],
             order: [['id', 'DESC']],
             limit: 9,

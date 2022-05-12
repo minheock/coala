@@ -9,7 +9,6 @@ const crypto = require('crypto');
 const axios = require('axios');
 const { Op } = require('sequelize');
 const sequelize = require('sequelize');
-const { comment } = require('../content');
 
 module.exports = {
   login: async (req, res) => {
@@ -310,12 +309,29 @@ module.exports = {
     });
   },
   alarm: async (req, res) => {
-    const verify = isAuthorized(req);
+    // const verify = isAuthorized(req);
     // if (verify) {
     // const { id } = verify;
-    // 댓글은 하나씩
-    // 채팅은 한꺼번에..
-    const comment = await user_notification.findAll({
+    const chat = await user_notification.findAll({
+      where: {
+        postUserId: 2,
+        [Op.not]: [
+          {
+            userId: 2,
+          },
+        ],
+        type: 'chat',
+        readAt: 0,
+      },
+      attributes: [
+        [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
+        'title',
+        'postId',
+      ],
+      group: ['title', 'postId'],
+      raw: true,
+    });
+    const commnet = await user_notification.findAll({
       where: {
         postUserId: 2,
         [Op.not]: [
@@ -324,12 +340,19 @@ module.exports = {
           },
         ],
         type: 'comment',
-        readAt: null,
+        readAt: 0,
       },
-      attributes: ['id', 'title', 'postId'],
+      attributes: [
+        [sequelize.fn('COUNT', sequelize.col('type')), 'count'],
+        'title',
+        'postId',
+      ],
+      group: ['title', 'postId'],
       raw: true,
     });
-    console.log(comment);
+    console.log(commnet);
+    console.log(chat);
+    res.status(200).send({ commnet, chat });
     // }
   },
   readAlarm: async (req, res) => {},

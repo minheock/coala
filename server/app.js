@@ -56,6 +56,7 @@ const io = socketIO(server, {
 });
 
 const { chattings, posts, user_notification } = require('./models');
+const { verify } = require('jsonwebtoken');
 
 io.on('connection', (socket) => {
   console.log(
@@ -143,6 +144,29 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', (reason) => {
     // console.log(socket);
+    if (
+      socket.handshake.headers.cookie &&
+      socket.handshake.headers.cookie.indexOf('jwt=') !== -1
+    ) {
+      const index = socket.handshake.headers.cookie.indexOf('jwt=');
+      const jwt = socket.handshake.headers.cookie.slice(index + 4);
+      // console.log(jwt);
+      const user = verify(jwt, process.env.ACCESS_SECRET, (error, decoded) => {
+        if (decoded) {
+          const { id, email, username, profile } = decoded;
+          return { id, email, username, profile };
+        } else {
+          console.log('error', error);
+        }
+      });
+      console.log(user);
+      posts.update(
+        { in: false },
+        {
+          where: { userId: user.id },
+        },
+      );
+    }
     console.log(`User Disconnected: ${socket.id}`);
     console.log('disconnect reason: ', reason);
   });
