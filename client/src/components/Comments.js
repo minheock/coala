@@ -37,7 +37,6 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
 
   useEffect(() => {
     if (postCommentMutation.isSuccess) {
-
       // 요청 성공시 댓글 바로 보여주는 작업
       const comments = postCommentMutation.data.data.data;
       const newComment = {
@@ -56,8 +55,8 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
         },
       };
       hadleInputComments([newComment, ...commentsList]);
-
       setComment('');
+      window.location.reload();
     } else if (postCommentMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,

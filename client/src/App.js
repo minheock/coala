@@ -14,6 +14,8 @@ import Post from './pages/Post';
 import Mypage from './pages/Mypage';
 import ContentDetail from './pages/ContentDetail';
 import AlertModal from './components/AlertModal';
+import AdminUserInfo from './components/AdminUserInfo';
+import AdminPost from './components/AdminPost';
 import { INIT_SOCKETIO } from './reducer/chat';
 import { getuserAPI, githubLoginAPI } from './api/user';
 import { LOG_IN_SUCCESS } from './reducer/user';
@@ -105,6 +107,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
+        {/* <Route path="/admin/userinfo" element={<AdminUserInfo />} /> */}
+        <Route path="/admin/post" element={<AdminPost />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/write" element={<Post />} />
         <Route path="/edit" element={<Post isEdit={editContent} />} />

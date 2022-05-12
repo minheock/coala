@@ -235,13 +235,13 @@ function ContentDetail() {
             />
             {done ? (
               <>
+                <CommentList comments={commentsList} />
                 <Comments
                   commentsList={commentsList}
                   userInfo={userInfo}
                   hadleInputComments={setCommentsList}
                   contentId={contentId}
                 />
-                <CommentList comments={commentsList} />
               </>
             ) : null}
           </article>
