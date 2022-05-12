@@ -93,6 +93,7 @@ function ConfirmModal({
 
   useEffect(() => {
     if (deleteMutation.isSuccess) {
+      console.log(deleteMutation.data);
       closeConfirm('');
       navigate('/');
     } else if (deleteMutation.isError) {

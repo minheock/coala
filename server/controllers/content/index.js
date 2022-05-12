@@ -33,7 +33,7 @@ module.exports = {
               message: 'post is saved',
               data: {
                 done: data.dataValues.done,
-                contentId: data.dataValues.id,
+                id: data.dataValues.id,
                 userInfo: {
                   id: verify.id,
                   username: verify.username,
