@@ -43,6 +43,8 @@ export const LOAD_USERCONTENTS_SUCCESS = 'LOAD_USERCONTENTS_SUCCESS';
 
 export const EDIT_CONTENT_REQUEST = 'EDIT_CONTENT_REQUEST';
 
+export const EDIT_USER_CHANGE_CONTENTS = 'EDIT_USER_CHANGE_CONTENTS';
+
 export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
 export const CONTENT_UNLIKE_REQUEST = 'CONTENT_UNLIKE_REQUEST';
 
@@ -142,6 +144,29 @@ const reducer = (state = initialized, action) =>
         draft.solvedContents = draft.solvedContents.filter(
           v => v.id !== action.data,
         );
+        break;
+      case EDIT_USER_CHANGE_CONTENTS:
+        draft.mainContents = draft.mainContents.map(content => {
+          if (content.userInfo.id === action.data.id) {
+            content.userInfo.username = action.data.username;
+            content.userInfo.profile = action.data.profile;
+          }
+          return content;
+        });
+        draft.solvedContents = draft.solvedContents.map(content => {
+          if (content.userInfo.id === action.data.id) {
+            content.userInfo.username = action.data.username;
+            content.userInfo.profile = action.data.profile;
+          }
+          return content;
+        });
+        draft.solvingContents = draft.solvingContents.map(content => {
+          if (content.userInfo.id === action.data.id) {
+            content.userInfo.username = action.data.username;
+            content.userInfo.profile = action.data.profile;
+          }
+          return content;
+        });
         break;
       default:
         break;

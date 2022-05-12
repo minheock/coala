@@ -146,7 +146,6 @@ function Content({ contentInfo }) {
   const { userInfo } = useSelector(state => state.user);
   const likeMutation = useMutation(likeAPI);
   const unLikeMutation = useMutation(unLikeAPI);
-  const { socket } = useSelector(state => state.chat);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -154,6 +153,12 @@ function Content({ contentInfo }) {
       if (likers.includes(userInfo.id)) setlike(true);
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    if (totalLike > 999) {
+      setTotalLike(`${`${totalLike / 1000}`.slice(0, 3)}k`);
+    }
+  }, [totalLike]);
 
   const handleLike = e => {
     e.stopPropagation();
