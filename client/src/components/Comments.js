@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Form, Button, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
+import { useParams } from 'react-router';
 import { commentContentAPI } from '../api/content';
 import { SET_ERROR_MESSAGE } from '../reducer/modal';
 
@@ -25,7 +26,14 @@ const CommentContainer = styled.div`
   }
 `;
 
-function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
+function Comments({
+  postTitle,
+  postUserId,
+  userInfo,
+  contentId,
+  hadleInputComments,
+  commentsList,
+}) {
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
   const postCommentMutation = useMutation(commentContentAPI);
@@ -72,6 +80,8 @@ function Comments({ userInfo, contentId, hadleInputComments, commentsList }) {
         userId: userInfo.id,
         postId: contentId,
         comment,
+        postUserId,
+        postTitle,
       };
       postCommentMutation.mutate(commentInfo);
     } else {

@@ -18,6 +18,7 @@ function Admin() {
     refetchOnWindowFocus: false,
     retry: 0,
   });
+
   useEffect(() => {
     if (userData) {
       dispatch({
@@ -28,7 +29,8 @@ function Admin() {
   }, [userData]);
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <h1>Loading....</h1>;
+
   }
   if (userData) {
     return (

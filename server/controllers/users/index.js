@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { users, posts, like } = require('../../models');
+const { users, user_notification } = require('../../models');
 const {
   generateAccessToken,
   sendAccessToken,
@@ -7,6 +7,9 @@ const {
 } = require('../token');
 const crypto = require('crypto');
 const axios = require('axios');
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
+const { comment } = require('../content');
 
 module.exports = {
   login: async (req, res) => {
@@ -123,61 +126,6 @@ module.exports = {
         });
     }
   },
-  post: async (req, res) => {
-    // 해당유저의 작성한 게시글 불러오기
-    const verify = isAuthorized(req);
-    if (verify) {
-      const { userId } = req.params;
-      if (userId) {
-        await posts
-          .findAll({
-            where: { userId },
-            include: [
-              {
-                model: users,
-                required: true,
-                as: 'userInfo',
-                attributes: ['id', 'username', 'profile'],
-              },
-              {
-                model: like,
-                as: 'likers',
-                attributes: ['userId'],
-              },
-            ],
-            attributes: [
-              'id',
-              'title',
-              'thumbnail',
-              'description',
-              'updatedAt',
-              'stack',
-              'done',
-            ],
-            order: [['id', 'DESC']],
-          })
-          .then((data) => {
-            const post = data.map((el) => el.get({ plain: true }));
-            for (let i = 0; i < post.length; i++) {
-              if (post[i].likers) {
-                for (let q = 0; q < post[i].likers.length; q++) {
-                  post[i].likers[q] = post[i].likers[q].userId;
-                }
-              }
-            }
-            res.status(200).send({ message: '요청 성공', data: post });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500);
-          });
-      } else {
-        res.status(400).send({ message: 'invalid request' });
-      }
-    } else {
-      res.status(401).send({ message: 'Invalid Token' });
-    }
-  },
   userInfo: async (req, res) => {
     // 유저 정보 변경
     const verify = isAuthorized(req);
@@ -234,8 +182,8 @@ module.exports = {
     } else {
       const { email } = verify;
       const { newPassword } = req.body;
-      const usreInfo = await users.findOne({ where: { email } });
-      const { password, salt } = usreInfo;
+      const userInfo = await users.findOne({ where: { email } });
+      const { password, salt } = userInfo;
       const original = req.body.password;
       const originalPassword = crypto
         .createHash('sha512')
@@ -361,4 +309,28 @@ module.exports = {
         });
     });
   },
+  alarm: async (req, res) => {
+    const verify = isAuthorized(req);
+    // if (verify) {
+    // const { id } = verify;
+    // 댓글은 하나씩
+    // 채팅은 한꺼번에..
+    const comment = await user_notification.findAll({
+      where: {
+        postUserId: 2,
+        [Op.not]: [
+          {
+            userId: 2,
+          },
+        ],
+        type: 'comment',
+        readAt: null,
+      },
+      attributes: ['id', 'title', 'postId'],
+      raw: true,
+    });
+    console.log(comment);
+    // }
+  },
+  readAlarm: async (req, res) => {},
 };

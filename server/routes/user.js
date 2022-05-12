@@ -5,10 +5,11 @@ const {
   logout,
   signup,
   signout,
-  post,
   userInfo,
   password,
   auth,
+  alarm,
+  readAlarm,
 } = require('../controllers/users');
 /**
  * @swagger
@@ -24,10 +25,11 @@ router.post('/logingithub', logingithub);
 router.post('/logout', logout); // 로그아웃 요청
 router.post('/signup', signup); // 회원가입 요청
 router.delete('/signout', signout); // 회원탈퇴 요청
-router.get('/contents/:userId', post); // 마이페이지에서 유저가 작성한 컨텐츠 요청
 router.patch('/userInfo', userInfo); // 마이페이지에서 유저 정보 변경 요청
 router.patch('/password', password); // 마이페이지에서 비밀번호 변경 요청
 router.get('/auth', auth); // 새로고침시에 유저 정보 요청
+router.get('/alarm', alarm); // 로그인시 알람 보내기
+router.patch('/alarm', readAlarm); // 알람 확인 요청
 /**
  * @swagger
  *  /user/login:

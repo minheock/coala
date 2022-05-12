@@ -23,6 +23,7 @@ const Container = styled.div`
 
 function AdminUserInfo({ allUserInfo }) {
   const delUserMutation = useMutation(deleteAdminUserAPI);
+
   const dispatch = useDispatch();
 
   const deleteUserHandle = e => {
