@@ -1,6 +1,6 @@
 ## 👇👇 로고 누르고 코딩 알려주는 라이브톡 Coala 바로가기 👇👇
 
-[![image](https://user-images.githubusercontent.com/81334373/167308723-7a63ec0b-9072-4b69-9ad3-2bf3f9d40fea.png)](https://www.coala.ml)
+[![image](https://user-images.githubusercontent.com/81334373/167308723-7a63ec0b-9072-4b69-9ad3-2bf3f9d40fea.png)](https://coala.ml)
 
 
 >Coala는 개발을 공부하며 궁금한것을 바로 해결하고 싶다는 갈증에서 시작 되었습니다.
