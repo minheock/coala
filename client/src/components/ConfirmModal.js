@@ -9,6 +9,7 @@ import { SET_ERROR_MESSAGE } from '../reducer/modal';
 import {
   DELETE_CONTENT_SUCCESS,
   EDIT_CONTENT_REQUEST,
+  SOLVED_CONTENT_SUCCESS,
 } from '../reducer/content';
 
 const Container = styled.div`
@@ -83,9 +84,13 @@ function ConfirmModal({
   };
   useEffect(() => {
     if (solvedMutation.isSuccess) {
+      dispatch({
+        type: SOLVED_CONTENT_SUCCESS,
+        data: +contentId,
+      });
       refetch();
       closeConfirm('');
-    } else if (deleteMutation.isError) {
+    } else if (solvedMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,
         data: '요청 실패.',

@@ -18,8 +18,12 @@ export const LOAD_CONTENTS_SUCCESS = 'LOAD_CONTENTS_SUCCESS';
 export const SOLVING_CONTENTS_SUCCESS = 'SOLVING_CONTENTS_SUCCESS';
 export const LOAD_MORE_SOLVING_CONTENTS = 'LOAD_MORE_SOLVING_CONTENTS';
 
+// 해결된문제들 불러올때
 export const SOLVED_CONTENTS_SUCCESS = 'SOLVED_CONTENTS_SUCCESS';
 export const LOAD_MORE_SOLVED_CONTENTS = 'LOAD_MORE_SOLVED_CONTENTS';
+
+// 문제 해결할때
+export const SOLVED_CONTENT_SUCCESS = 'SOLVED_CONTENT_SUCCESS';
 
 export const SET_CURRENT_SEARCH = 'SET_CURRENT_SEARCH';
 export const SEARCH_CONTENTS_SUCCESS = 'SEARCH_CONTENTS_SUCCESS';
@@ -82,6 +86,20 @@ const reducer = (state = initialized, action) =>
         break;
       case LOAD_MORE_SOLVING_CONTENTS:
         draft.solvingContents = [...action.data];
+        break;
+      case SOLVED_CONTENT_SUCCESS:
+        {
+          const solvedContent = draft.mainContents.find(
+            content => content.id === action.data,
+          );
+          solvedContent.done = 1;
+          if (draft.solvedContents.length > 0) {
+            draft.solvedContents = [solvedContent, ...draft.solvedContents];
+          }
+          draft.solvingContents = draft.solvingContents.filter(
+            content => content.id !== action.data,
+          );
+        }
         break;
       case SOLVED_CONTENTS_SUCCESS:
         draft.solvedContents = [...action.data];
