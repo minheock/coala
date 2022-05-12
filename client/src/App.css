@@ -9,3 +9,25 @@
 .hidden {
   visibility: hidden;
 }
+.loadingbox {
+  height: 100%;
+  width: 100%;
+}
+.loadinglogo {
+  font-size: 40px;
+  display: inline;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: all 2.5s linear;
+  left: 50%;
+  top: 50%;
+}
+.logo-spin {
+  animation: rotate_image 5s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes rotate_image {
+  100% {
+    transform: rotate(360deg);
+  }
+}
