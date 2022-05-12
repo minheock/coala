@@ -11,7 +11,6 @@ import Contents from '../components/Contents';
 import Header from '../components/Header';
 import LoadingContents from '../components/LoadingContents';
 import { EDIT_USERINFO_SUCCESS } from '../reducer/user';
-import { LOAD_USERCONTENTS_SUCCESS } from '../reducer/content';
 import SignoutModal from '../components/SignoutModal';
 import { uploadFiles } from '../firebase';
 import { SView } from '../config';
@@ -149,11 +148,17 @@ function Mypage() {
       setImage(userInfo.profile);
     }
   };
-  // html focus hook
-  // useEffect(() => {
-  //   console.log('----', inputRef.current, userRef.current);
-  // }, []);
-
+  if (isLoading) {
+    return (
+      <div className="loadingbox">
+        <Header />
+        <div className="loadinglogo">
+          <img className="logo-spin" src="/Coala_logo.png" alt="coala_logo" />
+          ...
+        </div>
+      </div>
+    );
+  }
   if (userInfo) {
     return (
       <>
@@ -292,7 +297,6 @@ function Mypage() {
   }
   return null;
 }
-
 const MypageWrapper = styled.div`
   background-image: url('https://i.imgur.com/bWzeWI4.jpg');
   background-size: cover;
@@ -457,7 +461,8 @@ const MypageWrapper = styled.div`
   .editPush,
   .edit-pw-submit {
     position: relative;
-    color: grey;
+    font-weight: 500;
+    color: #222222;
     border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.1);
     left: 15px;
@@ -478,13 +483,13 @@ const MypageWrapper = styled.div`
     bottom: 30px;
     right: 30px;
     position: absolute;
-    font-size: 10px;
+    font-size: 11.5px;
     color: red;
     cursor: pointer;
     transition: 0.1s;
   }
   .Withdrawal:hover {
-    font-size: 11px;
+    font-size: 12px;
   }
   .editInfo {
     background-color: rgba(255, 255, 255, 0.1);
