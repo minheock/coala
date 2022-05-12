@@ -28,7 +28,7 @@ module.exports = {
     if (!authorized) return null; // 이부분 고민
     else {
       return verify(authorized, process.env.ACCESS_SECRET, (error, decoded) => {
-        console.log('decoded', decoded);
+        // console.log('decoded', decoded);
         if (decoded) {
           const { id, email, username, profile } = decoded;
           return { id, email, username, profile };
