@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
 import user, { EDIT_USERINFO_SUCCESS } from './user';
-import content, { EDIT_USER_CHANGE_CONTENTS } from './content';
+import content, {
+  EDIT_USER_CHANGE_CONTENTS,
+  GET_UNREAD_COMMENTS,
+} from './content';
 import modal from './modal';
-import chat from './chat';
+import chat, { GET_UNREAD_CHAT } from './chat';
 
 export const editUserThunk = editData => dispatch => {
   dispatch({
@@ -15,6 +18,16 @@ export const editUserThunk = editData => dispatch => {
   });
 };
 
+export const getUserUnrealData = data => dispatch => {
+  dispatch({
+    type: GET_UNREAD_COMMENTS,
+    data: data.comment,
+  });
+  dispatch({
+    type: GET_UNREAD_CHAT,
+    data: data.chat,
+  });
+};
 const rootReducer = combineReducers({
   user,
   content,

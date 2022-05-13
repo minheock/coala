@@ -282,11 +282,13 @@ function Chat({
       time: chatting.time,
     }));
     setMessageList([...messages]);
-    socket.emit('join_room', {
-      room,
-      author: userInfo.username,
-      userId: userInfo.id,
-    });
+    if (userInfo) {
+      socket.emit('join_room', {
+        room,
+        author: userInfo.username,
+        userId: userInfo.id,
+      });
+    }
     // 유저 입장알림.
     socket.on('send_connect', data => {
       setMessageList(list => [...list, data]);

@@ -104,7 +104,10 @@ const HeaderWrapper = styled.header`
 function Header() {
   const [isUserMore, setIsUserMore] = useState(false);
   const [search, setSearch] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
   const { userInfo } = useSelector(state => state.user);
+  const { userUnreadComments } = useSelector(state => state.content);
+  const { userUnreadChats } = useSelector(state => state.chat);
   const navigator = useNavigate();
 
   const handleSearch = () => {
