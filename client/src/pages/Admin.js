@@ -29,8 +29,15 @@ function Admin() {
   }, [userData]);
 
   if (isLoading) {
-    return <h1>Loading....</h1>;
-
+    return (
+      <div className="loadingbox">
+        <Header />
+        <div className="loadinglogo">
+          <img className="logo-spin" src="/Coala_logo.png" alt="coala_logo" />
+          ...
+        </div>
+      </div>
+    );
   }
   if (userData) {
     return (
