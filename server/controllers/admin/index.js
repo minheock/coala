@@ -8,8 +8,10 @@ module.exports = {
     await users
       .findAll({
         attributes: { exclude: ['password', 'salt', 'updatedAt'] },
+        // raw: true,
       })
       .then((data) => {
+        // console.log(data);
         res.status(200).send({ message: '요청 성공', userInfo: data });
       })
       .catch((err) => {
@@ -50,6 +52,7 @@ module.exports = {
   },
   delUser: async (req, res) => {
     // 특정 유저 탈퇴
+    console.log(req.params);
     const { id } = req.params;
     await users
       .destroy({

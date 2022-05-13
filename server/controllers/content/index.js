@@ -11,6 +11,7 @@ const { isAuthorized } = require('../token');
 module.exports = {
   write: async (req, res) => {
     // 컨텐츠 작성
+    console.log(req.body);
     const verify = isAuthorized(req);
     if (verify) {
       const { userId, title, content, stack, thumbnail, description } =
@@ -65,7 +66,6 @@ module.exports = {
       const { postId, title, content, stack, thumbnail, description } =
         req.body;
       if (postId) {
-        // 파라미터가 없으면 400 있으면 200
         if (!title || !content || !stack) {
           res.status(400).send({ message: 'Invalid request' });
         } else {
@@ -96,9 +96,10 @@ module.exports = {
               res.status(500);
             });
         }
-      } else {
-        res.status(400).send({ message: 'does not exist postId' });
       }
+      // else {
+      //   res.status(400).send({ message: 'does not exist postId' });
+      // }
     } else {
       res.status(401).send({ message: 'Invalid Token' });
     }
@@ -113,8 +114,12 @@ module.exports = {
           .destroy({
             where: { id: req.params.postId },
           })
-          .then(() => {
-            res.status(200).send({ message: 'post delete' });
+          .then((data) => {
+            if (data) {
+              res.status(200).send({ message: 'post delete' });
+            } else {
+              res.status(409).send({ message: '이미 지워진 데이터' });
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -145,11 +150,9 @@ module.exports = {
   likePost: async (req, res) => {
     // 컨텐츠 좋아요
     const verify = isAuthorized(req);
-
     if (verify) {
-      // const { postId } = req.params;
+      console.log(req.body);
       const { userId, postId } = req.body;
-
       if (postId && userId) {
         await like
           .findOrCreate({
@@ -158,11 +161,13 @@ module.exports = {
           })
           .then(([result, created]) => {
             if (!created) {
-              res.status(400).send({ message: 'does not exist postId' });
+              res.status(409).send({ message: '이미 누른 요청' });
             } else {
               res.status(200).send({ message: 'post like' });
             }
           });
+      } else {
+        res.status(400).send({ message: 'does not exist postId' });
       }
     } else {
       res.status(401).send({ message: 'Invalid Token' });
@@ -172,12 +177,17 @@ module.exports = {
     // 컨텐츠 좋아요 취소
     const verify = isAuthorized(req);
     if (verify) {
-      // const { postId } = req.params;
       const { userId, postId } = req.body;
-
       if (postId && userId) {
-        await like.destroy({ where: { postId: postId, userId: userId } });
-        res.status(200).send({ message: 'post unlike' });
+        await like
+          .destroy({ where: { postId: postId, userId: userId } })
+          .then((data) => {
+            if (data) {
+              res.status(200).send({ message: 'post unlike' });
+            } else {
+              res.status(409).send({ message: '이미 취소된 요청' });
+            }
+          });
       } else {
         res.status(400).send({ message: 'does not exist postId' });
       }
@@ -239,17 +249,20 @@ module.exports = {
           // for (let i = 0; i < post[0].likers.length; i++) {
           //   post[0].likers[i] = post[0].likers[i].userId;
           // }
-          data.dataValues.likers = data.dataValues.likers.map((el) => {
-            el = el.userId;
-            return el;
-          });
-          res.status(200).send({
-            message: '요청 성공',
-            data: data.dataValues,
-          });
+          if (data) {
+            data.dataValues.likers = data.dataValues.likers.map((el) => {
+              el = el.userId;
+              return el;
+            });
+            res.status(200).send({
+              message: '요청 성공',
+              data: data.dataValues,
+            });
+          } else {
+            res.status(404).send({ message: '잘못된 요청' });
+          }
         });
     } else {
-      // 예외 처리 다시 확인할것
       res.status(400).send({ message: 'Invalid request' });
     }
   },
@@ -296,8 +309,7 @@ module.exports = {
     // 댓글 삭제
     const verify = isAuthorized(req);
     if (verify) {
-      const { userId, postId } = req.body;
-      const { commentId } = req.params;
+      const { userId, postId, commentId } = req.body;
       if (!postId || !userId) {
         res.status(400).send({ message: 'Invalid request' });
       } else {
