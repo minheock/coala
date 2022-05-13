@@ -50,6 +50,7 @@ export const CONTENT_LIKE_REQUEST = 'CONTENT_LIKE_REQUEST';
 export const CONTENT_UNLIKE_REQUEST = 'CONTENT_UNLIKE_REQUEST';
 
 export const GET_UNREAD_COMMENTS = 'GET_UNREAD_COMMENTS';
+export const SET_READ_COMMENTS = 'SET_READ_COMMENTS';
 export const INIT_UNREAD_COMMENTS = 'INIT_UNREAD_COMMENTS';
 
 const reducer = (state = initialized, action) =>
@@ -174,6 +175,11 @@ const reducer = (state = initialized, action) =>
         break;
       case GET_UNREAD_COMMENTS:
         draft.userUnreadComments = action.data;
+        break;
+      case SET_READ_COMMENTS:
+        draft.userUnreadComments = [
+          draft.userUnreadComments[0].filter(v => v.postId !== action.data),
+        ];
         break;
       case INIT_UNREAD_COMMENTS:
         draft.userUnreadComments = [];

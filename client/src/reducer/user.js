@@ -2,6 +2,7 @@ import produce from 'immer';
 
 export const initialized = {
   userInfo: null,
+  checkUnreadDate: '',
   allUserInfo: [],
 };
 
@@ -11,6 +12,7 @@ export const EDIT_USERINFO_SUCCESS = 'EDIT_USERINFO_SUCCESS';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const LOAD_ALL_USERINFO_SUCCESS = 'LOAD_ALL_USERINFO_SUCCESS';
+export const CHECK_UNREAD_MESSAGES_DATE = 'CHECK_UNREAD_MESSAGES_DATE';
 
 const dummyUser = {
   username: '성민',
@@ -34,6 +36,9 @@ const reducer = (state = initialized, action) =>
         break;
       case LOAD_ALL_USERINFO_SUCCESS:
         draft.allUserInfo = action.data;
+        break;
+      case CHECK_UNREAD_MESSAGES_DATE:
+        draft.checkUnreadDate = action.data;
         break;
       default:
         break;

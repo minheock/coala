@@ -101,12 +101,18 @@ function App() {
     }
   }, []);
 
+  const { data: userAlarmInfo } = useQuery('getUserAlarm', getUserAlarm, {
+    retry: 0,
+    enabled: !!userInfo,
+  });
+
   useEffect(async () => {
-    if (userInfo) {
-      const alarm = await getUserAlarm();
-      dispatch(getUserUnrealData(alarm.data));
+    if (userAlarmInfo) {
+      // const alarm = await getUserAlarm();
+      // console.log(alarm.data);
+      dispatch(getUserUnrealData(userAlarmInfo.data));
     }
-  }, [userInfo]);
+  }, [userAlarmInfo]);
 
   return (
     <div className="App">

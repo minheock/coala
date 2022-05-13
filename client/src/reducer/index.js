@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux';
-import user, { EDIT_USERINFO_SUCCESS } from './user';
+import user, {
+  CHECK_UNREAD_MESSAGES_DATE,
+  EDIT_USERINFO_SUCCESS,
+} from './user';
 import content, {
   EDIT_USER_CHANGE_CONTENTS,
   GET_UNREAD_COMMENTS,
@@ -26,6 +29,10 @@ export const getUserUnrealData = data => dispatch => {
   dispatch({
     type: GET_UNREAD_CHAT,
     data: data.chat,
+  });
+  dispatch({
+    type: CHECK_UNREAD_MESSAGES_DATE,
+    data: data.date[0],
   });
 };
 const rootReducer = combineReducers({

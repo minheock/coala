@@ -273,8 +273,8 @@ function Chat({
     const messages = chattings.map(chatting => ({
       id: chatting.id,
       room,
-      author: chatting.user.username,
-      profile: chatting.user.profile,
+      author: chatting.user.username ? chatting.user.username : '탈퇴회원',
+      profile: chatting.user.profile ? chatting.user.profile : '',
       userId: chatting.userId,
       message: chatting.content,
       image: chatting.image,
