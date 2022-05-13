@@ -426,7 +426,16 @@ module.exports = {
             raw: true,
           },
         )
-        .then((data) => console.log(data));
+        .then((data) => {
+          console.log(data);
+          if (data) {
+            setTimeout(() => {
+              user_notification.destroy({
+                where: { postId: postId, readAt: true },
+              });
+            }, 3000);
+          }
+        });
       res.status(200).send({ message: 'read ok' });
     } else {
       res.status(401).send({ message: 'Invalid Token' });

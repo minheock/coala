@@ -25,10 +25,10 @@ module.exports = {
           attributes: [
             'id',
             'title',
+            'thumbnail',
             'description',
             'updatedAt',
             'stack',
-            'thumbnail',
             'done',
             'in',
           ],
@@ -70,10 +70,10 @@ module.exports = {
           attributes: [
             'id',
             'title',
+            'thumbnail',
             'description',
             'updatedAt',
             'stack',
-            'thumbnail',
             'done',
             'in',
           ],
