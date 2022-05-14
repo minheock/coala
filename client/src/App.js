@@ -4,8 +4,7 @@ import 'antd/dist/antd.min.css';
 import { useSelector, useDispatch } from 'react-redux';
 import io from 'socket.io-client';
 import { useQuery, useMutation } from 'react-query';
-import { useEffect, useState } from 'react';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
+import { useEffect } from 'react';
 import Admin from './pages/Admin';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
@@ -14,16 +13,16 @@ import Post from './pages/Post';
 import Mypage from './pages/Mypage';
 import ContentDetail from './pages/ContentDetail';
 import AlertModal from './components/AlertModal';
-import AdminUserInfo from './components/AdminUserInfo';
 import AdminPost from './components/AdminPost';
 import { INIT_SOCKETIO } from './reducer/chat';
-import { getuserAPI, githubLoginAPI } from './api/user';
+import { getUserAlarm, getuserAPI, githubLoginAPI } from './api/user';
 import { LOG_IN_SUCCESS } from './reducer/user';
 import { SET_ERROR_MESSAGE } from './reducer/modal';
 import SolvingHome from './pages/SolvingHome';
 import SolvedHome from './pages/SolvedHome';
 import StackHome from './pages/StackHome';
 import SearchHome from './pages/SearchHome';
+import { getUserUnrealData } from './reducer';
 
 const socket = io.connect(process.env.REACT_APP_AXIOS_BASE_URL, {
   transports: ['websocket'],
@@ -46,16 +45,13 @@ function App() {
   const { error, success } = useSelector(state => state.modal);
   const { editContent } = useSelector(state => state.content);
   const githubLoginMutation = useMutation(githubLoginAPI); // 토큰 요청 api
+  const { userInfo } = useSelector(state => state.user);
+
+  // 초기 소켓 연결
   useEffect(() => {
     dispatch({
       type: INIT_SOCKETIO,
       data: socket,
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    socket.on(`send_join`, data => {
-      console.log(`send_join${data}`);
     });
   }, [socket]);
 
@@ -102,6 +98,19 @@ function App() {
       getAccessToken(authorizationCode);
     }
   }, []);
+
+  const { data: userAlarmInfo } = useQuery('getUserAlarm', getUserAlarm, {
+    retry: 0,
+    enabled: !!userInfo,
+  });
+
+  useEffect(async () => {
+    if (userAlarmInfo) {
+      // const alarm = await getUserAlarm();
+      // console.log(alarm.data);
+      dispatch(getUserUnrealData(userAlarmInfo.data));
+    }
+  }, [userAlarmInfo]);
 
   return (
     <div className="App">

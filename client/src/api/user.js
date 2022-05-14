@@ -11,3 +11,7 @@ export const edituserAPI = data => axios.patch('/user/userInfo', data);
 export const editpasswordAPI = data => axios.patch('/user/password', data);
 export const signoutAPI = () => axios.delete('/user/signout');
 export const githubLoginAPI = data => axios.post('/user/logingithub', data);
+
+export const readUserAlarm = data => axios.patch('/user/alarm', data);
+
+export const getUserAlarm = () => axios.get('/user/alarm');

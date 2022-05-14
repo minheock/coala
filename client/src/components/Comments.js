@@ -64,7 +64,7 @@ function Comments({
       };
       hadleInputComments([newComment, ...commentsList]);
       setComment('');
-      window.location.reload();
+      // window.location.reload();
     } else if (postCommentMutation.isError) {
       dispatch({
         type: SET_ERROR_MESSAGE,

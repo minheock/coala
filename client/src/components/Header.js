@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Input, Avatar } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
@@ -50,6 +50,7 @@ const HeaderWrapper = styled.header`
   .user-container {
     display: flex;
     align-items: center;
+    position: relative;
     .user-name {
       margin: 0px 10px 0 10px;
       font-size: 15px;
@@ -57,6 +58,19 @@ const HeaderWrapper = styled.header`
     }
     .user-profile {
       margin-right: 5px;
+    }
+    .unreadCnt {
+      position: absolute;
+      background-color: red;
+      color: white;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      font-size: 11px;
+      border-radius: 50%;
+      right: 14px;
+      z-index: 100;
+      top: 0px;
     }
     .user-more {
       cursor: pointer;
@@ -104,7 +118,10 @@ const HeaderWrapper = styled.header`
 function Header() {
   const [isUserMore, setIsUserMore] = useState(false);
   const [search, setSearch] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
   const { userInfo } = useSelector(state => state.user);
+  const { userUnreadComments } = useSelector(state => state.content);
+  const { userUnreadChats } = useSelector(state => state.chat);
   const navigator = useNavigate();
 
   const handleSearch = () => {
@@ -114,6 +131,22 @@ function Header() {
   const handleLogin = () => {
     navigator('/login');
   };
+
+  useEffect(() => {
+    let commentCnt = 0;
+    let chatCnt = 0;
+    if (userUnreadComments.length > 0) {
+      userUnreadComments[0].forEach(v => {
+        commentCnt += v.count;
+      });
+    }
+    if (userUnreadChats.length > 0) {
+      userUnreadChats[0].forEach(v => {
+        chatCnt += v.count;
+      });
+    }
+    setUnreadCount(chatCnt + commentCnt);
+  }, [userUnreadComments, userUnreadChats]);
 
   return (
     <HeaderWrapper>
@@ -134,6 +167,7 @@ function Header() {
         {userInfo ? (
           <div className="user-container">
             <div className="user-name">{userInfo.username}님 안녕하세요</div>
+            {unreadCount > 0 && <div className="unreadCnt">{unreadCount}</div>}
             <Avatar className="user-profile" src={userInfo.profile} />
             <CaretDownOutlined
               onClick={() => setIsUserMore(prev => !prev)}
