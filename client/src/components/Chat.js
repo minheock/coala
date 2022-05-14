@@ -233,9 +233,8 @@ function Chat({
 
   // 코드 블럭 영역
   useEffect(async () => {
-    if (sendEditCode) {
+    if (('sendEditCode:', sendEditCode)) {
       // code Editor에서 code 작성해서 보내줬을 경우.
-      console.log(sendEditCode);
       if (sendEditCode.editorValue !== '') {
         let minutes = new Date(Date.now()).getMinutes();
         if (minutes < 10) {
@@ -251,7 +250,9 @@ function Chat({
           code: JSON.stringify(sendEditCode),
           time: `${new Date(Date.now()).getHours()}:${minutes}`,
         };
+        console.log(codeMessageData);
         await socket.emit('send_message', codeMessageData);
+        codeMessageData.code = JSON.parse(codeMessageData.code);
         setMessageList([...messageList, codeMessageData]);
         handleSendEditCode('');
       }
@@ -290,9 +291,9 @@ function Chat({
       });
     }
     // 유저 입장알림.
-    socket.on('send_connect', data => {
-      setMessageList(list => [...list, data]);
-    });
+    // socket.on('send_connect', data => {
+    //   setMessageList(list => [...list, data]);
+    // });
   }, []);
   // 메시지 전송 메서드
   const sendMessage = async () => {
