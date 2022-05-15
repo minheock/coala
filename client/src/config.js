@@ -11,6 +11,7 @@ export const CoalaGreen = '#00b894';
 // 언어stack
 
 export const language = [
+  'git',
   'Arduino',
   'Bash',
   'BASIC',
