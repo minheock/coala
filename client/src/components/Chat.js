@@ -330,6 +330,9 @@ function Chat({
 
   useEffect(() => {
     socket.on('receive_message', data => {
+      if (data.code) {
+        data.code = JSON.parse(data.code);
+      }
       setMessageList(list => [...list, data]);
     });
   }, []);
