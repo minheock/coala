@@ -20,9 +20,12 @@ function Signup() {
     passwordChecked: '',
   });
   const [isAccept, setIsAccept] = useState(false);
-  const [isOn, setIsOn] = useState(false);
   const signupMutation = useMutation(signupAPI);
-  const [isCheck, setCheck] = useState(false);
+  const [isAllCheck, setAllCheck] = useState(false);
+  const [termsCheck, setTurmsCheck] = useState(false);
+  const [privercyCheck, setPrivercyCheck] = useState(false);
+  const [locationCheck, setLocationCheck] = useState(false);
+  const [promotionCheck, setPromotionCheck] = useState(false);
   const [errUserName, setErrUserName] = useState('');
   const [errEmail, setErrEmail] = useState('');
   const [errPassword, setErrPassword] = useState('');
@@ -31,8 +34,33 @@ function Signup() {
   const isValidEmail = emailVal =>
     emailVal.includes('@') && emailVal.includes('.');
 
+  function allcheckHandler() {
+    if (!isAllCheck) {
+      setTurmsCheck(true);
+      setPrivercyCheck(true);
+      setLocationCheck(true);
+      setPromotionCheck(true);
+    } else {
+      setTurmsCheck(false);
+      setPrivercyCheck(false);
+      setLocationCheck(false);
+      setPromotionCheck(false);
+    }
+  }
+
   useEffect(() => {
-    // handleButtomValid();
+    if (
+      termsCheck === true &&
+      privercyCheck === true &&
+      locationCheck === true &&
+      promotionCheck === true
+    ) {
+      setAllCheck(true);
+    } else {
+      setAllCheck(false);
+    }
+  }, [termsCheck, privercyCheck, locationCheck, promotionCheck]);
+  useEffect(() => {
     const {
       userName,
       email: curEmail,
@@ -68,12 +96,13 @@ function Signup() {
   };
 
   const handleAccept = () => {
-    setIsAccept(true);
+    if (termsCheck && privercyCheck) {
+      setIsAccept(true);
+    } else {
+      setAllCheck(false);
+      dispatch({ type: SET_ERROR_MESSAGE, data: '필수항목을 체크해주세요' });
+    }
   };
-
-  function isCheckBoxClicked() {
-    setCheck(!isCheck);
-  }
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -202,8 +231,8 @@ function Signup() {
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
               <CheckCircleOutlined
-                onClick={() => setIsOn(!isOn)}
-                className={isOn === false ? 'acceptIcon' : 'IconCheck'}
+                onClick={() => allcheckHandler(isAllCheck)}
+                className={!isAllCheck ? 'acceptIcon' : 'IconCheck'}
               />
               <div className="acceptTitle">
                 코알라 이용약관에 모두 동의합니다
@@ -213,40 +242,40 @@ function Signup() {
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
               <CheckCircleOutlined
-                onClick={() => setIsOn(!isOn)}
-                className={isOn === false ? 'acceptIcon' : 'IconCheck'}
+                className={!termsCheck ? 'acceptIcon' : 'IconCheck'}
+                onClick={() => setTurmsCheck(!termsCheck)}
               />
-              <div className="acceptTitle">코알라 이용약관</div>
+              <div className="acceptTitle">코알라 이용약관(필수)</div>
             </div>
             <div className="AcceptBox" type="text" />
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
               <CheckCircleOutlined
-                onClick={() => setIsOn(!isOn)}
-                className={isOn === false ? 'acceptIcon' : 'IconCheck'}
+                className={!privercyCheck ? 'acceptIcon' : 'IconCheck'}
+                onClick={() => setPrivercyCheck(!privercyCheck)}
               />
-              <div className="acceptTitle">개인정보 수집 및 동의</div>
+              <div className="acceptTitle">개인정보 수집 및 동의(필수)</div>
             </div>
             <div className="AcceptBox" type="text" />
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
               <CheckCircleOutlined
-                onClick={() => setIsOn(!isOn)}
-                className={isOn === false ? 'acceptIcon' : 'IconCheck'}
+                className={!locationCheck ? 'acceptIcon' : 'IconCheck'}
+                onClick={() => setLocationCheck(!locationCheck)}
               />
-              <div className="acceptTitle">위치정보 이용 약관 동의</div>
+              <div className="acceptTitle">위치정보 이용 약관 동의(선택)</div>
             </div>
             <div className="AcceptBox" type="text" />
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
               <CheckCircleOutlined
-                onClick={() => setIsOn(!isOn)}
-                className={isOn === false ? 'acceptIcon' : 'IconCheck'}
+                className={!promotionCheck ? 'acceptIcon' : 'IconCheck'}
+                onClick={() => setPromotionCheck(!promotionCheck)}
               />
-              <div className="acceptTitle">프로모션 정보수집 동의</div>
+              <div className="acceptTitle">프로모션 정보수집 동의(선택)</div>
             </div>
             <div className="AcceptBox" type="text" />
           </div>
@@ -364,12 +393,14 @@ const AcceptDiv = styled.div`
   .acceptIcon {
     left: 5px;
     margin-top: 2px;
+    margin-right: 5px;
     font-size: 20px;
-    color: black;
+    color: grey;
   }
   .IconCheck {
     left: 5px;
     margin-top: 2px;
+    margin-right: 5px;
     font-size: 20px;
     color: green;
   }
