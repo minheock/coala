@@ -124,6 +124,8 @@
 
 
 ## 💻사용 기술
+![image](https://user-images.githubusercontent.com/81334373/168532444-e2e2ad39-8c6d-40ec-a284-bb100c12fc56.png)
+
 
 ## 🐨Team Coala
 |역할|이름|포지션|Github|
