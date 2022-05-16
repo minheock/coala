@@ -21,7 +21,7 @@ const {
 const router = express.Router();
 
 router.post('/login', login); // 로그인 요청
-router.post('/logingithub', logingithub);
+router.post('/logingithub', logingithub); // 깃허브
 router.post('/logout', logout); // 로그아웃 요청
 router.post('/signup', signup); // 회원가입 요청
 router.delete('/signout', signout); // 회원탈퇴 요청
@@ -192,49 +192,6 @@ router.patch('/alarm', readAlarm); // 알람 확인 요청
  *                    example: Invalid Token
  */
 /**
- * @swagger
- *  /user/contents/{userId}:
- *    get:
- *      summary: 로그인한 유저가 작성한 컨텐츠 요청
- *      tags: [User]
- *      parameters:
- *      - in: path
- *        name: userId
- *        required: true
- *        description: 유저 아이디
- *        schema:
- *          type: integer
- *          example: 1
- *      responses:
- *        "200":
- *          description: 요청 완료
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: 성공
- *                  data:
- *                    type: string
- *                    example:
- *                      [
- *                        { "id": 3, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
- *                        { "id": 2, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
- *                        { "id": 1, "title": "test title", "thumbnail": "test", "description": "test description...","updatedAt": "20xx-xx-xx xx:xx:xx", "stack": "Javascript", "done": false, "userInfo": { "id": 1, "username": "tester", "profile": "test" }, "likers": [ 3,2,1] },
- *                      ]
- *        "400":
- *          description: 파라미터 에러
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  message:
- *                    type: string
- *                    example: invalid request
- */
 /**
  * @swagger
  *  /user/userInfo:
@@ -390,6 +347,91 @@ router.patch('/alarm', readAlarm); // 알람 확인 요청
  *                      [
  *                        { "username": "John", "email": "test1@coala.com", "profile": "https://joeschmoe.io/api/v1/random" }
  *                      ]
+ *        "401":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
+ */
+/**
+ * @swagger
+ *  /user/logingithub:
+ *    post:
+ *      summary: 깃허브 로그인
+ *      tags: [User]
+ * @swagger
+ *  /user/alarm:
+ *    get:
+ *      summary: 로그인시 알람 보내기
+ *      tags: [User]
+ *      responses:
+ *        "200":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  comment:
+ *                    type: string
+ *                    example: [
+ *                               [{ count: 3, title: test, postId: 1}]
+ *                             ]
+ *                  chat:
+ *                    type: string
+ *                    example: [
+ *                               [{ count: 3, title: test, postId: 1}]
+ *                             ]
+ *                  date:
+ *                    type: string
+ *                    example: ["2022-xx-xxTxx:xx:xx.xxxZ"]
+ *        "401":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: Invalid Token
+ * @swagger
+ *  /user/alarm:
+ *    patch:
+ *      summary: 알람 확인 요청
+ *      tags: [User]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                postId:
+ *                   type: integer
+ *                   example: 1
+ *                check:
+ *                   type: string
+ *                   example: ["2022-xx-xxTxx:xx:xx.xxxZ"]
+ *                type:
+ *                   type: string
+ *                   example: "comment"
+ *      responses:
+ *        "200":
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: read ok
  *        "401":
  *          description:
  *          content:
