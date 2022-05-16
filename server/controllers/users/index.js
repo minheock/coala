@@ -252,70 +252,75 @@ module.exports = {
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code: authCode,
       },
-    }).then(async (result) => {
-      const accessToken = result.data.access_token;
-      const gitUser = await axios({
-        method: 'get',
-        url: 'https://api.github.com/user',
-        headers: {
-          authorization: `token ${accessToken}`,
-        },
-      });
-      // console.log('!!!!', gitUser);
-      const { login, id, node_id, avatar_url } = gitUser.data;
-      const salt = Math.round(new Date().valueOf() * Math.random()) + '';
-      const hashPassword = crypto
-        .createHash('sha512')
-        .update(node_id + salt)
-        .digest('hex');
-
-      await users
-        .findOrCreate({
-          where: { email: `${id}@coala.com` },
-          defaults: {
-            username: login,
-            profile: avatar_url,
-            password: hashPassword,
-            salt: salt,
+    })
+      .then(async (result) => {
+        const accessToken = result.data.access_token;
+        const gitUser = await axios({
+          method: 'get',
+          url: 'https://api.github.com/user',
+          headers: {
+            authorization: `token ${accessToken}`,
           },
-        })
-        .then(([result, created]) => {
-          if (!created) {
-            // 겹치는 이메일이 있는경우
-            const { id, username, profile, email } = result.dataValues;
-            const accessToken = generateAccessToken({
-              id,
-              username,
-              profile,
-              email,
-            });
-            sendAccessToken(res, accessToken, {
-              id,
-              username,
-              profile,
-              email,
-            });
-          } else {
-            const { id, username, profile, email } = result.dataValues;
-            const accessToken = generateAccessToken({
-              id,
-              username,
-              profile,
-              email,
-            });
-            sendAccessToken(res, accessToken, {
-              id,
-              username,
-              profile,
-              email,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500);
         });
-    });
+        // console.log('!!!!', gitUser);
+        const { login, id, node_id, avatar_url } = gitUser.data;
+        const salt = Math.round(new Date().valueOf() * Math.random()) + '';
+        const hashPassword = crypto
+          .createHash('sha512')
+          .update(node_id + salt)
+          .digest('hex');
+
+        await users
+          .findOrCreate({
+            where: { email: `${id}@coala.com` },
+            defaults: {
+              username: login,
+              profile: avatar_url,
+              password: hashPassword,
+              salt: salt,
+            },
+          })
+          .then(([result, created]) => {
+            if (!created) {
+              // 겹치는 이메일이 있는경우
+              const { id, username, profile, email } = result.dataValues;
+              const accessToken = generateAccessToken({
+                id,
+                username,
+                profile,
+                email,
+              });
+              sendAccessToken(res, accessToken, {
+                id,
+                username,
+                profile,
+                email,
+              });
+            } else {
+              const { id, username, profile, email } = result.dataValues;
+              const accessToken = generateAccessToken({
+                id,
+                username,
+                profile,
+                email,
+              });
+              sendAccessToken(res, accessToken, {
+                id,
+                username,
+                profile,
+                email,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500);
+      });
   },
   alarm: async (req, res) => {
     const verify = isAuthorized(req);
