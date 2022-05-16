@@ -46,11 +46,20 @@ module.exports = (sequelize, DataTypes) => {
  *          - userId
  *          - chatroomId
  *          - content
+ *          - code
+ *          - image
+ *          - time
  *        properties:
  *          userId:
  *            type: integer
  *          chatroomId:
  *            type: integer
  *          content:
+ *            type: text
+ *          code:
+ *            type: text
+ *          image:
+ *            type: text
+ *          time:
  *            type: string
  */

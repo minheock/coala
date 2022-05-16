@@ -14,7 +14,7 @@ router.delete('/userId/:id', delUser); // 특정 유저 삭제
 router.delete('/contentId/:id', delPost); // 특정 컨텐츠 삭제
 /**
  * @swagger
- *  /Admin/user:
+ *  /admin/user:
  *    get:
  *      summary: 전체 유저 목록
  *      tags: [Admin]
@@ -38,7 +38,7 @@ router.delete('/contentId/:id', delPost); // 특정 컨텐츠 삭제
  *                        { "id": 3, "username": "test3", "profile": "test3", "email": "test3@coala.com","admin": false,"createdAt": "20xx-xx-xx xx:xx:xx"},
  *                      ]
  * @swagger
- *  /Admin/{user}:
+ *  /admin/{user}:
  *    get:
  *      summary: 특정 유저 검색
  *      tags: [Admin]
@@ -68,7 +68,7 @@ router.delete('/contentId/:id', delPost); // 특정 컨텐츠 삭제
  *                        { "id": 1, "username": "test1", "profile": "test1", "email": "test1@coala.com","admin": true,"createdAt": "20xx-xx-xx xx:xx:xx"},
  *                      ]
  * @swagger
- *  /Admin/userId/{id}:
+ *  /admin/userId/{id}:
  *    delete:
  *      summary: 특정 유저 탈퇴
  *      tags: [Admin]
@@ -92,7 +92,7 @@ router.delete('/contentId/:id', delPost); // 특정 컨텐츠 삭제
  *                    type: string
  *                    example: 요청 성공
  * @swagger
- *  /Admin/contentId/{id}:
+ *  /admin/contentId/{id}:
  *    delete:
  *      summary: 특정 컨텐츠 삭제
  *      tags: [Admin]
