@@ -23,7 +23,7 @@
 > 
 
 ## 🌱Final App View
-## HOME
+
 <details>
 <summary> Header </summary>
 <div markdown="1">
