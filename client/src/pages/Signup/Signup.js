@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { signupAPI } from '../../api/user';
 import { strongPassword } from './validator';
 import { SET_ERROR_MESSAGE, SET_SUCCESS_MESSAGE } from '../../reducer/modal';
+import { Terms1, Terms2, Terms3, Terms4 } from './terms';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({
@@ -247,7 +248,9 @@ function Signup() {
               />
               <div className="acceptTitle">코알라 이용약관(필수)</div>
             </div>
-            <div className="AcceptBox" type="text" />
+            <div className="AcceptBox" type="text">
+              <Terms1 />
+            </div>
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
@@ -257,7 +260,9 @@ function Signup() {
               />
               <div className="acceptTitle">개인정보 수집 및 동의(필수)</div>
             </div>
-            <div className="AcceptBox" type="text" />
+            <div className="AcceptBox" type="text">
+              <Terms2 />
+            </div>
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
@@ -267,7 +272,9 @@ function Signup() {
               />
               <div className="acceptTitle">위치정보 이용 약관 동의(선택)</div>
             </div>
-            <div className="AcceptBox" type="text" />
+            <div className="AcceptBox" type="text">
+              <Terms3 />
+            </div>
           </div>
           <div className="termsBox">
             <div className="acceptCheckTitleBox">
@@ -277,7 +284,9 @@ function Signup() {
               />
               <div className="acceptTitle">프로모션 정보수집 동의(선택)</div>
             </div>
-            <div className="AcceptBox" type="text" />
+            <div className="AcceptBox" type="text">
+              <Terms4 />
+            </div>
           </div>
           <button type="button" className="accept-btn" onClick={handleAccept}>
             확인

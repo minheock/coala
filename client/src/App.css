@@ -5,7 +5,9 @@
 .hide {
   display: none;
 }
-
+.terms-sty {
+  font-size: 12px;
+}
 .hidden {
   visibility: hidden;
 }
