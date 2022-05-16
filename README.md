@@ -124,7 +124,7 @@
 
 
 ## 💻사용 기술
-![image](https://user-images.githubusercontent.com/81334373/168532444-e2e2ad39-8c6d-40ec-a284-bb100c12fc56.png)
+![image](https://media.discordapp.net/attachments/965506153251491852/975593314587934730/undefined_1.png?width=892&height=502)
 
 
 ## 🐨Team Coala
