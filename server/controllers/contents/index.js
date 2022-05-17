@@ -442,7 +442,7 @@ module.exports = {
           res.status(500);
         });
     } else {
-      res.ststus(400).send({ message: 'Invalid Token' });
+      res.ststus(401).send({ message: 'Invalid Token' });
     }
   },
 };

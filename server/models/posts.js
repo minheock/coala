@@ -59,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       done: { type: DataTypes.BOOLEAN, defaultValue: 0 },
       in: {
         type: DataTypes.BOOLEAN,
+        defaultValue: 0,
         allowNull: false,
       },
     },
@@ -84,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
  *          - description
  *          - stack
  *          - done
+ *          - in
  *        properties:
  *          userId:
  *            type: integer
@@ -98,5 +100,7 @@ module.exports = (sequelize, DataTypes) => {
  *          stack:
  *            type: string
  *          done:
+ *            type: boolean
+ *          in:
  *            type: boolean
  */

@@ -43,3 +43,33 @@ module.exports = (sequelize, DataTypes) => {
   );
   return user_notification;
 };
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      User_notification:
+ *        type: object
+ *        required:
+ *          - userId
+ *          - type
+ *          - title
+ *          - postId
+ *          - postUserId
+ *          - readAt
+ *          - check
+ *        properties:
+ *          userId:
+ *            type: integer
+ *          type:
+ *            type: string
+ *          title:
+ *            type: string
+ *          postId:
+ *            type: integer
+ *          postUserId:
+ *            type: integer
+ *          readAt:
+ *            type: boolean
+ *          check:
+ *            type: date
+ */
