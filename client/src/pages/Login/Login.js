@@ -65,7 +65,7 @@ function Login() {
       <div className="login-container">
         <h1>
           <Link className="logo" to="/">
-            Login
+            <img className="logo-sty" src="/Coala_logo.png" alt="coala_logo" />
           </Link>
         </h1>
         <div className="login-box">
@@ -120,7 +120,7 @@ function Login() {
 }
 
 const LoginWrapper = styled.div`
-  background: linear-gradient(15deg, green, #999999);
+  background: rgba(0, 0, 0, 0.5);
   background-size: cover;
   align-items: center;
   position: absolute;
@@ -128,17 +128,15 @@ const LoginWrapper = styled.div`
   width: 100%;
 
   .logo {
-    height: 50px;
-    font-size: 150%;
-    font-family: sans-serif;
+    height: 90px;
+    font-size: 100%;
     position: absolute;
     transform: translate(-50%, -50%);
     left: 50%;
     top: 15%;
-    color: whitesmoke;
   }
   .login-container {
-    background-color: rgba(30, 30, 30, 0.5);
+    background-color: white;
     justify-content: center;
     border-radius: 45px;
     height: 600px;
@@ -164,15 +162,11 @@ const LoginWrapper = styled.div`
     display: inline-block;
     margin-top: 3vh;
   }
-  .id-close {
-    position: relative;
-    margin-top: 1.6vh;
-    color: whitesmoke;
-  }
+  .id-close,
   .pw-close {
     position: relative;
     margin-top: 1.6vh;
-    color: whitesmoke;
+    color: darkgray;
   }
   .inputIdBox {
     display: flex;
@@ -196,7 +190,7 @@ const LoginWrapper = styled.div`
     font-size: 10.5px;
   }
   .sighup {
-    color: white;
+    color: grey;
     font-size: 12px;
     margin-top: 30px;
     font-weight: 400;
@@ -209,7 +203,6 @@ const LoginWrapper = styled.div`
       font-weight: 500;
     }
   }
-
   @media screen and (max-width: ${SView}px) {
     & {
       width: 90%;
@@ -251,7 +244,7 @@ const Input = styled.input`
   border-top: none;
   border-left: none;
   border-right: none;
-  color: white;
+  color: black;
   box-sizing: border-box;
   z-index: 4;
   border-radius: 0;
